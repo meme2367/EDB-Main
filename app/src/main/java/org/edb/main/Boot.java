@@ -7,6 +7,7 @@ import javafx.stage.Stage;
  * test class
  *
  */
+
 public class Boot {
     /**
      *
