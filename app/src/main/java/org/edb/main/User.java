@@ -3,6 +3,7 @@ package org.edb.main;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.fxml.FXML;
 
 public class User {
 
@@ -11,8 +12,8 @@ public class User {
     private StringProperty passwd;
     private StringProperty email;
     private StringProperty token;
-
     private StringProperty grade;//ADMIN, SERVICE_PROVIDER, USER
+
 
 
     public User(String id,String passwd,String email,String grade){
@@ -20,6 +21,14 @@ public class User {
         this.passwd = new SimpleStringProperty(passwd);
         this.email = new SimpleStringProperty(email);
         this.grade = new SimpleStringProperty(grade);
+
+    }
+
+    public User(String token) {
+        this.token = new SimpleStringProperty(token);
+    }
+
+    public User() {
 
     }
 
@@ -46,6 +55,9 @@ public class User {
     public void setEmail(String email){
         this.email.set(email);
     }
+
+
+
 
 /*
     public int getIdx() {

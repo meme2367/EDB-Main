@@ -22,7 +22,7 @@ public interface userNetworkService {
 
     //로그인
     @POST("auth/signin")
-    Call<postLoginResponse> postLoginAPI(@Body() JSONObject body);
+    Call<postLoginResponse> postLoginAPI(@Body() JsonObject body);
 
 
 }
