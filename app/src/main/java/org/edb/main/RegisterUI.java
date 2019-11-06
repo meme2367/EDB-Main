@@ -1,9 +1,17 @@
 package org.edb.main;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,49 +26,58 @@ import org.edb.main.network.post.postLoginResponse;
 import org.edb.main.network.restApiConnector;
 import org.edb.main.network.userNetworkService;
 
+import java.io.IOException;
+
 
 public class RegisterUI {
+    //logincontroller 역할
     @FXML
-    private TextField id;
+    private TextField txtUserId;
 
     @FXML
-    private PasswordField passwd;
+    private PasswordField txtPassword;
 
     @FXML
     private Button loginButton;
 
-    @FXML
-    private Label lblStatus;
 
-
-
-//id,pw 입력 후 로그인 버튼
+    //id,pw 입력 후 로그인 버튼
 // REST API 호출
     public void login(ActionEvent event) throws Exception {
-//   //Call<getUserInfoResponse> getUserInfo = RetrofitClient.getUserApiService().getUserInfoAPI(idx);
-//    //반환 값loginResponse    //userNetworkService useNetworkService
-    //json타입의 body넣기
+        JsonObject jsonObject = new JsonObject();
 
-
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("id",id);
-        jsonObject.put("passwd",passwd);
-
-//         String json = gson.toJson(jsonObject);
-
-
-
+        jsonObject.addProperty("id", txtUserId.getText());
+        jsonObject.addProperty("passwd", txtPassword.getText());
 
 
         Call<postLoginResponse> postLoginResponseCall =
                 restApiConnector.getUserNetworkService().postLoginAPI(jsonObject);
 
         postLoginResponseCall.enqueue(new Callback<postLoginResponse>() {
+
+
             @Override
             public void onResponse(Call<postLoginResponse> call, Response<postLoginResponse> response) {
-                System.out.print("db connect success\n");
-                System.out.println(response);
+
+                if (response.isSuccessful()) {
+                    int status = response.body().getStatus();
+                    if (status == 200) {
+
+
+                        System.out.print("db connect success\n");
+                        //token사용시
+                        //System.out.println(response.body().getToken());
+
+                        //로그인 성공시 메인화면+회원정보
+                        //response.body().getToken();
+                        Authorization.setToken(response.body().getToken());
+                        // mainUserinfoSubController 와sceneMainAfterLogin.fxml띄우기
+
+
+
+
+                    }
+                }
             }
 
             @Override
@@ -72,10 +89,5 @@ public class RegisterUI {
 
     }
 
+};
 
-    //id,pw입력
-
-    //입력한 id,pw를 가지고 맞는지 체크
-
-    //
-}
