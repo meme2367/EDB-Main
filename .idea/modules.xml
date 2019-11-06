@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/edb-main.iml" filepath="$PROJECT_DIR$/edb-main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/edb-main-app.iml" filepath="$PROJECT_DIR$/app/edb-main-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sampleplugins/edb-sampleplugins.iml" filepath="$PROJECT_DIR$/sampleplugins/edb-sampleplugins.iml" />
+    </modules>
+  </component>
+</project>
