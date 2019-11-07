@@ -1,4 +1,4 @@
-package org.edb.main;
+package org.edb.main.UI;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,15 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import sun.applet.Main;
+import org.edb.main.Authorization;
 
 import java.io.IOException;
 
-public class mainController {
+public class MainUIController {
 
     @FXML
     private Label lbl1;
@@ -44,7 +41,7 @@ public class mainController {
 
         try {
 
-            Parent login = FXMLLoader.load(getClass().getResource("../../../fxml/login.fxml"));
+            Parent login = FXMLLoader.load(getClass().getResource("/fxml/loginUI.fxml"));
             Scene scene = new Scene(login);
             Stage primaryStage = (Stage)loginViewbutton.getScene().getWindow();//현재 윈도우 가져오기
 

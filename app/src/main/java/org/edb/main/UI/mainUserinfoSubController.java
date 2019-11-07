@@ -1,4 +1,4 @@
-package org.edb.main;
+package org.edb.main.UI;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.edb.main.Authorization;
 import sun.applet.Main;
 
 import java.io.IOException;

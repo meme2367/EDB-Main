@@ -1,4 +1,4 @@
-package org.edb.main;
+package org.edb.main.UI;
 
 public class Controller {
 }

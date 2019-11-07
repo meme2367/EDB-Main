@@ -1,4 +1,4 @@
-package org.edb.main;
+package org.edb.main.UI;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import jdk.nashorn.internal.parser.JSONParser;
+import org.edb.main.Authorization;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import javafx.event.ActionEvent;
@@ -29,7 +30,7 @@ import org.edb.main.network.userNetworkService;
 import java.io.IOException;
 
 
-public class RegisterUI {
+public class LoginUIController {
     //logincontroller 역할
     @FXML
     private TextField txtUserId;
