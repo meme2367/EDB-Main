@@ -1,15 +1,14 @@
 
 package org.edb.main.network.get;
 
-import com.google.gson.JsonObject;
-import org.edb.main.User;
+import org.edb.main.TempUser;
 
 public class getUserInfoResponse{
     private int status;
     private Boolean success;
     private String message;
 
-    private User data;
+    private TempUser data;
 
 
     public int getStatus() {
@@ -38,11 +37,11 @@ public class getUserInfoResponse{
     }
 
 
-    public User getData() {
+    public TempUser getData() {
         return data;
     }
 
-    public void setData(User data){
+    public void setData(TempUser data){
         this.data = data;
     }
 

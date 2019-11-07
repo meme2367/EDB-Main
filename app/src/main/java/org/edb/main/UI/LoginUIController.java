@@ -1,33 +1,17 @@
 package org.edb.main.UI;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.edb.main.Authorization;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import org.edb.main.network.post.postLoginResponse;
-import org.edb.main.network.restApiConnector;
-import org.edb.main.network.userNetworkService;
-
-import java.io.IOException;
+import org.edb.main.network.RestApiConnector;
 
 
 public class LoginUIController {
@@ -52,7 +36,7 @@ public class LoginUIController {
 
 
         Call<postLoginResponse> postLoginResponseCall =
-                restApiConnector.getUserNetworkService().postLoginAPI(jsonObject);
+                RestApiConnector.getUserNetworkService().postLoginAPI(jsonObject);
 
         postLoginResponseCall.enqueue(new Callback<postLoginResponse>() {
 
