@@ -1,89 +1,90 @@
 package org.edb.main;
-//유저 모델 클래스
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.fxml.FXML;
 
+import org.edb.main.network.RestApiConnector;
+
+import java.util.ArrayList;
+
+/**
+ * User
+ * can access common single TempUser instance
+ */
 public class User {
+    private static User loggedInUser;
 
-    private int idx;
-    private StringProperty id;
-    private StringProperty passwd;
-    private StringProperty email;
-    private StringProperty token;
-    private StringProperty grade;//ADMIN, SERVICE_PROVIDER, USER
+    private ArrayList<ExternalService> externalServices;
+    private ArrayList<PluginConfig> pluginConfigs;
+    private String id;
+    private String token;
 
-
-
-    public User(String id,String passwd,String email,String grade){
-        this.id = new SimpleStringProperty(id);
-        this.passwd = new SimpleStringProperty(passwd);
-        this.email = new SimpleStringProperty(email);
-        this.grade = new SimpleStringProperty(grade);
-
+    private User(String id,String token){
+        this.id=id;
+        this.token=token;
     }
 
-    public User(String token) {
-        this.token = new SimpleStringProperty(token);
-    }
-
-    public User() {
-
-    }
-
-    public String getPasswd() {
-        return passwd.get();
-    }
-
-    public void setPasswd(String passwd){
-        this.passwd.set(passwd);
+    /**
+     * 공통적인 User 객체를 얻을 수 있다.
+     *
+     * 이 메서드를 호출하기 전에 login()메서드를 먼저 호출하는것이 권장된다.
+     *
+     * @return 현재 로그인된 유저의 정보를 담는 객체 반환
+     *
+     * @exception RuntimeException 로그인된 유저가 없을 경우 예외를 발생시킨다.
+     * 이를 처리하는 쪽에서는 로그인을 요청하는 UI를 띄우거나, 잠금관련 기능을 일시정지한다.
+     */
+    public static User getUser() {
+        if(loggedInUser==null){
+            throw new RuntimeException();
+            //exception 발생
+        }
+        return loggedInUser;
     }
 
     public String getId() {
-        return id.get();
-    }
-
-    public void setId(String id){
-        this.id.set(id);
-    }
-
-    public String getEmail() {
-        return email.get();
-    }
-
-    public void setEmail(String email){
-        this.email.set(email);
-    }
-
-
-
-
-/*
-    public int getIdx() {
-        return idx.get();
-    }
-
-    public void setIdx(int idx){
-        this.idx.set(idx);
-    }
-*/
-    public String getGrade() {
-        return grade.get();
-    }
-
-    public void setGrade(String grade){
-        this.grade.set(grade);
-        if(grade.isEmpty()) {this.grade.set("USER");}
+        return id;
     }
 
     public String getToken() {
-        return token.get();
+        return token;
     }
 
-    public void setToken(String token){
-        this.token.set(token);
+    public static synchronized void login(String id, String passwd){
+        if(loggedInUser!=null){
+            if(id!=loggedInUser.getId())loggedInUser.logOut();
+        }
+        /*
+            token=로그인 처리
+            loadPluginConfig()
+            loadExternalService()
+            loggedinUser=new User(id, token);
+         */
     }
 
+    public void logOut(){
+        loggedInUser=null;
+        /*
+            edbTimer.stop()?
+         */
+    }
 
+    /*
+        갱신부분 좀 난해한듯..
+        플러그인, 외부서비스 불러오는 부분 일단 제외하고 나머지 작성.
+     */
+    public void loadPluginConfig(){
+        /*
+            잠금정책들 불러오기
+            edbTimer에 전달하기
+            만약 이러면 내부 메서드에 보관할 필요 있는가?
+         */
+    }
+
+    public void loadExternalService(){
+        /*
+            외부서비스들 불러오기
+            edbTimer에 전달하기
+            너두
+         */
+
+    }
 }

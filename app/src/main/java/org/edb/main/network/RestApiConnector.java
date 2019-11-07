@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class restApiConnector {
+public class RestApiConnector {
 
     private static final String BASE_URL = "http://localhost:3000/api/";
 
