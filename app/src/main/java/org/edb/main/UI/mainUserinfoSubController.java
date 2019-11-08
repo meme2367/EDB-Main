@@ -37,6 +37,7 @@ public class mainUserinfoSubController   {
 
 
     public void lblUserId(){
+        //lblUerId.setText("test");
         System.out.print("test");
         System.out.print("userinfo");
     }

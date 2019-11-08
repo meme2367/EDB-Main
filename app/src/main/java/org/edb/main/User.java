@@ -48,7 +48,7 @@ public class User {
         return token;
     }
 
-    public static synchronized void login(String id, String passwd){
+    public static synchronized void login(String id, String token){
         if(loggedInUser!=null){
             if(id!=loggedInUser.getId())loggedInUser.logOut();
         }
