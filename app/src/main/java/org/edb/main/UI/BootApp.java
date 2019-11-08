@@ -9,11 +9,10 @@ import org.edb.main.Authorization;
 
 public class BootApp extends Application {
 
+    private static Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
 
         String token = Authorization.getToken();
 
@@ -24,6 +23,7 @@ public class BootApp extends Application {
 
             Scene scene = new Scene(root);
 
+            this.primaryStage=primaryStage;
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.show();
@@ -39,6 +39,10 @@ public class BootApp extends Application {
         }
 
 
+    }
+
+    public static Stage getPrimaryStage(){
+        return primaryStage;
     }
 
 

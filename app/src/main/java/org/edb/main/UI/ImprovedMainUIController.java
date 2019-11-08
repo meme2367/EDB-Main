@@ -49,7 +49,6 @@ public class ImprovedMainUIController implements Initializable {
 
         FXMLLoader loader= new FXMLLoader(getClass().getResource("/fxml/loginDialog.fxml"));
         Parent parent = loader.load();
-        loader.<LoginDialogController>getController().setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(parent);
 

@@ -30,16 +30,12 @@ public class LoginDialogController implements Initializable {
     @FXML
     private Button loginBtn;
 
-    private Stage primaryStage;
-
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { }
 
     public void loginRequest(ActionEvent event)throws Exception{
+
         String tempId=idField.getText();
 
         JsonObject jsonObject = new JsonObject();
@@ -63,7 +59,7 @@ public class LoginDialogController implements Initializable {
                         String tempToken=response.body().getToken();
                         User.login(tempId,tempToken);
                         Platform.runLater(()->{
-                            Scene tempScene = primaryStage.getScene();
+                            Scene tempScene = BootApp.getPrimaryStage().getScene();
                             //nullpointer exception
                             Button loginBtn = (Button) tempScene.lookup("#loginBtn");
                             Label userIdLbl = (Label)tempScene.lookup("#userIdLbl");
