@@ -10,8 +10,6 @@ import org.edb.main.Authorization;
 public class BootApp extends Application {
 
 
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -21,21 +19,23 @@ public class BootApp extends Application {
 
         if(token == ""){
             //token이 없으면
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUI.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUI.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/improvedMainUI.fxml"));
 
             Scene scene = new Scene(root);
 
             primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
             primaryStage.show();
         }else{
 
-            //token이 있으면
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUIAfterLogin.fxml"));
-
-            Scene scene = new Scene(root);
-
-            primaryStage.setScene(scene);
-            primaryStage.show();
+//            //token이 있으면
+//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUIAfterLogin.fxml"));
+//
+//            Scene scene = new Scene(root);
+//
+//            primaryStage.setScene(scene);
+//            primaryStage.show();
         }
 
 
