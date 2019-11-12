@@ -67,7 +67,7 @@ public class LoginDialogController implements Initializable {
                             loginBtn.setDisable(true);
                             userIdLbl.setVisible(true);
                             userIdLbl.setText(tempId);
-                    });
+                        });
                     }
                 }
             }

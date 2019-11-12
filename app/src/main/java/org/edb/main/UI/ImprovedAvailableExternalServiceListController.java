@@ -1,13 +1,17 @@
 package org.edb.main.UI;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import org.edb.main.Authorization;
 import org.edb.main.ExternalService;
+import org.edb.main.User;
 import org.edb.main.network.RestApiConnector;
 import org.edb.main.network.get.getAvailableExternalServiceResponse;
 import org.edb.main.network.get.getExternalServiceListResponse;
@@ -44,7 +48,7 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
 
 
     public void loadAvailableExternalServiceList() {
-
+        String token= User.getUser().getToken();
         System.out.print("\n외부서비스등록sertokentest\n");
 
         Call<getAvailableExternalServiceResponse> getAvailableExternalServiceResponseCall =

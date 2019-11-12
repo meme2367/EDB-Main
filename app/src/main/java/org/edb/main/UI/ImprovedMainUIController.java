@@ -48,6 +48,8 @@ public class ImprovedMainUIController {
     private Label userIdLbl;
     @FXML
     private ComboBox pluginComboBox;
+    @FXML
+    private HBox centerUI;
 
     public Stage primaryStage;
 
@@ -59,6 +61,24 @@ public class ImprovedMainUIController {
     @FXML
     public Label postExternalServiceListButton;
 
+
+    public void changeCenterUI(String filePath){
+        try {
+            clearCenterUI();
+            Parent list = FXMLLoader.load(getClass().getResource(filePath));
+            Scene tempScene=BootApp.getPrimaryStage().getScene();
+            HBox hbox=(HBox)tempScene.lookup("#centerUI");
+            hbox.getChildren().add(list);
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void clearCenterUI(){
+        centerUI.getChildren().clear();
+        System.out.println("clearCenterUI\n");
+    }
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -85,73 +105,13 @@ public class ImprovedMainUIController {
     }
 
 
-
-
-    public void postExternalServiceListButton(){
-
-        /*
-        try {
-            // 연락처 요약을 가져온다.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/availableExternalServiceList.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
-
-            // 연락처 요약을 상위 레이아웃 가운데로 설정한다.
-            rootLayout.setCenter(personOverview);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-
-        try {
-            Parent list = FXMLLoader.load(getClass().getResource("/fxml/improvedAvailableExternalServiceList.fxml"));
-            Scene tempScene=BootApp.getPrimaryStage().getScene();
-            HBox hbox=(HBox)tempScene.lookup("#centerUI");
-            hbox.getChildren().add(list);
-
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+    public void postExternalServiceListButton() {
+        changeCenterUI("/fxml/improvedAvailableExternalServiceList.fxml");
     }
 
 
-
     public void getExternalServiceListButton(){
-
-        /*
-        try {
-
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/availableExternalServiceList.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
-
-            // 상위 레이아웃 가운데로 설정한다.
-            rootLayout.setCenter(personOverview);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-         */
-
-
-        try {
-           //화면이 고정됨, 새로운 stage를 띄우는 것이 낫다.
-            Parent list = FXMLLoader.load(getClass().getResource("/fxml/userExternalServiceList.fxml"));
-            Scene scene = new Scene(list);
-            Stage primaryStage = (Stage)getExternalServiceListButton.getScene().getWindow();//현재 윈도우 가져오기
-
-            primaryStage.setScene(scene);
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-
-
-
+        changeCenterUI("/fxml/improvedUserExternalServiceList.fxml");
     }
 }
 
