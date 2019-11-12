@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -36,7 +37,7 @@ import java.util.ResourceBundle;
 
 public class ImprovedMainUIController {
     //    @FXML
-//    private HBox rootContainer;
+    private HBox rootContainer;
     @FXML
     private AnchorPane userPane;
     @FXML
@@ -50,7 +51,7 @@ public class ImprovedMainUIController {
 
     public Stage primaryStage;
 
-    public BorderPane rootLayout;
+//    public BorderPane rootLayout;
 
     @FXML
     public Label getExternalServiceListButton;
@@ -105,11 +106,11 @@ public class ImprovedMainUIController {
         */
 
         try {
-            Parent list = FXMLLoader.load(getClass().getResource("/fxml/availableExternalServiceList.fxml"));
-            Scene scene = new Scene(list);
-            Stage primaryStage = (Stage)postExternalServiceListButton.getScene().getWindow();//현재 윈도우 가져오기
+            Parent list = FXMLLoader.load(getClass().getResource("/fxml/improvedAvailableExternalServiceList.fxml"));
+            Scene tempScene=BootApp.getPrimaryStage().getScene();
+            HBox hbox=(HBox)tempScene.lookup("#centerUI");
+            hbox.getChildren().add(list);
 
-            primaryStage.setScene(scene);
 
         }catch(IOException e){
             e.printStackTrace();

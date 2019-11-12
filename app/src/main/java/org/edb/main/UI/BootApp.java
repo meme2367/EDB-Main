@@ -28,7 +28,7 @@ public class BootApp extends Application {
 
     public static Stage primaryStage;
 
-    public static BorderPane rootLayout;
+    public static HBox rootLayout;
 
     public BootApp() {
 
@@ -50,7 +50,7 @@ public class BootApp extends Application {
             FXMLLoader loader = new FXMLLoader();
 //            Parent root = FXMLLoader.load(getClass().getResource("/fxml/improvedMainUI.fxml"));
             loader.setLocation(BootApp.class.getResource("/fxml/improvedMainUI.fxml"));
-            rootLayout = (BorderPane) loader.load();
+            rootLayout = (HBox) loader.load();
 
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);

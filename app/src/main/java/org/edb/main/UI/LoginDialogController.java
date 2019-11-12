@@ -57,7 +57,6 @@ public class LoginDialogController implements Initializable {
                     int status = response.body().getStatus();
                     if (status == 200) {
                         System.out.print("db connect success\n");
-                        Authorization.setToken(response.body().getToken());
                         String tempToken=response.body().getToken();
                         User.login(tempId,tempToken);
                         Platform.runLater(()->{
@@ -68,8 +67,7 @@ public class LoginDialogController implements Initializable {
                             loginBtn.setDisable(true);
                             userIdLbl.setVisible(true);
                             userIdLbl.setText(tempId);
-
-                        });
+                    });
                     }
                 }
             }
