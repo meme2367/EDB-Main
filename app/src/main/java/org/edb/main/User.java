@@ -17,9 +17,9 @@ public class User {
     private String id;
     private String token;
 
-    private User(String id,String token){
-        this.id=id;
-        this.token=token;
+    public User(String id,String token){
+        this.id = id;
+        this.token = token;
     }
 
     /**
@@ -47,7 +47,6 @@ public class User {
     public String getToken() {
         return token;
     }
-
     public static synchronized void login(String id, String token){
         if(loggedInUser!=null){
             if(id!=loggedInUser.getId())loggedInUser.logOut();

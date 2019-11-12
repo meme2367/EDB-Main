@@ -1,49 +1,78 @@
 package org.edb.main.UI;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.edb.main.Authorization;
+import org.edb.main.ExternalService;
+import org.edb.main.network.RestApiConnector;
+import org.edb.main.network.get.getAvailableExternalServiceResponse;
+import org.edb.main.network.get.getExternalServiceListResponse;
+import org.edb.main.tempExternalService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class BootApp extends Application {
 
-    private static Stage primaryStage;
+    public static Stage primaryStage;
+
+    public static BorderPane rootLayout;
+
+    public BootApp() {
+
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        String token = Authorization.getToken();
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("EDB-Main");
+        initRootLayout();
 
-        if(token == ""){
-            //token이 없으면
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUI.fxml"));
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/improvedMainUI.fxml"));
+    }
 
-            Scene scene = new Scene(root);
+    public void initRootLayout() {
+        try {
+            String token = Authorization.getToken();
 
-            this.primaryStage=primaryStage;
+            FXMLLoader loader = new FXMLLoader();
+//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/improvedMainUI.fxml"));
+            loader.setLocation(BootApp.class.getResource("/fxml/improvedMainUI.fxml"));
+            rootLayout = (BorderPane) loader.load();
+
+            Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.show();
-        }else{
 
-//            //token이 있으면
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUIAfterLogin.fxml"));
-//
-//            Scene scene = new Scene(root);
-//
-//            primaryStage.setScene(scene);
-//            primaryStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-
     }
 
-    public static Stage getPrimaryStage(){
+    public static Stage getPrimaryStage() {
         return primaryStage;
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+
 
 
 }

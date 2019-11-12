@@ -30,6 +30,8 @@ public class LoginDialogController implements Initializable {
     @FXML
     private Button loginBtn;
 
+    private Stage primaryStage;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { }
@@ -55,7 +57,7 @@ public class LoginDialogController implements Initializable {
                     int status = response.body().getStatus();
                     if (status == 200) {
                         System.out.print("db connect success\n");
-
+                        Authorization.setToken(response.body().getToken());
                         String tempToken=response.body().getToken();
                         User.login(tempId,tempToken);
                         Platform.runLater(()->{

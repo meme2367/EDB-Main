@@ -17,6 +17,10 @@ public class RestApiConnector {
     //Call<getUserInfoResponse> getUserInfo = RetrofitClient.getUserApiService().getUserInfoAPI(idx);
     //반환 값loginResponse    //userNetworkService useNetworkService
 
+    public static externalServiceNetworkService getExternalServiceNetworkService(){
+        return getInstance().create(externalServiceNetworkService.class);
+    }
+
     private static Retrofit getInstance(){
         Gson gson = new GsonBuilder()
                 .setLenient()
