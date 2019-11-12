@@ -48,7 +48,14 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
 
 
     public void loadAvailableExternalServiceList() {
-        String token= User.getUser().getToken();
+        String token;
+        try {
+            token = User.getUser().getToken();
+        }
+        catch(RuntimeException runtimeException){
+            token="dummy";
+        }
+        
         System.out.print("\n외부서비스등록sertokentest\n");
 
         Call<getAvailableExternalServiceResponse> getAvailableExternalServiceResponseCall =
@@ -59,15 +66,18 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
             @Override
             public void onResponse(Call<getAvailableExternalServiceResponse> call, Response<getAvailableExternalServiceResponse> response) {
 
-                if (response.isSuccessful()) {
-                    int status = response.body().getStatus();
-                    if (status == 200) {
-                        System.out.print("\navilable service\n");
+                Platform.runLater(()->{
+                    System.out.println("in runLater\n");
+                    if (response.isSuccessful()) {
+                        int status = response.body().getStatus();
+                        if (status == 200) {
+                            System.out.print("\navilable service\n");
 
-                        availableExternalServiceTableList(response.body().getData());
+                            availableExternalServiceTableList(response.body().getData());
 
+                        }
                     }
-                }
+                });
             }
 
             @Override

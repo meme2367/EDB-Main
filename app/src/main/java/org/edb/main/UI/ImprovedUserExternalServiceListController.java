@@ -65,7 +65,14 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 //    }
 
     public void loadUserExternelServiceList() {
-        String token= User.getUser().getToken();
+        String token;
+        try {
+            token = User.getUser().getToken();
+        }
+        catch(RuntimeException runtimeException){
+            token="dummy";
+        }
+
         System.out.print("\n외부서비스목록usertokentest\n");
         System.out.print(token);
         System.out.print("\n");
@@ -77,14 +84,16 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
             @Override
             public void onResponse(Call<getExternalServiceListResponse> call, Response<getExternalServiceListResponse> response) {
+                Platform.runLater(()->{
+                    System.out.println("in runLater\n");
+                    if (response.isSuccessful()) {
+                        int status = response.body().getStatus();
+                        if (status == 200) {
+                            showExternalServiceTableList(response.body().getData());
 
-                if (response.isSuccessful()) {
-                    int status = response.body().getStatus();
-                    if (status == 200) {
-                        showExternalServiceTableList(response.body().getData());
-
+                        }
                     }
-                }
+                });
             }
 
             @Override
