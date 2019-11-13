@@ -3,11 +3,9 @@ package org.edb.main.UI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
 import org.edb.main.ExternalService;
 import org.edb.main.network.RestApiConnector;
 import org.edb.main.network.get.getAvailableExternalServiceResponse;
@@ -16,12 +14,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class postExternalServiceController extends ImprovedMainUIController implements Initializable {
+public class postExternalServiceController extends MainUIController implements Initializable {
     @FXML
     private TableView<ExternalService> availableExternalServiceListView;
     @FXML

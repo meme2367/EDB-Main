@@ -85,18 +85,23 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
             @Override
             public void onResponse(Call<getAvailableExternalServiceResponse> call, Response<getAvailableExternalServiceResponse> response) {
 
-                Platform.runLater(()->{
-                    System.out.println("in runLater\n");
-                    if (response.isSuccessful()) {
-                        int status = response.body().getStatus();
-                        if (status == 200) {
-                            System.out.print("\navilable service\n");
+                try {
+                    Platform.runLater(() -> {
+                        System.out.println("in runLater\n");
+                        if (response.isSuccessful()) {
+                            int status = response.body().getStatus();
+                            if (status == 200) {
+                                System.out.print("\navilable service\n");
 
-                            availableExternalServiceTableList(response.body().getData());
+                                availableExternalServiceTableList(response.body().getData());
 
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override

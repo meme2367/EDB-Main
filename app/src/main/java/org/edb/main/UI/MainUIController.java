@@ -35,7 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class ImprovedMainUIController {
+public class MainUIController {
     //    @FXML
     private HBox rootContainer;
     @FXML
@@ -92,6 +92,10 @@ public class ImprovedMainUIController {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginDialog.fxml"));
         Parent parent = loader.load();
+//        로그인 다이얼로그 닫는 이슈
+//        LoginDialogController controller=new LoginDialogController();
+//        controller.setStage(dialog);
+//        loader.setController(controller);
 
         Scene scene = new Scene(parent);
 

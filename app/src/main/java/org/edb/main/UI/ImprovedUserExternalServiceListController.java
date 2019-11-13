@@ -98,16 +98,21 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
             @Override
             public void onResponse(Call<getExternalServiceListResponse> call, Response<getExternalServiceListResponse> response) {
-                Platform.runLater(()->{
-                    System.out.println("in runLater\n");
-                    if (response.isSuccessful()) {
-                        int status = response.body().getStatus();
-                        if (status == 200) {
-                            showExternalServiceTableList(response.body().getData());
+                try {
+                    Platform.runLater(() -> {
+                        System.out.println("in runLater\n");
+                        if (response.isSuccessful()) {
+                            int status = response.body().getStatus();
+                            if (status == 200) {
+                                showExternalServiceTableList(response.body().getData());
 
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override

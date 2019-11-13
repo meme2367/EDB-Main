@@ -1,28 +1,13 @@
 package org.edb.main.UI;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.edb.main.Authorization;
-import org.edb.main.ExternalService;
-import org.edb.main.network.RestApiConnector;
-import org.edb.main.network.get.getAvailableExternalServiceResponse;
-import org.edb.main.network.get.getExternalServiceListResponse;
-import org.edb.main.tempExternalService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class BootApp extends Application {
 
@@ -48,8 +33,8 @@ public class BootApp extends Application {
             String token = Authorization.getToken();
 
             FXMLLoader loader = new FXMLLoader();
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/improvedMainUI.fxml"));
-            loader.setLocation(BootApp.class.getResource("/fxml/improvedMainUI.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainUI.fxml"));
+            loader.setLocation(BootApp.class.getResource("/fxml/MainUI.fxml"));
             rootLayout = (HBox) loader.load();
 
             Scene scene = new Scene(rootLayout);
