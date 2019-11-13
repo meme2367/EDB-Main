@@ -30,6 +30,15 @@ public class LoginDialogController implements Initializable {
     @FXML
     private Button loginBtn;
 
+    private Stage primaryStage;
+
+    private Stage stage;
+
+
+
+    public void setStage(Stage dialog) {
+        this.stage=stage;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { }
@@ -48,25 +57,39 @@ public class LoginDialogController implements Initializable {
 
         postLoginResponseCall.enqueue(new Callback<postLoginResponse>() {
 
+            private Stage stage;
+
+            private Callback<postLoginResponse> init(Stage stage){
+                this.stage=stage;
+                return this;
+            }
+
             @Override
             public void onResponse(Call<postLoginResponse> call, Response<postLoginResponse> response) {
 
                 if (response.isSuccessful()) {
+                    if(stage==null){
+                        System.out.println("onResponse stage null\n");
+                        System.out.println(this);
+                    }
+
                     int status = response.body().getStatus();
                     if (status == 200) {
                         System.out.print("db connect success\n");
-
                         String tempToken=response.body().getToken();
                         User.login(tempId,tempToken);
                         Platform.runLater(()->{
                             Scene tempScene = BootApp.getPrimaryStage().getScene();
-                            //nullpointer exception
                             Button loginBtn = (Button) tempScene.lookup("#loginBtn");
                             Label userIdLbl = (Label)tempScene.lookup("#userIdLbl");
                             loginBtn.setDisable(true);
                             userIdLbl.setVisible(true);
                             userIdLbl.setText(tempId);
-
+//                            this.stage.close();
+                            /*
+                            로그인 다이얼로그 닫는 이슈
+                            null pointer exception...
+                             */
                         });
                     }
                 }
@@ -77,7 +100,7 @@ public class LoginDialogController implements Initializable {
                 System.out.print("error\n");
                 System.out.println(throwable);
             }
-        });
+        }.init(stage));
 
     }
 

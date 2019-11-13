@@ -2,48 +2,62 @@ package org.edb.main.UI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.edb.main.Authorization;
 
+import java.io.IOException;
+
 public class BootApp extends Application {
 
-    private static Stage primaryStage;
+    public static Stage primaryStage;
+
+    public static HBox rootLayout;
+
+    public BootApp() {
+
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        String token = Authorization.getToken();
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("EDB-Main");
+        initRootLayout();
 
-        if(token == ""){
-            //token이 없으면
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUI.fxml"));
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/improvedMainUI.fxml"));
+    }
 
-            Scene scene = new Scene(root);
+    public void initRootLayout() {
+        try {
+            String token = Authorization.getToken();
 
-            this.primaryStage=primaryStage;
+            FXMLLoader loader = new FXMLLoader();
+//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainUI.fxml"));
+            loader.setLocation(BootApp.class.getResource("/fxml/MainUI.fxml"));
+            rootLayout = (HBox) loader.load();
+
+            Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.show();
-        }else{
 
-//            //token이 있으면
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainUIAfterLogin.fxml"));
-//
-//            Scene scene = new Scene(root);
-//
-//            primaryStage.setScene(scene);
-//            primaryStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-
     }
 
-    public static Stage getPrimaryStage(){
+    public static Stage getPrimaryStage() {
         return primaryStage;
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+
 
 
 }
