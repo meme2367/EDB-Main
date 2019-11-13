@@ -33,19 +33,26 @@ public class ImprovedUserExternalServiceListController implements Initializable 
     @FXML
     private TableColumn<ExternalService, String> userExternalServiceUrl;
 
+    private ObservableList<ExternalService> userExternalData = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //초기화
-
         loadUserExternelServiceList();
-
 
     }
 
-    private ObservableList<ExternalService> userExternalData = FXCollections.observableArrayList();
+    public TableView<ExternalService> getUserExternalServiceListView() {
+        return userExternalServiceListView;
+    }
 
+    public TableColumn<ExternalService, String> getUserExternalServiceTitle() {
+        return userExternalServiceTitle;
+    }
 
-
+    public TableColumn<ExternalService, String> getUserExternalServiceUrl() {
+        return userExternalServiceUrl;
+    }
 
     public ObservableList<ExternalService> getUserExternalData() {
         return userExternalData;
@@ -82,6 +89,13 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
         getExternalServiceListResponseCall.enqueue(new Callback<getExternalServiceListResponse>() {
 
+            private ImprovedUserExternalServiceListController controller;
+
+            private Callback<getExternalServiceListResponse> init(ImprovedUserExternalServiceListController controller){
+                this.controller=controller;
+                return this;
+            }
+
             @Override
             public void onResponse(Call<getExternalServiceListResponse> call, Response<getExternalServiceListResponse> response) {
                 Platform.runLater(()->{
@@ -106,15 +120,30 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
 
             private void showExternalServiceTableList(ArrayList<tempExternalService> data) {
+
+                ObservableList<ExternalService> userExternalData=controller.getUserExternalData();
+
                 for (tempExternalService value : data) {
                     userExternalData.add(new ExternalService(value.getName(), value.getUrl()));
                 }
-                userExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-                userExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
-                userExternalServiceListView.setItems(userExternalData);
+
+                if(controller==null){
+                    System.out.println("null controller\n");
+                }
+                if(controller.getUserExternalData()==null){
+                    System.out.println("null ExternalData\n");
+                }
+
+                controller.getUserExternalServiceTitle().setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+//                userExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+                controller.getUserExternalServiceUrl().setCellValueFactory(cellData -> cellData.getValue().urlProperty());
+//                userExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
+                controller.getUserExternalServiceListView().setItems(userExternalData);
+//                userExternalServiceListView.setItems(userExternalData);
+
 
             }
-        });
+        }.init(this));
 
 
     }

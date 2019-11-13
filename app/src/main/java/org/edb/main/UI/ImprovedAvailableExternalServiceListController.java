@@ -34,16 +34,28 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
 
     private ObservableList<ExternalService> availableExternalData = FXCollections.observableArrayList();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //초기화
-        loadAvailableExternalServiceList();
+    public TableView<ExternalService> getAvailableExternalServiceListView() {
+        return availableExternalServiceListView;
+    }
+
+    public TableColumn<ExternalService, String> getAvailableExternalServiceTitle() {
+        return availableExternalServiceTitle;
+    }
+
+    public TableColumn<ExternalService, String> getAvailableExternalServiceUrl() {
+        return availableExternalServiceUrl;
     }
 
 
     public ObservableList<ExternalService> getAvailableExternalData() {
         return availableExternalData;
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //초기화
+        loadAvailableExternalServiceList();
     }
 
 
@@ -55,13 +67,20 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
         catch(RuntimeException runtimeException){
             token="dummy";
         }
-        
+
         System.out.print("\n외부서비스등록sertokentest\n");
 
         Call<getAvailableExternalServiceResponse> getAvailableExternalServiceResponseCall =
                 RestApiConnector.getExternalServiceNetworkService().getAvailableExternalServiceListAPI();
 
         getAvailableExternalServiceResponseCall.enqueue(new Callback<getAvailableExternalServiceResponse>() {
+
+            private ImprovedAvailableExternalServiceListController controller;
+
+            private Callback<getAvailableExternalServiceResponse> init(ImprovedAvailableExternalServiceListController controller){
+                this.controller=controller;
+                return this;
+            }
 
             @Override
             public void onResponse(Call<getAvailableExternalServiceResponse> call, Response<getAvailableExternalServiceResponse> response) {
@@ -88,15 +107,30 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
 
             private void availableExternalServiceTableList(ArrayList<tempExternalService> data) {
 
+                ObservableList<ExternalService> availableExternalData=controller.getAvailableExternalData();
+
+
                 for (tempExternalService value : data) {
                     availableExternalData.add(new ExternalService(value.getName(), value.getUrl()));
                 }
 
-                availableExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-                availableExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
-                availableExternalServiceListView.setItems(availableExternalData);
+                if(controller==null){
+                    System.out.println("null controller\n");
+                }
+                if(controller.getAvailableExternalData()==null){
+                    System.out.println("null ExternalData\n");
+                }
+
+                controller.getAvailableExternalServiceTitle().setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+//                availableExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+                controller.getAvailableExternalServiceUrl().setCellValueFactory(cellData -> cellData.getValue().urlProperty());
+//                availableExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
+                controller.getAvailableExternalServiceListView().setItems(availableExternalData);
+//                availableExternalServiceListView.setItems(availableExternalData);
+
+
             }
-        });
+        }.init(this));
 
     }
 
