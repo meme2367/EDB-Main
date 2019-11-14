@@ -51,6 +51,8 @@ public class User {
         if(loggedInUser!=null){
             if(id!=loggedInUser.getId())loggedInUser.logOut();
         }
+
+        loggedInUser = new User(id,token);
         /*
             token=로그인 처리
             loadPluginConfig()
