@@ -73,6 +73,12 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
     public void loadUserExternelServiceList() {
         String token;
+
+
+        System.out.print("\nuser\n");
+        System.out.print(User.getUser().getToken());
+        System.out.print(User.getUser().getId());
+
         try {
             token = User.getUser().getToken();
         }
@@ -104,6 +110,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                         if (response.isSuccessful()) {
                             int status = response.body().getStatus();
                             if (status == 200) {
+
                                 showExternalServiceTableList(response.body().getData());
 
                             }
@@ -126,16 +133,17 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
             private void showExternalServiceTableList(ArrayList<tempExternalService> data) {
 
-                ObservableList<ExternalService> userExternalData=controller.getUserExternalData();
+                ObservableList<ExternalService> userExternalData = controller.getUserExternalData();
 
                 for (tempExternalService value : data) {
                     userExternalData.add(new ExternalService(value.getName(), value.getUrl()));
                 }
 
-                if(controller==null){
+
+                if (controller == null) {
                     System.out.println("null controller\n");
                 }
-                if(controller.getUserExternalData()==null){
+                if (controller.getUserExternalData() == null) {
                     System.out.println("null ExternalData\n");
                 }
 
@@ -145,9 +153,10 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 //                userExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
                 controller.getUserExternalServiceListView().setItems(userExternalData);
 //                userExternalServiceListView.setItems(userExternalData);
-
-
             }
+
+
+
         }.init(this));
 
 
