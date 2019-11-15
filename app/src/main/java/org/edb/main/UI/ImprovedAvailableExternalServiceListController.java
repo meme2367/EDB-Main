@@ -70,6 +70,7 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
         }
 
         System.out.print("\n외부서비스등록sertokentest\n");
+        System.out.print(token);
 
         Call<getAvailableExternalServiceResponse> getAvailableExternalServiceResponseCall =
                 RestApiConnector.getExternalServiceNetworkService().getAvailableExternalServiceListAPI();
@@ -117,7 +118,7 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
 
 
                 for (tempExternalService value : data) {
-                    availableExternalData.add(new ExternalService(value.getName(), value.getUrl()));
+                    availableExternalData.add(new ExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
                 }
 
                 if(controller==null){
