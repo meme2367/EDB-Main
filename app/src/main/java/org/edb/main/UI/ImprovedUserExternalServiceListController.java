@@ -17,6 +17,7 @@ import org.edb.main.*;
 import org.edb.main.network.RestApiConnector;
 import org.edb.main.network.get.getExternalServiceDetailListResponse;
 import org.edb.main.network.get.getExternalServiceListResponse;
+import org.edb.main.network.post.postExternalServiceResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,16 +47,21 @@ public class ImprovedUserExternalServiceListController implements Initializable 
     @FXML
     private TableColumn<ExternalServiceDetail, Boolean> externalServiceDetailChkBox;
 
+    @FXML
+    private Button postExternalDetailBtn;
 
     private ObservableList<ExternalServiceDetail> externalDetailData = FXCollections.observableArrayList();
+
+    public ArrayList<Integer[]> list = new ArrayList<Integer[]>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //초기화
         loadUserExternelServiceList();
 
+        //외부서비스목록테이블 선택시 목표달성테이블 띄우기
         userExternalServiceListView.getSelectionModel().selectedItemProperty()
-                .addListener((observable,oldValue,newValue)->showDetails(newValue));
+                .addListener((observable, oldValue, newValue) -> showDetails(newValue));
 
 
     }
@@ -78,9 +84,6 @@ public class ImprovedUserExternalServiceListController implements Initializable 
     }
 
 
-
-
-
     public void loadUserExternelServiceList() {
         String token;
 
@@ -91,9 +94,8 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
         try {
             token = User.getUser().getToken();
-        }
-        catch(RuntimeException runtimeException){
-            token="dummy";
+        } catch (RuntimeException runtimeException) {
+            token = "dummy";
         }
 
         System.out.print("\n외부서비스목록usertokentest\n");
@@ -107,8 +109,8 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
             private ImprovedUserExternalServiceListController controller;
 
-            private Callback<getExternalServiceListResponse> init(ImprovedUserExternalServiceListController controller){
-                this.controller=controller;
+            private Callback<getExternalServiceListResponse> init(ImprovedUserExternalServiceListController controller) {
+                this.controller = controller;
                 return this;
             }
 
@@ -126,8 +128,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                             }
                         }
                     });
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -139,14 +140,12 @@ public class ImprovedUserExternalServiceListController implements Initializable 
             }
 
 
-
-
             private void showExternalServiceTableList(ArrayList<tempExternalService> data) {
 
                 ObservableList<ExternalService> userExternalData = controller.getUserExternalData();
 
                 for (tempExternalService value : data) {
-                    userExternalData.add(new ExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
+                    userExternalData.add(new ExternalService(value.getName(), value.getUrl(), value.getExternal_service_idx()));
                 }
 
 
@@ -158,13 +157,10 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                 }
 
                 controller.getUserExternalServiceTitle().setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-//                userExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
                 controller.getUserExternalServiceUrl().setCellValueFactory(cellData -> cellData.getValue().urlProperty());
-//                userExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
                 controller.getUserExternalServiceListView().setItems(userExternalData);
-//                userExternalServiceListView.setItems(userExternalData);
-            }
 
+            }
 
 
         }.init(this));
@@ -172,14 +168,15 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
     }
 
-    public void showDetails(ExternalService clickValue){
+    public void showDetails(ExternalService clickValue) {
+
         System.out.print("\n특정 IDX 클릭\n");
         System.out.print(clickValue.getIdx());
-
+        //선택한 외부서비스의 external_idx
         loadDetailList(clickValue.getIdx());
     }
 
-    public void loadDetailList(int idx) {
+    public void loadDetailList(int externalIdx) {
         String token;
         System.out.print("\nuser\n");
         System.out.print(User.getUser().getToken());
@@ -187,13 +184,17 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
         try {
             token = User.getUser().getToken();
-        }
-        catch(RuntimeException runtimeException){
-            token="dummy";
+        } catch (RuntimeException runtimeException) {
+            token = "dummy";
         }
 
+        //선택한 외부서비스의 목표달성테이블 데이터받기
+        //요청값 externalIdx,token //응답값  external_service_detail_idx(목표달성idx),name (목표달성이름),if_achieve(달성여부 1 = 목표 달성 , 0 = 목표달성x)
+        //@GET("external/detail/{externalIdx}")
+
+        //데이터 받기 성공시 테이블과 체크박스 보여주기
         Call<getExternalServiceDetailListResponse> getExternalServiceDetailListResponseCall =
-                RestApiConnector.getExternalServiceNetworkService().getExternalServiceDetailListAPI(idx,token);
+                RestApiConnector.getExternalServiceNetworkService().getExternalServiceDetailListAPI(externalIdx, token);
 
         getExternalServiceDetailListResponseCall.enqueue(new Callback<getExternalServiceDetailListResponse>() {
 
@@ -214,19 +215,13 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                             if (status == 200) {
                                 System.out.print("detail result test\n");
                                 System.out.print(response.body().getData());
-
-                                showExternalServiceDetailTableList(response.body().getData());
+                                //데이터 받기 성공시 테이블과 체크박스 보여주기
+                                showExternalServiceDetailTableList(externalIdx, response.body().getData());
 
 
                             }
                         }
-
-
-
-
-
-                            });
-
+                    });
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -243,12 +238,12 @@ public class ImprovedUserExternalServiceListController implements Initializable 
     }
 
 
-    private void showExternalServiceDetailTableList(ArrayList<tempExternalServiceDetail> data) {
+    private void showExternalServiceDetailTableList(int externalIdx, ArrayList<tempExternalServiceDetail> data) {
 
         externalServiceDetailView.setVisible(true);
         externalServiceDetailTitle.setVisible(true);
         externalServiceDetail_IF_ARCHIEVE.setVisible(true);
-
+        postExternalDetailBtn.setVisible(true);
 
         externalDetailData.clear();
 
@@ -261,6 +256,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
         externalServiceDetailChkBox.setCellValueFactory(new PropertyValueFactory<ExternalServiceDetail, Boolean>("check"));
 
+
         externalServiceDetailChkBox.setCellFactory(column -> new TableCell<ExternalServiceDetail, Boolean>() {
             @Override
             protected void updateItem(Boolean check, boolean empty) {
@@ -268,13 +264,20 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                 if (check == null || empty) {
                     setGraphic(null);
                 } else {
+                    //체크박스생성
+                    //체크박스 클릭시 list 2차원 배열에 externalIdx 와 externalDetailIdx 를 저장함
+                    // (이후에 postExternalDetailBtn 버튼 클릭 시에 저장된 list를 이용해 목표 달성 갱신)
                     CheckBox box = new CheckBox();
                     BooleanProperty checked = (BooleanProperty) column.getCellObservableValue(getIndex());
                     ExternalServiceDetail cn = (ExternalServiceDetail) column.getTableView().getItems().get(getIndex());
                     if (checked.get()) {
-                        System.out.println(cn.idxProperty() + " is Checked!");
+//                        System.out.println(cn.idxProperty() + " is Checked!");
+
+                        list.add(new Integer[]{externalIdx, cn.idxProperty().get()});
+
+
                     } else {
-                        System.out.println(cn.idxProperty() + " is Unchecked!");
+//                        System.out.println(cn.idxProperty() + " is Unchecked!");
                     }
                     box.setSelected(checked.get());
                     box.selectedProperty().bindBidirectional(checked);
@@ -288,8 +291,71 @@ public class ImprovedUserExternalServiceListController implements Initializable 
         //externalServiceDetailView.setEditable(true);
         externalServiceDetailView.setItems(externalDetailData);
 
+
     }
 
+    public void postExternalDetailRequest() {
 
+        String token;
+
+        System.out.print("\npostTest\n");
+        System.out.print(User.getUser().getToken());
+
+        try {
+            token = User.getUser().getToken();
+        } catch (RuntimeException runtimeException) {
+            token = "dummy";
+        }
+//체크박스 클릭시 list 2차원 배열에 externalIdx 와 externalDetailIdx 를 저장
+//(이후에 postExternalDetailBtn 버튼 클릭 시에 저장된 list를 이용해 목표 달성 갱신)
+
+        //    @PUT("external/{externalIdx}/{externalDetailIdx}")
+        //요청값: externalIdx, externalDetailIdx, token
+        //응답값: statuscode, message, success여부
+
+        for(int i = 0;i< list.size();i++){
+
+            Call<postExternalServiceResponse> postExternalServiceDetailResponseCall =
+                    RestApiConnector.getExternalServiceNetworkService().postExternalServiceListAPI(list.get(i)[0], list.get(i)[1], token);
+
+            postExternalServiceDetailResponseCall.enqueue(new Callback<postExternalServiceResponse>() {
+
+                private ImprovedUserExternalServiceListController controller;
+
+                private Callback<postExternalServiceResponse> init(ImprovedUserExternalServiceListController controller) {
+                    this.controller = controller;
+                    return this;
+                }
+
+                @Override
+                public void onResponse(Call<postExternalServiceResponse> call, Response<postExternalServiceResponse> response) {
+                    try {
+                        Platform.runLater(() -> {
+                            System.out.println("in runLater\n");
+                            if (response.isSuccessful()) {
+                                int status = response.body().getStatus();
+                                if (status == 200) {
+                                    System.out.print("detail result test\n");
+                                    System.out.print(response.body().getMessage());
+                                }
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<postExternalServiceResponse> call, Throwable throwable) {
+                    System.out.print("error\n");
+                    System.out.println(throwable);
+                }
+
+            });
+
+
+        }
+        }
 
 }

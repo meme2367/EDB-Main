@@ -15,8 +15,8 @@ public interface externalServiceNetworkService {
     @GET("external/available")
     Call<getAvailableExternalServiceResponse> getAvailableExternalServiceListAPI();
 
-    @POST("external/{externalIdx}")
-    Call<postExternalServiceResponse> postExternalServiceListAPI(@Path("externalIdx") int externalIdx, @Header("token") String token);
+    @PUT("external/{externalIdx}/{externalDetailIdx}")
+    Call<postExternalServiceResponse> postExternalServiceListAPI(@Path("externalIdx") int externalIdx, @Path("externalDetailIdx") int externalDetailIdx ,@Header("token") String token);
 
     @GET("external/detail/{externalIdx}")
     Call<getExternalServiceDetailListResponse> getExternalServiceDetailListAPI(@Path("externalIdx") int externalIdx, @Header("token") String token);
