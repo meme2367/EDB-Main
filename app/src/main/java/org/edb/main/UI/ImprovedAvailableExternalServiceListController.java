@@ -56,6 +56,8 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //초기화
+        availableExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        availableExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
         loadAvailableExternalServiceList();
     }
 
@@ -95,8 +97,7 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
                             if (status == 200) {
                                 System.out.print("\navilable service\n");
 
-                                availableExternalServiceTableList(response.body().getData());
-
+                                controller.handleExternalServiceResponse(response.body().getData());
                             }
                         }
                     });
@@ -112,33 +113,26 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
                 System.out.println(throwable);
             }
 
-            private void availableExternalServiceTableList(ArrayList<tempExternalService> data) {
 
-                ObservableList<ExternalService> availableExternalData=controller.getAvailableExternalData();
-
-
-                for (tempExternalService value : data) {
-                    availableExternalData.add(new ExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
-                }
-
-                if(controller==null){
-                    System.out.println("null controller\n");
-                }
-                if(controller.getAvailableExternalData()==null){
-                    System.out.println("null ExternalData\n");
-                }
-
-                controller.getAvailableExternalServiceTitle().setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-//                availableExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-                controller.getAvailableExternalServiceUrl().setCellValueFactory(cellData -> cellData.getValue().urlProperty());
-//                availableExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
-                controller.getAvailableExternalServiceListView().setItems(availableExternalData);
-//                availableExternalServiceListView.setItems(availableExternalData);
-
-
-            }
         }.init(this));
 
     }
+
+    public void handleExternalServiceResponse(ArrayList<tempExternalService> data){
+        convertToRows(data);
+        addRowsToTableView();
+    }
+
+    public void convertToRows(ArrayList<tempExternalService> data) {
+
+        for (tempExternalService value : data) {
+            availableExternalData.add(new ExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
+        }
+    }
+
+    public void addRowsToTableView(){
+        availableExternalServiceListView.setItems(availableExternalData);
+    }
+
 
 }
