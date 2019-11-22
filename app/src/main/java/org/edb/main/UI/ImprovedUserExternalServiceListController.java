@@ -57,12 +57,19 @@ public class ImprovedUserExternalServiceListController implements Initializable 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //초기화
-        loadUserExternelServiceList();
+        userExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        userExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
+
+        loadUserExternalServiceList();
 
         //외부서비스목록테이블 선택시 목표달성테이블 띄우기
         userExternalServiceListView.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> showDetails(newValue));
 
+        externalServiceDetailTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        externalServiceDetail_IF_ARCHIEVE.setCellValueFactory(cellData -> cellData.getValue().ifachieveProperty());
+
+        externalServiceDetailChkBox.setCellValueFactory(new PropertyValueFactory<ExternalServiceDetail, Boolean>("check"));
 
     }
 
@@ -84,7 +91,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
     }
 
 
-    public void loadUserExternelServiceList() {
+    public void loadUserExternalServiceList() {
         String token;
 
 
@@ -123,7 +130,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                             int status = response.body().getStatus();
                             if (status == 200) {
 
-                                showExternalServiceTableList(response.body().getData());
+                                controller.handleUserExternalServiceResponse(response.body().getData());
 
                             }
                         }
@@ -139,34 +146,28 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                 System.out.println(throwable);
             }
 
-
-            private void showExternalServiceTableList(ArrayList<tempExternalService> data) {
-
-                ObservableList<ExternalService> userExternalData = controller.getUserExternalData();
-
-                for (tempExternalService value : data) {
-                    userExternalData.add(new ExternalService(value.getName(), value.getUrl(), value.getExternal_service_idx()));
-                }
-
-
-                if (controller == null) {
-                    System.out.println("null controller\n");
-                }
-                if (controller.getUserExternalData() == null) {
-                    System.out.println("null ExternalData\n");
-                }
-
-                controller.getUserExternalServiceTitle().setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-                controller.getUserExternalServiceUrl().setCellValueFactory(cellData -> cellData.getValue().urlProperty());
-                controller.getUserExternalServiceListView().setItems(userExternalData);
-
-            }
-
-
         }.init(this));
 
 
     }
+
+    public void handleUserExternalServiceResponse(ArrayList<tempExternalService> data) {
+
+        convertUserExternalServiceToRows(data);
+        addUserExternalServiceRowsToTableView();
+    }
+
+    public void convertUserExternalServiceToRows(ArrayList<tempExternalService> data) {
+
+        for (tempExternalService value : data) {
+            userExternalData.add(new ExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
+        }
+    }
+
+    public void addUserExternalServiceRowsToTableView(){
+        userExternalServiceListView.setItems(userExternalData);
+    }
+
 
     public void showDetails(ExternalService clickValue) {
 
@@ -216,8 +217,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                                 System.out.print("detail result test\n");
                                 System.out.print(response.body().getData());
                                 //데이터 받기 성공시 테이블과 체크박스 보여주기
-                                showExternalServiceDetailTableList(externalIdx, response.body().getData());
-
+                                controller.showExternalServiceDetailTableList(externalIdx, response.body().getData());
 
                             }
                         }
@@ -234,11 +234,11 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                 System.out.println(throwable);
             }
 
-        });
+        }.init(this));
     }
 
 
-    private void showExternalServiceDetailTableList(int externalIdx, ArrayList<tempExternalServiceDetail> data) {
+    public void showExternalServiceDetailTableList(int externalIdx, ArrayList<tempExternalServiceDetail> data) {
 
         externalServiceDetailView.setVisible(true);
         externalServiceDetailTitle.setVisible(true);
@@ -247,20 +247,15 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
         externalDetailData.clear();
 
-        for (tempExternalServiceDetail value : data) {
-            externalDetailData.add(new ExternalServiceDetail(value.getExternal_service_detail_idx(), value.getName(), value.getIf_achieve()));
-        }
+        convertExternalServiceDetailToRows(data);
 
-        externalServiceDetailTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        externalServiceDetail_IF_ARCHIEVE.setCellValueFactory(cellData -> cellData.getValue().ifachieveProperty());
-
-        externalServiceDetailChkBox.setCellValueFactory(new PropertyValueFactory<ExternalServiceDetail, Boolean>("check"));
-
-
+        //tablecolumn에 담길 tablecell을 만드는 cellFactory의 구현
         externalServiceDetailChkBox.setCellFactory(column -> new TableCell<ExternalServiceDetail, Boolean>() {
             @Override
             protected void updateItem(Boolean check, boolean empty) {
                 super.updateItem(check, empty);
+                //check : 새롭게 입력된 값?
+                //empty : 연결된 데이터가 있는지 여부?
                 if (check == null || empty) {
                     setGraphic(null);
                 } else {
@@ -269,6 +264,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                     // (이후에 postExternalDetailBtn 버튼 클릭 시에 저장된 list를 이용해 목표 달성 갱신)
                     CheckBox box = new CheckBox();
                     BooleanProperty checked = (BooleanProperty) column.getCellObservableValue(getIndex());
+
                     ExternalServiceDetail cn = (ExternalServiceDetail) column.getTableView().getItems().get(getIndex());
                     if (checked.get()) {
 //                        System.out.println(cn.idxProperty() + " is Checked!");
@@ -278,6 +274,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
                     } else {
 //                        System.out.println(cn.idxProperty() + " is Unchecked!");
+                        // 선택해제된것이라면 remove의 구현도 필요?
                     }
                     box.setSelected(checked.get());
                     box.selectedProperty().bindBidirectional(checked);
@@ -285,13 +282,22 @@ public class ImprovedUserExternalServiceListController implements Initializable 
                 }
             }
         });
+        //externalIdx를 받아올수 있는 다른방법을 고려한뒤 initialize 메소드로 이동 필요해보임..
 
 
         //externalServiceDetailView.getColumns().add(externalServiceDetailChkBox);
         //externalServiceDetailView.setEditable(true);
+        addExternalServiceDetailToTable();
+    }
+
+    private void convertExternalServiceDetailToRows(ArrayList<tempExternalServiceDetail> data) {
+        for (tempExternalServiceDetail value : data) {
+            externalDetailData.add(new ExternalServiceDetail(value.getExternal_service_detail_idx(), value.getName(), value.getIf_achieve()));
+        }
+    }
+
+    private void addExternalServiceDetailToTable() {
         externalServiceDetailView.setItems(externalDetailData);
-
-
     }
 
     public void postExternalDetailRequest() {
@@ -356,6 +362,6 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
 
         }
-        }
+    }
 
 }

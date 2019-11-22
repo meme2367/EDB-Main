@@ -58,6 +58,7 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
         //초기화
         availableExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         availableExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
+
         loadAvailableExternalServiceList();
     }
 
