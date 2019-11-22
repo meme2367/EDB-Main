@@ -41,4 +41,13 @@ public class ExternalService {
 
 
     public int getIdx() {return idx.get(); }
+
+    @Override
+    public String toString() {
+        return "ExternalService{" +
+                "url=" + url +
+                ", name=" + name +
+                ", idx=" + idx +
+                '}';
+    }
 }

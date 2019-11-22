@@ -31,9 +31,4 @@ public class RestApiConnector {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
-
-
-
-
-
 }
