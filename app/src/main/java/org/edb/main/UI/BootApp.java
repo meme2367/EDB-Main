@@ -6,6 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.edb.main.Authorization;
+import org.edb.main.ServerResponseHandler;
+import org.edb.main.UIManipulator;
+import org.edb.main.network.RestAPIRequester;
 
 import java.io.IOException;
 
@@ -24,11 +27,17 @@ public class BootApp extends Application {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("EDB-Main");
-        initRootLayout();
+        MainUIController mainUIController=initRootLayout();
 
+        FXManipulator fxManipulator= new FXManipulator();
+        fxManipulator.setMainUIController(mainUIController);
+        ServerResponseHandler serverResponseHandler=new ServerResponseHandler();
+        serverResponseHandler.setUiManipulator(fxManipulator);
+        RestAPIRequester restAPIRequester = new RestAPIRequester();
+        restAPIRequester.setMainHandler(serverResponseHandler);
     }
 
-    public void initRootLayout() {
+    public MainUIController initRootLayout() {
         try {
             String token = Authorization.getToken();
 
@@ -42,9 +51,11 @@ public class BootApp extends Application {
             primaryStage.setResizable(false);
             primaryStage.show();
 
+            return loader.getController();
 
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
 
     }

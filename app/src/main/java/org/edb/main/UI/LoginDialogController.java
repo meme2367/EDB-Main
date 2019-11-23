@@ -43,7 +43,30 @@ public class LoginDialogController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { }
 
-    public void loginRequest(ActionEvent event)throws Exception{
+    public void closeDialog(){
+        stage.close();
+    }
+
+    public void setMainUIToLogin(String id){
+        Platform.runLater(()->{
+            Scene tempScene = BootApp.getPrimaryStage().getScene();
+            Button loginBtn = (Button) tempScene.lookup("#loginBtn");
+            Label userIdLbl = (Label)tempScene.lookup("#userIdLbl");
+            loginBtn.setDisable(true);
+            userIdLbl.setVisible(true);
+            userIdLbl.setText(id);
+
+            this.closeDialog();
+//          this.stage.close();
+            /*
+                  로그인 다이얼로그 닫는 이슈
+                  null pointer exception...
+            */
+        });
+
+    }
+
+    public void onClickLoginBtn(ActionEvent event)throws Exception{
 
         String tempId=idField.getText();
 
@@ -57,10 +80,10 @@ public class LoginDialogController implements Initializable {
 
         postLoginResponseCall.enqueue(new Callback<postLoginResponse>() {
 
-            private Stage stage;
+            private LoginDialogController controller;
 
-            private Callback<postLoginResponse> init(Stage stage){
-                this.stage=stage;
+            private Callback<postLoginResponse> init(LoginDialogController controller){
+                this.controller=controller;
                 return this;
             }
 
@@ -78,19 +101,9 @@ public class LoginDialogController implements Initializable {
                         System.out.print("db connect success\n");
                         String tempToken=response.body().getToken();
                         User.login(tempId,tempToken);
-                        Platform.runLater(()->{
-                            Scene tempScene = BootApp.getPrimaryStage().getScene();
-                            Button loginBtn = (Button) tempScene.lookup("#loginBtn");
-                            Label userIdLbl = (Label)tempScene.lookup("#userIdLbl");
-                            loginBtn.setDisable(true);
-                            userIdLbl.setVisible(true);
-                            userIdLbl.setText(tempId);
-//                            this.stage.close();
-                            /*
-                            로그인 다이얼로그 닫는 이슈
-                            null pointer exception...
-                             */
-                        });
+                        controller.setMainUIToLogin(tempId);
+
+
                     }
                 }
             }
@@ -100,7 +113,7 @@ public class LoginDialogController implements Initializable {
                 System.out.print("error\n");
                 System.out.println(throwable);
             }
-        }.init(stage));
+        }.init(this));
 
     }
 

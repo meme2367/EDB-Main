@@ -1,6 +1,7 @@
 package org.edb.main.UI;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,6 +52,8 @@ public class MainUIController {
     @FXML
     private HBox centerUI;
 
+    private Stage loginDialog;
+
     public Stage primaryStage;
 
 //    public BorderPane rootLayout;
@@ -85,23 +88,25 @@ public class MainUIController {
     }
 
     public void showLoginDialog(ActionEvent event) throws Exception {
-        Stage dialog = new Stage(StageStyle.DECORATED);
-        dialog.initModality(Modality.WINDOW_MODAL);
-        dialog.initOwner(primaryStage);
-        dialog.setTitle("Login");
+        loginDialog = new Stage(StageStyle.DECORATED);
+        loginDialog.initModality(Modality.WINDOW_MODAL);
+        loginDialog.initOwner(primaryStage);
+        loginDialog.setTitle("Login");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginDialog.fxml"));
         Parent parent = loader.load();
 //        로그인 다이얼로그 닫는 이슈
-//        LoginDialogController controller=new LoginDialogController();
+//        LoginDialogController controller=(LoginDialogController)loader.getController();
 //        controller.setStage(dialog);
 //        loader.setController(controller);
 
         Scene scene = new Scene(parent);
 
-        dialog.setScene(scene);
-        dialog.setResizable(false);
-        dialog.show();
+        loginDialog.setScene(scene);
+        loginDialog.setResizable(false);
+        loginDialog.show();
+//        dialog.close();
+//        다이얼로그 닫는것은 메인에서 처리 해줘야 한다.
     }
 
     public void showRegisterDialog(ActionEvent event) throws RuntimeException {
@@ -116,6 +121,21 @@ public class MainUIController {
 
     public void getExternalServiceListButton(){
         changeCenterUI("/fxml/improvedUserExternalServiceList.fxml");
+    }
+
+    public void closeLoginDialog() {
+        if(loginDialog!=null) {
+            loginDialog.close();
+        }
+    }
+
+    public void setUILoggedIn(String id) {
+        Platform.runLater(()->{
+            loginBtn.setDisable(true);
+            userIdLbl.setVisible(true);
+            userIdLbl.setText(id);
+
+        });
     }
 }
 

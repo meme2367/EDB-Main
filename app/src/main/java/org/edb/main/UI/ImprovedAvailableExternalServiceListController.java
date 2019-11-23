@@ -78,6 +78,7 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
         Call<getAvailableExternalServiceResponse> getAvailableExternalServiceResponseCall =
                 RestApiConnector.getExternalServiceNetworkService().getAvailableExternalServiceListAPI();
 
+
         getAvailableExternalServiceResponseCall.enqueue(new Callback<getAvailableExternalServiceResponse>() {
 
             private ImprovedAvailableExternalServiceListController controller;
@@ -91,17 +92,14 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
             public void onResponse(Call<getAvailableExternalServiceResponse> call, Response<getAvailableExternalServiceResponse> response) {
 
                 try {
-                    Platform.runLater(() -> {
-                        System.out.println("in runLater\n");
-                        if (response.isSuccessful()) {
-                            int status = response.body().getStatus();
-                            if (status == 200) {
-                                System.out.print("\navilable service\n");
+                    if (response.isSuccessful()) {
+                        int status = response.body().getStatus();
+                        if (status == 200) {
+                            System.out.print("\navilable service\n");
 
-                                controller.handleExternalServiceResponse(response.body().getData());
-                            }
+                            controller.handleExternalServiceResponse(response.body().getData());
                         }
-                    });
+                    }
                 }
                 catch(Exception e){
                     e.printStackTrace();
@@ -120,8 +118,10 @@ public class ImprovedAvailableExternalServiceListController implements Initializ
     }
 
     public void handleExternalServiceResponse(ArrayList<tempExternalService> data){
-        convertToRows(data);
-        addRowsToTableView();
+        Platform.runLater(() -> {
+            convertToRows(data);
+            addRowsToTableView();
+        });
     }
 
     public void convertToRows(ArrayList<tempExternalService> data) {
