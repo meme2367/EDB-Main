@@ -7,14 +7,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.ArrayList;
-
 public class RestAPIRequester  implements ServerRequester {
 
-    ServerResponseHandler mainHandler;
+    ServerResponseHandler serverResponseHandler;
 
     public RestAPIRequester(ServerResponseHandler mainHandler) {
-        this.mainHandler = mainHandler;
+        this.serverResponseHandler = mainHandler;
     }
 
     @Override
@@ -53,7 +51,7 @@ public class RestAPIRequester  implements ServerRequester {
                         System.out.print("db connect success\n");
                         String tempToken=response.body().getToken();
 
-                        mainHandler.handleLoginResponse(id, tempToken);
+                        serverResponseHandler.handleLoginResponse(id, tempToken);
                     }
                 }
             }

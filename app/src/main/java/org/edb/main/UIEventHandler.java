@@ -6,4 +6,8 @@ public class UIEventHandler {
     public UIEventHandler(ServerRequester serverRequester) {
         this.serverRequester = serverRequester;
     }
+
+    public void OnClickLoginBtn(String id, String pw) {
+        serverRequester.requestLogin(id,pw);
+    }
 }

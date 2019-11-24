@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.edb.main.Authorization;
 import org.edb.main.ExternalService;
+import org.edb.main.UIEventHandler;
 import org.edb.main.network.RestApiConnector;
 import org.edb.main.network.get.getAvailableExternalServiceResponse;
 import org.edb.main.network.get.getExternalServiceListResponse;
@@ -51,18 +52,26 @@ public class MainUIController {
     private ComboBox pluginComboBox;
     @FXML
     private HBox centerUI;
-
-    private Stage loginDialog;
-
-    public Stage primaryStage;
-
-//    public BorderPane rootLayout;
-
     @FXML
     public Label getExternalServiceListButton;
 
+    private Stage loginDialog;
+    private UIEventHandler uiEventHandler;
+
+
     @FXML
     public Label postExternalServiceListButton;
+
+    public Stage primaryStage;
+
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    public void setUiEventHandler(UIEventHandler uiEventHandler) {
+        this.uiEventHandler = uiEventHandler;
+    }
 
 
     public void changeCenterUI(String filePath){
@@ -83,9 +92,7 @@ public class MainUIController {
         System.out.println("clearCenterUI\n");
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
+
 
     public void showLoginDialog(ActionEvent event) throws Exception {
         loginDialog = new Stage(StageStyle.DECORATED);
@@ -93,15 +100,13 @@ public class MainUIController {
         loginDialog.initOwner(primaryStage);
         loginDialog.setTitle("Login");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginDialog.fxml"));
-        Parent parent = loader.load();
+        Parent parent = FXFactory.getInstance().loadLoginUI("/fxml/loginDialog.fxml");
 
         Scene scene = new Scene(parent);
 
         loginDialog.setScene(scene);
         loginDialog.setResizable(false);
         loginDialog.show();
-
     }
 
     public void showRegisterDialog(ActionEvent event) throws RuntimeException {
@@ -125,11 +130,9 @@ public class MainUIController {
     }
 
     public void setUILoggedIn(String id) {
-        Platform.runLater(()->{
-            loginBtn.setDisable(true);
-            userIdLbl.setVisible(true);
-            userIdLbl.setText(id);
-        });
+        loginBtn.setDisable(true);
+        userIdLbl.setVisible(true);
+        userIdLbl.setText(id);
     }
 }
 

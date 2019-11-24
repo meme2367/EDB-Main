@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.edb.main.Authorization;
+import org.edb.main.UIEventHandler;
 import org.edb.main.User;
 import org.edb.main.network.RestApiConnector;
 import org.edb.main.network.post.postLoginResponse;
@@ -34,7 +35,11 @@ public class LoginDialogController implements Initializable {
 
     private Stage stage;
 
+    private UIEventHandler uiEventHandler;
 
+    public void setUiEventHandler(UIEventHandler uiEventHandler) {
+        this.uiEventHandler = uiEventHandler;
+    }
 
     public void setStage(Stage dialog) {
         this.stage=stage;
@@ -48,7 +53,7 @@ public class LoginDialogController implements Initializable {
     }
 
     public void onClickLoginBtn(ActionEvent event)throws Exception{
-
+        uiEventHandler.OnClickLoginBtn(idField.getText(),pwField.getText());
     }
 
 }
