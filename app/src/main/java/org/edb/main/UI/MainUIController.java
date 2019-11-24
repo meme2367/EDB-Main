@@ -1,41 +1,21 @@
 package org.edb.main.UI;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.edb.main.Authorization;
-import org.edb.main.ExternalService;
 import org.edb.main.UIEventHandler;
-import org.edb.main.network.RestApiConnector;
-import org.edb.main.network.get.getAvailableExternalServiceResponse;
-import org.edb.main.network.get.getExternalServiceListResponse;
-import org.edb.main.tempExternalService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 public class MainUIController {
     //    @FXML
@@ -125,7 +105,7 @@ public class MainUIController {
     public void showAvailableExternalServiceList() {
 
         try {
-            Parent parent = FXFactory.getInstance().loadAvailableExternalServiceUI("/fxml/improvedAvailableExternalServiceList.fxml");
+            Parent parent = FXFactory.getInstance().loadAvailableExternalServiceUI("/fxml/AvailableExternalServiceList.fxml");
             changeCenterUI(parent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,7 +115,7 @@ public class MainUIController {
 
     public void showUserExternalServiceList(){
         try {
-            Parent parent = FXFactory.getInstance().loadUserExternalServiceUI("/fxml/improvedUserExternalServiceList.fxml");
+            Parent parent = FXFactory.getInstance().loadUserExternalServiceUI("/fxml/UserExternalServiceList.fxml");
             changeCenterUI(parent);
         } catch (Exception e) {
             e.printStackTrace();

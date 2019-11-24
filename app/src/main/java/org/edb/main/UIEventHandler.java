@@ -14,4 +14,8 @@ public class UIEventHandler {
     public void onAvailableExternalServiceListLoaded(){
         serverRequester.requestAvailableExternalServices();
     }
+
+    public void onUserExternalServiceListLoaded(){
+        serverRequester.requestUserExternalServices();
+    }
 }

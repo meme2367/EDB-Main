@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class ImprovedUserExternalServiceListController implements Initializable {
+public class UserExternalServiceListController implements Initializable {
 
     @FXML
     private TableView<ExternalService> userExternalServiceListView;
@@ -56,6 +56,10 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
     private UIEventHandler uiEventHandler;
 
+    public void setUiEventHandler(UIEventHandler uiEventHandler) {
+        this.uiEventHandler=uiEventHandler;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //초기화
@@ -75,82 +79,10 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
     }
 
-    public TableView<ExternalService> getUserExternalServiceListView() {
-        return userExternalServiceListView;
-    }
-
-    public TableColumn<ExternalService, String> getUserExternalServiceTitle() {
-        return userExternalServiceTitle;
-    }
-
-    public TableColumn<ExternalService, String> getUserExternalServiceUrl() {
-        return userExternalServiceUrl;
-    }
-
-    public ObservableList<ExternalService> getUserExternalData() {
-        return userExternalData;
-
-    }
 
 
     public void loadUserExternalServiceList() {
-        String token;
-
-
-        System.out.print("\nuser\n");
-        System.out.print(User.getUser().getToken());
-        System.out.print(User.getUser().getId());
-
-        try {
-            token = User.getUser().getToken();
-        } catch (RuntimeException runtimeException) {
-            token = "dummy";
-        }
-
-        System.out.print("\n외부서비스목록usertokentest\n");
-        System.out.print(token);
-        System.out.print("\n");
-
-        Call<getExternalServiceListResponse> getExternalServiceListResponseCall =
-                RestApiConnector.getExternalServiceNetworkService().getExternalServiceListAPI(token);
-
-        getExternalServiceListResponseCall.enqueue(new Callback<getExternalServiceListResponse>() {
-
-            private ImprovedUserExternalServiceListController controller;
-
-            private Callback<getExternalServiceListResponse> init(ImprovedUserExternalServiceListController controller) {
-                this.controller = controller;
-                return this;
-            }
-
-            @Override
-            public void onResponse(Call<getExternalServiceListResponse> call, Response<getExternalServiceListResponse> response) {
-                try {
-                    Platform.runLater(() -> {
-                        System.out.println("in runLater\n");
-                        if (response.isSuccessful()) {
-                            int status = response.body().getStatus();
-                            if (status == 200) {
-
-                                controller.handleUserExternalServiceResponse(response.body().getData());
-
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<getExternalServiceListResponse> call, Throwable throwable) {
-                System.out.print("error\n");
-                System.out.println(throwable);
-            }
-
-        }.init(this));
-
-
+        uiEventHandler.onUserExternalServiceListLoaded();
     }
 
     public void handleUserExternalServiceResponse(ArrayList<tempExternalService> data) {
@@ -201,9 +133,9 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
         getExternalServiceDetailListResponseCall.enqueue(new Callback<getExternalServiceDetailListResponse>() {
 
-            private ImprovedUserExternalServiceListController controller;
+            private UserExternalServiceListController controller;
 
-            private Callback<getExternalServiceDetailListResponse> init(ImprovedUserExternalServiceListController controller) {
+            private Callback<getExternalServiceDetailListResponse> init(UserExternalServiceListController controller) {
                 this.controller = controller;
                 return this;
             }
@@ -328,9 +260,9 @@ public class ImprovedUserExternalServiceListController implements Initializable 
 
             postExternalServiceDetailResponseCall.enqueue(new Callback<postExternalServiceResponse>() {
 
-                private ImprovedUserExternalServiceListController controller;
+                private UserExternalServiceListController controller;
 
-                private Callback<postExternalServiceResponse> init(ImprovedUserExternalServiceListController controller) {
+                private Callback<postExternalServiceResponse> init(UserExternalServiceListController controller) {
                     this.controller = controller;
                     return this;
                 }
@@ -366,7 +298,4 @@ public class ImprovedUserExternalServiceListController implements Initializable 
         }
     }
 
-    public void setUiEventHandler(UIEventHandler uiEventHandler) {
-        this.uiEventHandler=uiEventHandler;
-    }
 }

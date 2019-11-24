@@ -6,15 +6,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.edb.main.ExternalService;
 import org.edb.main.tempExternalService;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ import java.util.ArrayList;
 public class AvailableExternalServiceListTest extends Application
 {
     public Stage primaryStage;
-    public ImprovedAvailableExternalServiceListController controller;
+    public AvailableExternalServiceListController controller;
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage=stage;
@@ -38,7 +35,7 @@ public class AvailableExternalServiceListTest extends Application
     public void loadAvailableExternalServiceListFXML()
     {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(BootApp.class.getResource("/fxml/improvedAvailableExternalServiceList.fxml"));
+        loader.setLocation(BootApp.class.getResource("/fxml/AvailableExternalServiceList.fxml"));
         Parent parent= null;
 
         try {
@@ -47,7 +44,7 @@ public class AvailableExternalServiceListTest extends Application
             e.printStackTrace();
         }
 
-        controller=(ImprovedAvailableExternalServiceListController)loader.getController();
+        controller=(AvailableExternalServiceListController)loader.getController();
         Scene scene = new Scene(parent);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);

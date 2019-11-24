@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class FXManipulator implements UIManipulator {
     private MainUIController mainUIController;
     private LoginDialogController loginDialogController;
-    private ImprovedAvailableExternalServiceListController availableExternalServicelListController;
-    private ImprovedUserExternalServiceListController userExternalServicelListController;
+    private AvailableExternalServiceListController availableExternalServicelListController;
+    private UserExternalServiceListController userExternalServicelListController;
 
     @Override
     public void onLoginSuccessful(String id) {
@@ -34,6 +34,13 @@ public class FXManipulator implements UIManipulator {
         });
     }
 
+    @Override
+    public void onResponseUserExternalServices(ArrayList<tempExternalService> data) {
+        Platform.runLater(()->{
+            userExternalServicelListController.handleUserExternalServiceResponse(data);
+        });
+    }
+
     public void setMainUIController(MainUIController mainUIController) {
         this.mainUIController = mainUIController;
     }
@@ -42,11 +49,11 @@ public class FXManipulator implements UIManipulator {
         this.loginDialogController = loginDialogController;
     }
 
-    public <T> void setAvailableExternalServicelListController(ImprovedAvailableExternalServiceListController availableExternalServicelListController) {
+    public <T> void setAvailableExternalServicelListController(AvailableExternalServiceListController availableExternalServicelListController) {
         this.availableExternalServicelListController = availableExternalServicelListController;
     }
 
-    public <T> void setUserExternalServicelListController(ImprovedUserExternalServiceListController userExternalServicelListController) {
+    public <T> void setUserExternalServicelListController(UserExternalServiceListController userExternalServicelListController) {
         this.userExternalServicelListController = userExternalServicelListController;
     }
 

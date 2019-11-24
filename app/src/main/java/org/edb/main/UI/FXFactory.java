@@ -52,7 +52,7 @@ public class FXFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent parent = loader.load();
 
-        loader.<ImprovedAvailableExternalServiceListController>getController().setUiEventHandler(uiEventHandler);
+        loader.<AvailableExternalServiceListController>getController().setUiEventHandler(uiEventHandler);
         fxManipulator.setAvailableExternalServicelListController(loader.getController());
 
         return parent;
@@ -62,7 +62,7 @@ public class FXFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent parent = loader.load();
 
-        loader.<ImprovedUserExternalServiceListController>getController().setUiEventHandler(uiEventHandler);
+        loader.<UserExternalServiceListController>getController().setUiEventHandler(uiEventHandler);
         fxManipulator.setUserExternalServicelListController(loader.getController());
 
         return parent;

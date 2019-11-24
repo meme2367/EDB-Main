@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class ImprovedAvailableExternalServiceListController implements Initializable {
+public class AvailableExternalServiceListController implements Initializable {
     @FXML
     private TableView<ExternalService> availableExternalServiceListView;
     @FXML

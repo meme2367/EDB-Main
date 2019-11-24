@@ -8,4 +8,6 @@ public interface UIManipulator {
     void onLoginUnsuccessful();
 
     void onResponseAvailableExternalServices(ArrayList<tempExternalService> data);
+
+    void onResponseUserExternalServices(ArrayList<tempExternalService> data);
 }

@@ -1,9 +1,11 @@
 package org.edb.main.network;
 
 import com.google.gson.JsonObject;
+import javafx.application.Platform;
 import org.edb.main.*;
-import org.edb.main.UI.ImprovedAvailableExternalServiceListController;
+import org.edb.main.UI.UserExternalServiceListController;
 import org.edb.main.network.get.getAvailableExternalServiceResponse;
+import org.edb.main.network.get.getExternalServiceListResponse;
 import org.edb.main.network.post.postLoginResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,8 +19,7 @@ public class RestAPIRequester  implements ServerRequester {
         this.serverResponseHandler = serverResponseHandler;
     }
 
-    @Override
-    public void requestAvailableExternalServices() {
+    private String getToken() {
         String token;
         try {
             token = User.getUser().getToken();
@@ -26,6 +27,12 @@ public class RestAPIRequester  implements ServerRequester {
         catch(RuntimeException runtimeException){
             token="dummy";
         }
+        return token;
+    }
+
+    @Override
+    public void requestAvailableExternalServices() {
+        String token=getToken();
 
         Call<getAvailableExternalServiceResponse> getAvailableExternalServiceResponseCall =
                 RestApiConnector.getExternalServiceNetworkService().getAvailableExternalServiceListAPI();
@@ -59,8 +66,33 @@ public class RestAPIRequester  implements ServerRequester {
 
     }
 
+
+
     @Override
     public void requestUserExternalServices() {
+        String token=getToken();
+
+
+        Call<getExternalServiceListResponse> getExternalServiceListResponseCall =
+                RestApiConnector.getExternalServiceNetworkService().getExternalServiceListAPI(token);
+
+        getExternalServiceListResponseCall.enqueue(new Callback<getExternalServiceListResponse>() {
+
+            @Override
+            public void onResponse(Call<getExternalServiceListResponse> call, Response<getExternalServiceListResponse> response) {
+                if (response.isSuccessful()) {
+                    serverResponseHandler.handleUserExternalServiceResponse(response.body().getData());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<getExternalServiceListResponse> call, Throwable throwable) {
+                System.out.print("error\n");
+                System.out.println(throwable);
+            }
+
+        });
+
 
     }
 

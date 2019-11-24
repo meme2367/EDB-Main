@@ -17,4 +17,8 @@ public class ServerResponseHandler {
     public void handleAvailableExernalServiceResponse(ArrayList<tempExternalService> data) {
         uiManipulator.onResponseAvailableExternalServices(data);
     }
+
+    public void handleUserExternalServiceResponse(ArrayList<tempExternalService> data) {
+        uiManipulator.onResponseUserExternalServices(data);
+    }
 }
