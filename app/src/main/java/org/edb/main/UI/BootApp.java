@@ -32,18 +32,20 @@ public class BootApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("EDB-Main");
 
+        initComponentRoots();
+        initRootLayout();
+    }
+
+    public void initComponentRoots(){
         FXManipulator fxManipulator= new FXManipulator();
         ServerResponseHandler serverResponseHandler=new ServerResponseHandler(fxManipulator);
         RestAPIRequester restAPIRequester = new RestAPIRequester(serverResponseHandler);
         UIEventHandler uiEventHandler=new UIEventHandler(restAPIRequester);
-        FXFactory fxFactory= FXFactory.getInstance();
-        fxFactory.init(uiEventHandler,fxManipulator);
-
-        initRootLayout(fxFactory);
-
+        FXFactory.getInstance().init(uiEventHandler,fxManipulator);
     }
 
-    public void initRootLayout(FXFactory fxFactory) {
+    public void initRootLayout() {
+        FXFactory fxFactory= FXFactory.getInstance();
         Parent parent = null;
         try {
             parent =fxFactory.loadMainUI("/fxml/MainUI.fxml");

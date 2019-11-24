@@ -11,8 +11,8 @@ public class RestAPIRequester  implements ServerRequester {
 
     ServerResponseHandler serverResponseHandler;
 
-    public RestAPIRequester(ServerResponseHandler mainHandler) {
-        this.serverResponseHandler = mainHandler;
+    public RestAPIRequester(ServerResponseHandler serverResponseHandler) {
+        this.serverResponseHandler = serverResponseHandler;
     }
 
     @Override
@@ -52,6 +52,7 @@ public class RestAPIRequester  implements ServerRequester {
                         String tempToken=response.body().getToken();
 
                         serverResponseHandler.handleLoginResponse(id, tempToken);
+//                        실패시 그 결과를 UI에 주려면, 위 메소드 인터페이스가 status도 받아들일 수 있도록.
                     }
                 }
             }
