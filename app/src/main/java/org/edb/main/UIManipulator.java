@@ -10,4 +10,6 @@ public interface UIManipulator {
     void onResponseAvailableExternalServices(ArrayList<tempExternalService> data);
 
     void onResponseUserExternalServices(ArrayList<tempExternalService> data);
+
+    void onResponseExternalServiceDetails(int externalIdx, ArrayList<tempExternalServiceDetail> data);
 }

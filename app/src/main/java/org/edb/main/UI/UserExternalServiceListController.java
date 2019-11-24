@@ -112,63 +112,7 @@ public class UserExternalServiceListController implements Initializable {
     }
 
     public void loadDetailList(int externalIdx) {
-        String token;
-        System.out.print("\nuser\n");
-        System.out.print(User.getUser().getToken());
-        System.out.print(User.getUser().getId());
-
-        try {
-            token = User.getUser().getToken();
-        } catch (RuntimeException runtimeException) {
-            token = "dummy";
-        }
-
-        //선택한 외부서비스의 목표달성테이블 데이터받기
-        //요청값 externalIdx,token //응답값  external_service_detail_idx(목표달성idx),name (목표달성이름),if_achieve(달성여부 1 = 목표 달성 , 0 = 목표달성x)
-        //@GET("external/detail/{externalIdx}")
-
-        //데이터 받기 성공시 테이블과 체크박스 보여주기
-        Call<getExternalServiceDetailListResponse> getExternalServiceDetailListResponseCall =
-                RestApiConnector.getExternalServiceNetworkService().getExternalServiceDetailListAPI(externalIdx, token);
-
-        getExternalServiceDetailListResponseCall.enqueue(new Callback<getExternalServiceDetailListResponse>() {
-
-            private UserExternalServiceListController controller;
-
-            private Callback<getExternalServiceDetailListResponse> init(UserExternalServiceListController controller) {
-                this.controller = controller;
-                return this;
-            }
-
-            @Override
-            public void onResponse(Call<getExternalServiceDetailListResponse> call, Response<getExternalServiceDetailListResponse> response) {
-                try {
-                    Platform.runLater(() -> {
-                        System.out.println("in runLater\n");
-                        if (response.isSuccessful()) {
-                            int status = response.body().getStatus();
-                            if (status == 200) {
-                                System.out.print("detail result test\n");
-                                System.out.print(response.body().getData());
-                                //데이터 받기 성공시 테이블과 체크박스 보여주기
-                                controller.showExternalServiceDetailTableList(externalIdx, response.body().getData());
-
-                            }
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<getExternalServiceDetailListResponse> call, Throwable throwable) {
-                System.out.print("error\n");
-                System.out.println(throwable);
-            }
-
-        }.init(this));
+        uiEventHandler.onExternalServiceDetailRequested(externalIdx);
     }
 
 
@@ -204,6 +148,9 @@ public class UserExternalServiceListController implements Initializable {
 //                        System.out.println(cn.idxProperty() + " is Checked!");
 
                         list.add(new Integer[]{externalIdx, cn.idxProperty().get()});
+                        //externalIdx는 다른 테이블에 정의되어 있기 때문에 row를 받는 방법은 불가능
+                        //list에도 접근할 방법을 명시해줄 필요가 있음.
+                        //tableView가 가지고 있도록?
 
 
                     } else {
