@@ -3,7 +3,7 @@ package org.edb.main;
 public class ServerResponseHandler {
     private UIManipulator uiManipulator;
 
-    public void setUiManipulator(UIManipulator uiManipulator) {
+    public ServerResponseHandler(UIManipulator uiManipulator) {
         this.uiManipulator = uiManipulator;
     }
 

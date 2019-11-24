@@ -13,7 +13,7 @@ public class RestAPIRequester  implements ServerRequester {
 
     ServerResponseHandler mainHandler;
 
-    public void setMainHandler(ServerResponseHandler mainHandler) {
+    public RestAPIRequester(ServerResponseHandler mainHandler) {
         this.mainHandler = mainHandler;
     }
 

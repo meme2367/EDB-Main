@@ -95,18 +95,13 @@ public class MainUIController {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginDialog.fxml"));
         Parent parent = loader.load();
-//        로그인 다이얼로그 닫는 이슈
-//        LoginDialogController controller=(LoginDialogController)loader.getController();
-//        controller.setStage(dialog);
-//        loader.setController(controller);
 
         Scene scene = new Scene(parent);
 
         loginDialog.setScene(scene);
         loginDialog.setResizable(false);
         loginDialog.show();
-//        dialog.close();
-//        다이얼로그 닫는것은 메인에서 처리 해줘야 한다.
+
     }
 
     public void showRegisterDialog(ActionEvent event) throws RuntimeException {
@@ -134,7 +129,6 @@ public class MainUIController {
             loginBtn.setDisable(true);
             userIdLbl.setVisible(true);
             userIdLbl.setText(id);
-
         });
     }
 }

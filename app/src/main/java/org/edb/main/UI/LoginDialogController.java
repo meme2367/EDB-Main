@@ -47,73 +47,7 @@ public class LoginDialogController implements Initializable {
         stage.close();
     }
 
-    public void setMainUIToLogin(String id){
-        Platform.runLater(()->{
-            Scene tempScene = BootApp.getPrimaryStage().getScene();
-            Button loginBtn = (Button) tempScene.lookup("#loginBtn");
-            Label userIdLbl = (Label)tempScene.lookup("#userIdLbl");
-            loginBtn.setDisable(true);
-            userIdLbl.setVisible(true);
-            userIdLbl.setText(id);
-
-            this.closeDialog();
-//          this.stage.close();
-            /*
-                  로그인 다이얼로그 닫는 이슈
-                  null pointer exception...
-            */
-        });
-
-    }
-
     public void onClickLoginBtn(ActionEvent event)throws Exception{
-
-        String tempId=idField.getText();
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", tempId);
-        jsonObject.addProperty("passwd", pwField.getText());
-
-
-        Call<postLoginResponse> postLoginResponseCall =
-                RestApiConnector.getUserNetworkService().postLoginAPI(jsonObject);
-
-        postLoginResponseCall.enqueue(new Callback<postLoginResponse>() {
-
-            private LoginDialogController controller;
-
-            private Callback<postLoginResponse> init(LoginDialogController controller){
-                this.controller=controller;
-                return this;
-            }
-
-            @Override
-            public void onResponse(Call<postLoginResponse> call, Response<postLoginResponse> response) {
-
-                if (response.isSuccessful()) {
-                    if(stage==null){
-                        System.out.println("onResponse stage null\n");
-                        System.out.println(this);
-                    }
-
-                    int status = response.body().getStatus();
-                    if (status == 200) {
-                        System.out.print("db connect success\n");
-                        String tempToken=response.body().getToken();
-                        User.login(tempId,tempToken);
-                        controller.setMainUIToLogin(tempId);
-
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<postLoginResponse> call, Throwable throwable) {
-                System.out.print("error\n");
-                System.out.println(throwable);
-            }
-        }.init(this));
 
     }
 
