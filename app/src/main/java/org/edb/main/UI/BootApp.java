@@ -2,12 +2,19 @@ package org.edb.main.UI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.edb.main.Authorization;
+import org.edb.main.ServerResponseHandler;
+import org.edb.main.UIEventHandler;
+import org.edb.main.UIManipulator;
+import org.edb.main.network.RestAPIRequester;
 
 import java.io.IOException;
+
+import static javafx.application.Platform.exit;
 
 public class BootApp extends Application {
 
@@ -24,29 +31,32 @@ public class BootApp extends Application {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("EDB-Main");
-        initRootLayout();
 
+        initComponentRoots();
+        initRootLayout();
+    }
+
+    public void initComponentRoots(){
+        FXManipulator fxManipulator= new FXManipulator();
+        ServerResponseHandler serverResponseHandler=new ServerResponseHandler(fxManipulator);
+        RestAPIRequester restAPIRequester = new RestAPIRequester(serverResponseHandler);
+        UIEventHandler uiEventHandler=new UIEventHandler(restAPIRequester);
+        FXFactory.getInstance().init(uiEventHandler,fxManipulator);
     }
 
     public void initRootLayout() {
+        FXFactory fxFactory= FXFactory.getInstance();
+        Parent parent = null;
         try {
-            String token = Authorization.getToken();
-
-            FXMLLoader loader = new FXMLLoader();
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainUI.fxml"));
-            loader.setLocation(BootApp.class.getResource("/fxml/MainUI.fxml"));
-            rootLayout = (HBox) loader.load();
-
-            Scene scene = new Scene(rootLayout);
+            parent =fxFactory.loadMainUI("/fxml/MainUI.fxml");
+            Scene scene = new Scene(parent);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.show();
-
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            exit();
         }
-
     }
 
     public static Stage getPrimaryStage() {

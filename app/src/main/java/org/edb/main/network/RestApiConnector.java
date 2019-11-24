@@ -10,7 +10,7 @@ public class RestApiConnector {
     private static final String BASE_URL = "http://localhost:3000/api/";
 
     public static userNetworkService getUserNetworkService(){
-        return getInstance().create(userNetworkService.class);
+        return createRetrofitInstance().create(userNetworkService.class);
     }
     //사용시
     //https://galid1.tistory.com/617
@@ -18,10 +18,10 @@ public class RestApiConnector {
     //반환 값loginResponse    //userNetworkService useNetworkService
 
     public static externalServiceNetworkService getExternalServiceNetworkService(){
-        return getInstance().create(externalServiceNetworkService.class);
+        return createRetrofitInstance().create(externalServiceNetworkService.class);
     }
 
-    private static Retrofit getInstance(){
+    private static Retrofit createRetrofitInstance(){
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -31,9 +31,4 @@ public class RestApiConnector {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
-
-
-
-
-
 }
