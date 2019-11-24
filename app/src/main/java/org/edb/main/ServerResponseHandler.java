@@ -1,5 +1,7 @@
 package org.edb.main;
 
+import java.util.ArrayList;
+
 public class ServerResponseHandler {
     private UIManipulator uiManipulator;
 
@@ -7,8 +9,12 @@ public class ServerResponseHandler {
         this.uiManipulator = uiManipulator;
     }
 
-    public void handleLoginResponse(String id, String token) {
-        User.login(id,token);
-        uiManipulator.onResponseLogin(id);
+    public void handleLoginResponse(boolean successful, String id) {
+        if(successful) uiManipulator.onLoginSuccessful(id);
+        else uiManipulator.onLoginUnsuccessful();
+    }
+
+    public void handleAvailableExernalServiceResponse(ArrayList<tempExternalService> data) {
+        uiManipulator.onResponseAvailableExternalServices(data);
     }
 }

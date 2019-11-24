@@ -2,6 +2,8 @@ package org.edb.main.network;
 
 import com.google.gson.JsonObject;
 import org.edb.main.*;
+import org.edb.main.UI.ImprovedAvailableExternalServiceListController;
+import org.edb.main.network.get.getAvailableExternalServiceResponse;
 import org.edb.main.network.post.postLoginResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,6 +19,43 @@ public class RestAPIRequester  implements ServerRequester {
 
     @Override
     public void requestAvailableExternalServices() {
+        String token;
+        try {
+            token = User.getUser().getToken();
+        }
+        catch(RuntimeException runtimeException){
+            token="dummy";
+        }
+
+        Call<getAvailableExternalServiceResponse> getAvailableExternalServiceResponseCall =
+                RestApiConnector.getExternalServiceNetworkService().getAvailableExternalServiceListAPI();
+
+        getAvailableExternalServiceResponseCall.enqueue(new Callback<getAvailableExternalServiceResponse>() {
+
+            @Override
+            public void onResponse(Call<getAvailableExternalServiceResponse> call, Response<getAvailableExternalServiceResponse> response) {
+
+                try {
+                    if (response.isSuccessful()) {
+                        int status = response.body().getStatus();
+                        if (status == 200) {
+                            System.out.print("\navilable service\n");
+
+                            serverResponseHandler.handleAvailableExernalServiceResponse(response.body().getData());
+                        }
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<getAvailableExternalServiceResponse> call, Throwable throwable) {
+                System.out.print("error\n");
+                System.out.println(throwable);
+            }
+        });
 
     }
 
@@ -44,17 +83,13 @@ public class RestAPIRequester  implements ServerRequester {
             @Override
             public void onResponse(Call<postLoginResponse> call, Response<postLoginResponse> response) {
 
-                if (response.isSuccessful()) {
-
-                    int status = response.body().getStatus();
-                    if (status == 200) {
-                        System.out.print("db connect success\n");
-                        String tempToken=response.body().getToken();
-
-                        serverResponseHandler.handleLoginResponse(id, tempToken);
-//                        실패시 그 결과를 UI에 주려면, 위 메소드 인터페이스가 status도 받아들일 수 있도록.
-                    }
+                boolean sucessful=response.isSuccessful();
+                if (sucessful) {
+                    System.out.print("db connect success\n");
+                    String tempToken=response.body().getToken();
+                    User.login(id,tempToken);
                 }
+                serverResponseHandler.handleLoginResponse(sucessful,id);
             }
 
             @Override

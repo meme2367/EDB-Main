@@ -2,14 +2,9 @@ package org.edb.main.UI;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+
 import org.edb.main.UIEventHandler;
 
-import java.io.IOException;
 
 public class FXFactory {
     private UIEventHandler uiEventHandler;
@@ -48,6 +43,27 @@ public class FXFactory {
 
         loader.<LoginDialogController>getController().setUiEventHandler(uiEventHandler);
         fxManipulator.setLoginDialogController(loader.getController());
+
+        return parent;
+
+    }
+
+    public Parent loadAvailableExternalServiceUI(String path)throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+        Parent parent = loader.load();
+
+        loader.<ImprovedAvailableExternalServiceListController>getController().setUiEventHandler(uiEventHandler);
+        fxManipulator.setAvailableExternalServicelListController(loader.getController());
+
+        return parent;
+    }
+
+    public Parent loadUserExternalServiceUI(String path) throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+        Parent parent = loader.load();
+
+        loader.<ImprovedUserExternalServiceListController>getController().setUiEventHandler(uiEventHandler);
+        fxManipulator.setUserExternalServicelListController(loader.getController());
 
         return parent;
 

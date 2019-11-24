@@ -87,6 +87,14 @@ public class MainUIController {
         }
     }
 
+    public void changeCenterUI(Parent parent){
+        clearCenterUI();
+        Scene tempScene=BootApp.getPrimaryStage().getScene();
+        HBox hbox=(HBox)tempScene.lookup("#centerUI");
+        hbox.getChildren().add(parent);
+
+    }
+
     private void clearCenterUI(){
         centerUI.getChildren().clear();
         System.out.println("clearCenterUI\n");
@@ -114,13 +122,24 @@ public class MainUIController {
     }
 
 
-    public void postExternalServiceListButton() {
-        changeCenterUI("/fxml/improvedAvailableExternalServiceList.fxml");
+    public void showAvailableExternalServiceList() {
+
+        try {
+            Parent parent = FXFactory.getInstance().loadAvailableExternalServiceUI("/fxml/improvedAvailableExternalServiceList.fxml");
+            changeCenterUI(parent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
-    public void getExternalServiceListButton(){
-        changeCenterUI("/fxml/improvedUserExternalServiceList.fxml");
+    public void showUserExternalServiceList(){
+        try {
+            Parent parent = FXFactory.getInstance().loadUserExternalServiceUI("/fxml/improvedUserExternalServiceList.fxml");
+            changeCenterUI(parent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void closeLoginDialog() {

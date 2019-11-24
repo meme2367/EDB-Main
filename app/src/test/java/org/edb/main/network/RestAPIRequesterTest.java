@@ -27,7 +27,7 @@ public class RestAPIRequesterTest {
                 System.out.println("token : " + (String)args[1]);
                 return null;
             }
-        }).when(serverResponseHandler).handleLoginResponse(anyString(),anyString());
+        }).when(serverResponseHandler).handleLoginResponse(anyBoolean(),anyString());
 
         RestAPIRequester restAPIRequester=new RestAPIRequester(serverResponseHandler);
         restAPIRequester.requestLogin("jooha208","123");

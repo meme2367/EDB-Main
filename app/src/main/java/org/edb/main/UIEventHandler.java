@@ -7,7 +7,11 @@ public class UIEventHandler {
         this.serverRequester = serverRequester;
     }
 
-    public void OnClickLoginBtn(String id, String pw) {
+    public void onClickLoginBtn(String id, String pw) {
         serverRequester.requestLogin(id,pw);
+    }
+
+    public void onAvailableExternalServiceListLoaded(){
+        serverRequester.requestAvailableExternalServices();
     }
 }

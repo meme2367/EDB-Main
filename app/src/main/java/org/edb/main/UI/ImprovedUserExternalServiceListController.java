@@ -1,18 +1,18 @@
 package org.edb.main.UI;
 
 import javafx.application.Platform;
-import javafx.beans.binding.BooleanBinding;
+
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.value.ObservableValue;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
+
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
+
 import org.edb.main.*;
 import org.edb.main.network.RestApiConnector;
 import org.edb.main.network.get.getExternalServiceDetailListResponse;
@@ -53,6 +53,8 @@ public class ImprovedUserExternalServiceListController implements Initializable 
     private ObservableList<ExternalServiceDetail> externalDetailData = FXCollections.observableArrayList();
 
     public ArrayList<Integer[]> list = new ArrayList<Integer[]>();
+
+    private UIEventHandler uiEventHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -364,4 +366,7 @@ public class ImprovedUserExternalServiceListController implements Initializable 
         }
     }
 
+    public void setUiEventHandler(UIEventHandler uiEventHandler) {
+        this.uiEventHandler=uiEventHandler;
+    }
 }

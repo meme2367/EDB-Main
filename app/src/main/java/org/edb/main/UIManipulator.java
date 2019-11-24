@@ -1,5 +1,11 @@
 package org.edb.main;
 
+import java.util.ArrayList;
+
 public interface UIManipulator {
-    void onResponseLogin(String id);
+    void onLoginSuccessful(String id);
+
+    void onLoginUnsuccessful();
+
+    void onResponseAvailableExternalServices(ArrayList<tempExternalService> data);
 }
