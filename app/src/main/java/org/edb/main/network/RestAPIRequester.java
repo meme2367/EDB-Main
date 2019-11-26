@@ -147,12 +147,12 @@ public class RestAPIRequester  implements ServerRequester {
             public void onResponse(Call<postLoginResponse> call, Response<postLoginResponse> response) {
 
                 boolean sucessful=response.isSuccessful();
+                String tempToken="null";
                 if (sucessful) {
                     System.out.print("db connect success\n");
-                    String tempToken=response.body().getToken();
-                    User.login(id,tempToken);
+                    tempToken=response.body().getToken();
                 }
-                serverResponseHandler.handleLoginResponse(sucessful,id);
+                serverResponseHandler.handleLoginResponse(sucessful,id,tempToken);
             }
 
             @Override
