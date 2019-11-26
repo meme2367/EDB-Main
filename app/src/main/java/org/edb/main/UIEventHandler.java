@@ -22,4 +22,7 @@ public class UIEventHandler {
     public void onExternalServiceDetailRequested(int externalIdx) {
         serverRequester.requestExternalServiceDetails(externalIdx);
     }
+
+    public void onUserPluginListLoaded(){ serverRequester.requestUserPlugins();}
+
 }

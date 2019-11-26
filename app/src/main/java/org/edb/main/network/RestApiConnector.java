@@ -21,6 +21,10 @@ public class RestApiConnector {
         return createRetrofitInstance().create(externalServiceNetworkService.class);
     }
 
+    public static pluginNetworkService getPluginService(){
+        return createRetrofitInstance().create(pluginNetworkService.class);
+    }
+
     private static Retrofit createRetrofitInstance(){
         Gson gson = new GsonBuilder()
                 .setLenient()
