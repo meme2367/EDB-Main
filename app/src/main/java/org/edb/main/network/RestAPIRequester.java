@@ -1,9 +1,7 @@
 package org.edb.main.network;
 
 import com.google.gson.JsonObject;
-import javafx.application.Platform;
 import org.edb.main.*;
-import org.edb.main.UI.UserExternalServiceListController;
 import org.edb.main.network.get.getAvailableExternalServiceResponse;
 import org.edb.main.network.get.getExternalServiceDetailListResponse;
 import org.edb.main.network.get.getExternalServiceListResponse;

@@ -2,8 +2,8 @@ package org.edb.main.UI;
 
 import javafx.application.Platform;
 import org.edb.main.UIManipulator;
-import org.edb.main.tempExternalService;
-import org.edb.main.tempExternalServiceDetail;
+import org.edb.main.ExternalService;
+import org.edb.main.ExternalServiceDetail;
 
 import java.util.ArrayList;
 
@@ -29,21 +29,21 @@ public class FXManipulator implements UIManipulator {
     }
 
     @Override
-    public void onResponseAvailableExternalServices(ArrayList<tempExternalService> data) {
+    public void onResponseAvailableExternalServices(ArrayList<ExternalService> data) {
         Platform.runLater(()->{
            availableExternalServicelListController.handleExternalServiceResponse(data);
         });
     }
 
     @Override
-    public void onResponseUserExternalServices(ArrayList<tempExternalService> data) {
+    public void onResponseUserExternalServices(ArrayList<ExternalService> data) {
         Platform.runLater(()->{
             userExternalServicelListController.handleUserExternalServiceResponse(data);
         });
     }
 
     @Override
-    public void onResponseExternalServiceDetails(int externalIdx, ArrayList<tempExternalServiceDetail> data) {
+    public void onResponseExternalServiceDetails(int externalIdx, ArrayList<ExternalServiceDetail> data) {
         Platform.runLater(()->{
             userExternalServicelListController.showExternalServiceDetailTableList(externalIdx,data);
         });

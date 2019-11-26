@@ -15,8 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import org.edb.main.*;
 import org.edb.main.network.RestApiConnector;
-import org.edb.main.network.get.getExternalServiceDetailListResponse;
-import org.edb.main.network.get.getExternalServiceListResponse;
 import org.edb.main.network.post.postExternalServiceResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,28 +27,28 @@ import java.util.ResourceBundle;
 public class UserExternalServiceListController implements Initializable {
 
     @FXML
-    private TableView<ExternalService> userExternalServiceListView;
+    private TableView<FXExternalService> userExternalServiceListView;
     @FXML
-    private TableColumn<ExternalService, String> userExternalServiceTitle;
+    private TableColumn<FXExternalService, String> userExternalServiceTitle;
     @FXML
-    private TableColumn<ExternalService, String> userExternalServiceUrl;
+    private TableColumn<FXExternalService, String> userExternalServiceUrl;
 
-    private ObservableList<ExternalService> userExternalData = FXCollections.observableArrayList();
-
-    @FXML
-    private TableView<ExternalServiceDetail> externalServiceDetailView;
-    @FXML
-    private TableColumn<ExternalServiceDetail, String> externalServiceDetailTitle;
-    @FXML
-    private TableColumn<ExternalServiceDetail, String> externalServiceDetail_IF_ARCHIEVE;
+    private ObservableList<FXExternalService> userExternalData = FXCollections.observableArrayList();
 
     @FXML
-    private TableColumn<ExternalServiceDetail, Boolean> externalServiceDetailChkBox;
+    private TableView<FXExternalServiceDetail> externalServiceDetailView;
+    @FXML
+    private TableColumn<FXExternalServiceDetail, String> externalServiceDetailTitle;
+    @FXML
+    private TableColumn<FXExternalServiceDetail, String> externalServiceDetail_IF_ARCHIEVE;
+
+    @FXML
+    private TableColumn<FXExternalServiceDetail, Boolean> externalServiceDetailChkBox;
 
     @FXML
     private Button postExternalDetailBtn;
 
-    private ObservableList<ExternalServiceDetail> externalDetailData = FXCollections.observableArrayList();
+    private ObservableList<FXExternalServiceDetail> externalDetailData = FXCollections.observableArrayList();
 
     public ArrayList<Integer[]> list = new ArrayList<Integer[]>();
 
@@ -75,7 +73,7 @@ public class UserExternalServiceListController implements Initializable {
         externalServiceDetailTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         externalServiceDetail_IF_ARCHIEVE.setCellValueFactory(cellData -> cellData.getValue().ifachieveProperty());
 
-        externalServiceDetailChkBox.setCellValueFactory(new PropertyValueFactory<ExternalServiceDetail, Boolean>("check"));
+        externalServiceDetailChkBox.setCellValueFactory(new PropertyValueFactory<FXExternalServiceDetail, Boolean>("check"));
 
     }
 
@@ -85,16 +83,16 @@ public class UserExternalServiceListController implements Initializable {
         uiEventHandler.onUserExternalServiceListLoaded();
     }
 
-    public void handleUserExternalServiceResponse(ArrayList<tempExternalService> data) {
+    public void handleUserExternalServiceResponse(ArrayList<ExternalService> data) {
 
         convertUserExternalServiceToRows(data);
         addUserExternalServiceRowsToTableView();
     }
 
-    public void convertUserExternalServiceToRows(ArrayList<tempExternalService> data) {
+    public void convertUserExternalServiceToRows(ArrayList<ExternalService> data) {
 
-        for (tempExternalService value : data) {
-            userExternalData.add(new ExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
+        for (ExternalService value : data) {
+            userExternalData.add(new FXExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
         }
     }
 
@@ -103,7 +101,7 @@ public class UserExternalServiceListController implements Initializable {
     }
 
 
-    public void showDetails(ExternalService clickValue) {
+    public void showDetails(FXExternalService clickValue) {
 
         System.out.print("\n특정 IDX 클릭\n");
         System.out.print(clickValue.getIdx());
@@ -116,7 +114,7 @@ public class UserExternalServiceListController implements Initializable {
     }
 
 
-    public void showExternalServiceDetailTableList(int externalIdx, ArrayList<tempExternalServiceDetail> data) {
+    public void showExternalServiceDetailTableList(int externalIdx, ArrayList<ExternalServiceDetail> data) {
 
         externalServiceDetailView.setVisible(true);
         externalServiceDetailTitle.setVisible(true);
@@ -128,7 +126,7 @@ public class UserExternalServiceListController implements Initializable {
         convertExternalServiceDetailToRows(data);
 
         //tablecolumn에 담길 tablecell을 만드는 cellFactory의 구현
-        externalServiceDetailChkBox.setCellFactory(column -> new TableCell<ExternalServiceDetail, Boolean>() {
+        externalServiceDetailChkBox.setCellFactory(column -> new TableCell<FXExternalServiceDetail, Boolean>() {
             @Override
             protected void updateItem(Boolean check, boolean empty) {
                 super.updateItem(check, empty);
@@ -143,7 +141,7 @@ public class UserExternalServiceListController implements Initializable {
                     CheckBox box = new CheckBox();
                     BooleanProperty checked = (BooleanProperty) column.getCellObservableValue(getIndex());
 
-                    ExternalServiceDetail cn = (ExternalServiceDetail) column.getTableView().getItems().get(getIndex());
+                    FXExternalServiceDetail cn = (FXExternalServiceDetail) column.getTableView().getItems().get(getIndex());
                     if (checked.get()) {
 //                        System.out.println(cn.idxProperty() + " is Checked!");
 
@@ -171,9 +169,9 @@ public class UserExternalServiceListController implements Initializable {
         addExternalServiceDetailToTable();
     }
 
-    private void convertExternalServiceDetailToRows(ArrayList<tempExternalServiceDetail> data) {
-        for (tempExternalServiceDetail value : data) {
-            externalDetailData.add(new ExternalServiceDetail(value.getExternal_service_detail_idx(), value.getName(), value.getIf_achieve()));
+    private void convertExternalServiceDetailToRows(ArrayList<ExternalServiceDetail> data) {
+        for (ExternalServiceDetail value : data) {
+            externalDetailData.add(new FXExternalServiceDetail(value.getExternal_service_detail_idx(), value.getName(), value.getIf_achieve()));
         }
     }
 

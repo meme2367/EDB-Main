@@ -1,12 +1,10 @@
 package org.edb.main.UI;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.edb.main.Authorization;
 import org.edb.main.ServerResponseHandler;
 import org.edb.main.UIEventHandler;
 import org.edb.main.UIManipulator;
@@ -40,7 +38,9 @@ public class BootApp extends Application {
         FXManipulator fxManipulator= new FXManipulator();
         ServerResponseHandler serverResponseHandler=new ServerResponseHandler(fxManipulator);
         RestAPIRequester restAPIRequester = new RestAPIRequester(serverResponseHandler);
+        serverResponseHandler.setServerRequester(restAPIRequester);
         UIEventHandler uiEventHandler=new UIEventHandler(restAPIRequester);
+        uiEventHandler.setUiManipulator(fxManipulator);
         FXFactory.getInstance().init(uiEventHandler,fxManipulator);
     }
 

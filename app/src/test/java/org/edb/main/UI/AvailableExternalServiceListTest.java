@@ -7,8 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.edb.main.FXExternalService;
 import org.edb.main.ExternalService;
-import org.edb.main.tempExternalService;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -52,18 +52,18 @@ public class AvailableExternalServiceListTest extends Application
     }
 
 
-    private ArrayList<tempExternalService> createServiceList(){
-        ArrayList<tempExternalService> data=new ArrayList<>();
-        data.add(new tempExternalService(1, 2,"inflearn","www.inflearn.com"));
+    private ArrayList<ExternalService> createServiceList(){
+        ArrayList<ExternalService> data=new ArrayList<>();
+        data.add(new ExternalService(1, 2,"inflearn","www.inflearn.com"));
         return data;
     }
 
-    private void convertToRowsTest(ArrayList<tempExternalService> data){
+    private void convertToRowsTest(ArrayList<ExternalService> data){
         controller.convertToRows(data);
-        ObservableList<ExternalService> availableExternalData=controller.getAvailableExternalData();
+        ObservableList<FXExternalService> availableExternalData=controller.getAvailableExternalData();
         int size=availableExternalData.size();
 
-        for (ExternalService single:availableExternalData) {
+        for (FXExternalService single:availableExternalData) {
             System.out.println(single.toString());
         }
     }

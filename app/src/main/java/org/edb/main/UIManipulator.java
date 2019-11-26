@@ -7,9 +7,9 @@ public interface UIManipulator {
 
     void onLoginUnsuccessful();
 
-    void onResponseAvailableExternalServices(ArrayList<tempExternalService> data);
+    void onResponseAvailableExternalServices(ArrayList<ExternalService> data);
 
-    void onResponseUserExternalServices(ArrayList<tempExternalService> data);
+    void onResponseUserExternalServices(ArrayList<ExternalService> data);
 
-    void onResponseExternalServiceDetails(int externalIdx, ArrayList<tempExternalServiceDetail> data);
+    void onResponseExternalServiceDetails(int externalIdx, ArrayList<ExternalServiceDetail> data);
 }

@@ -1,6 +1,6 @@
 package org.edb.main.network.get;
 
-import org.edb.main.tempExternalService;
+import org.edb.main.ExternalService;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class getExternalServiceListResponse {
     private int status;
     private Boolean success;
     private String message;
-    private ArrayList<tempExternalService> data;
+    private ArrayList<ExternalService> data;
 
     public int getStatus() {
         return status;
@@ -36,12 +36,12 @@ public class getExternalServiceListResponse {
     }
 
 
-    public ArrayList<tempExternalService> getData() {
+    public ArrayList<ExternalService> getData() {
 
         return data;
     }
 
-    public void setData(ArrayList<tempExternalService> data) {
+    public void setData(ArrayList<ExternalService> data) {
 
         this.data = data;
 

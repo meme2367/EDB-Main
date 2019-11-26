@@ -1,23 +1,8 @@
 package org.edb.main.UI;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import org.edb.main.Authorization;
-import sun.applet.Main;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import org.edb.main.User;
 
 public class mainUserinfoSubController   {
 
@@ -33,7 +18,7 @@ public class mainUserinfoSubController   {
     @FXML
     private Label lblUerId;
 //extends 부모
-    private String token = Authorization.getToken();
+    private String token = User.getUser().getToken();
 
 
     public void lblUserId(){

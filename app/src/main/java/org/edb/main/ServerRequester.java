@@ -8,5 +8,4 @@ public interface ServerRequester {
     public void requestUserExternalServices();
     public void requestExternalServiceDetails(int externalIdx);
     public void requestLogin(String id, String pw);
-
 }
