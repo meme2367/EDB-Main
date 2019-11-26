@@ -18,6 +18,8 @@ import static org.awaitility.Awaitility.await;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.lang.Object;
+
 public class RestAPIRequesterTest {
 
     private static RestAPIRequester restAPIRequester;
@@ -45,9 +47,10 @@ public class RestAPIRequesterTest {
                 //requestAvailablePlugins();
 
                 //3.잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
-                requestUserDetailPlugin();
-
+//                requestUserDetailPlugin();
+//'{"configuration":{"object":{"object_idx1":"Game.exe","object_idx2":"Chrome"}\n,"time":{"start_time":"09:20","end_time":"15:00"}}}'
                 // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠금정책설정 저장
+                requestPostPluginDetail();
 
                 return null;
             }
@@ -70,7 +73,8 @@ public class RestAPIRequesterTest {
 
     // 3. 잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
     public static void requestUserDetailPlugin(){restAPIRequester.requestPluginDetails(3);}
-
     // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠 금정책설정 저장
     public static void requestPostPluginDetail(){restAPIRequester.requestPostUserPlugin();}
+
+
 }

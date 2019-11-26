@@ -12,10 +12,6 @@ public class RestApiConnector {
     public static userNetworkService getUserNetworkService(){
         return createRetrofitInstance().create(userNetworkService.class);
     }
-    //사용시
-    //https://galid1.tistory.com/617
-    //Call<getUserInfoResponse> getUserInfo = RetrofitClient.getUserApiService().getUserInfoAPI(idx);
-    //반환 값loginResponse    //userNetworkService useNetworkService
 
     public static externalServiceNetworkService getExternalServiceNetworkService(){
         return createRetrofitInstance().create(externalServiceNetworkService.class);

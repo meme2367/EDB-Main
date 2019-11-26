@@ -1,14 +1,20 @@
 package org.edb.main.network;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.application.Platform;
+import com.google.gson.JsonParser;
 import org.edb.main.*;
 import org.edb.main.UI.UserExternalServiceListController;
 import org.edb.main.network.get.*;
 import org.edb.main.network.post.postLoginResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.text.ParseException;
 
 public class RestAPIRequester  implements ServerRequester {
 
@@ -239,9 +245,6 @@ public class RestAPIRequester  implements ServerRequester {
 
     }
 
-
-//router.get('/detail/:lockIdx',authUtil.isLoggedin, async (req, res) => {
-
     //특정잠금정책 설정 조회
     @Override
     public void requestPluginDetails(int pluginIdx) {
@@ -256,10 +259,24 @@ public class RestAPIRequester  implements ServerRequester {
             public void onResponse(Call<getPluginDetailListResponse> call, Response<getPluginDetailListResponse> response) {
                 try {
                     if (response.isSuccessful()) {
-                        //데이터 받기 성공시 테이블과 체크박스 보여주기
+
 
                         System.out.print("\nRestAPIRequester.java의 requestPluginDetails()\n\n");
-                        System.out.print(response.body().getData().get(0).getConfiguration());
+                        JsonConverter jsonConverter = new JsonConverter();
+                        jsonConverter.setConfiguration(response.body().getData().get(0).getConfiguration());
+
+                        jsonConverter.getObject();//Arraylist<object>
+
+                        //time configuration만 가져오기
+                        System.out.print("\ntime jsonconverter");
+                        System.out.print(jsonConverter.getTime().get(0).getStartTime());//09:20
+                        System.out.print(jsonConverter.getTime().get(0).getEnd_time());//15:00
+
+                        //Object configuration만 가져오기
+                        System.out.print("\nOBJECT jsonconverter");
+                        System.out.print(jsonConverter.getObject().get(0).getObject_name());//object_idx1
+                        System.out.print(jsonConverter.getObject().get(0).getObject_value());//"Game.exe"
+
 
                         serverResponseHandler.handlePluginDetailsResponse(pluginIdx, response.body().getData());
                     }
@@ -279,9 +296,32 @@ public class RestAPIRequester  implements ServerRequester {
     }
 
     //특정 잠금정책의 설정 저장
-
-
-
+    //
     public void requestPostUserPlugin() {
+
+        JsonObject jsonObject = new JsonObject();
+
+
+        JsonArray jsonArray = new JsonArray();
+        JsonObject object = new JsonObject();
+        object.addProperty("object1","Chrome");
+        object.addProperty("object2","Game.exe");
+
+        jsonArray.add(object);
+        jsonObject.add("object",jsonArray);
+
+
+        JsonArray jsonArray2 = new JsonArray();
+        JsonObject time = new JsonObject();
+        time.addProperty("start_time","19:00");
+        time.addProperty("update_time","17:00");
+
+        jsonArray.add(time);
+        jsonObject.add("time",jsonArray);
+
+
+
+        //TIME OBJECT 등
+
     }
 }
