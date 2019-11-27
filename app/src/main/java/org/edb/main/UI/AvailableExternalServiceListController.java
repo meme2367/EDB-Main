@@ -44,7 +44,7 @@ public class AvailableExternalServiceListController implements Initializable {
         availableExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         availableExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
 
-        loadAvailableExternalServiceList();
+//        loadAvailableExternalServiceList();
     }
 
 

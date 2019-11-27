@@ -102,7 +102,6 @@ public class RestAPIRequester  implements ServerRequester {
         //요청값 externalIdx,token //응답값  external_service_detail_idx(목표달성idx),name (목표달성이름),if_achieve(달성여부 1 = 목표 달성 , 0 = 목표달성x)
         //@GET("external/detail/{externalIdx}")
 
-        //데이터 받기 성공시 테이블과 체크박스 보여주기
         Call<getExternalServiceDetailListResponse> getExternalServiceDetailListResponseCall =
                 RestApiConnector.getExternalServiceNetworkService().getExternalServiceDetailListAPI(externalIdx, token);
 
@@ -112,7 +111,6 @@ public class RestAPIRequester  implements ServerRequester {
             public void onResponse(Call<getExternalServiceDetailListResponse> call, Response<getExternalServiceDetailListResponse> response) {
                 try {
                     if (response.isSuccessful()) {
-                        //데이터 받기 성공시 테이블과 체크박스 보여주기
                         serverResponseHandler.handleExternalServiceDetailsResponse(externalIdx,response.body().getData());
                     }
 

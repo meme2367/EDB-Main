@@ -6,7 +6,6 @@ public class FXExternalServiceDetail {
     private StringProperty if_achieve;
     private StringProperty name;
     private IntegerProperty idx;
-    private BooleanProperty check;
 
     /*
     *  int if_achieve;
@@ -21,7 +20,6 @@ public class FXExternalServiceDetail {
         }else{
             this.if_achieve = new SimpleStringProperty("달성해주세요");
         }
-        this.check = new SimpleBooleanProperty(false);
 
     }
 
@@ -35,10 +33,4 @@ public class FXExternalServiceDetail {
 
     public IntegerProperty idxProperty(){return idx;}
 
-    public BooleanProperty checkProperty() { return check; }
-    public BooleanProperty getCheck() {return check; }
-
-    public void setCheck(Boolean check) {
-        this.check = new SimpleBooleanProperty(check);
-    }
 }

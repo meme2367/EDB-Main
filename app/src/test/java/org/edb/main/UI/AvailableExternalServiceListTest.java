@@ -29,9 +29,6 @@ public class AvailableExternalServiceListTest extends Application
         controller.addRowsToTableView();
     }
 
-    //이 메소드는 특히 재사용될 가능성이 높기 때문에 다른 테스트 클래스에서도 공통적으로 사용될 수 있는 방법을 고민할 필요가 있음.
-    //테스트중에 서버 연결코드를 적용하지 않는 방법. 구체적 컨트롤러 사이 중간계층 만드는 것밖에 없음.
-
     public void loadAvailableExternalServiceListFXML()
     {
         FXMLLoader loader = new FXMLLoader();

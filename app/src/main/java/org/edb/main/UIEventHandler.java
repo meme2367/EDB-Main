@@ -36,7 +36,9 @@ public class UIEventHandler {
     }
 
     public void onExternalServiceDetailRefreshRequested(int externalIdx){
+        serverRequester.requestExternalServiceDetails(externalIdx);
 
+        onExternalServiceDetailRequested(externalIdx);
     }
 
 }
