@@ -1,8 +1,9 @@
 package org.edb.main;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class EDBPluginManager {
 
-    private HashMap<Integer,EDBPlugin> plugins;
+    private Map<Integer,EDBPlugin> plugins;
 }

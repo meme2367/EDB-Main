@@ -1,6 +1,7 @@
 package org.edb.main.network;
 
 import org.edb.main.ServerResponseHandler;
+import org.edb.main.User;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
@@ -37,5 +38,21 @@ public class RestAPITestAPI {
                 return null;
             }
         });
+    }
+
+    public static void loginFotTest(String id, String pw){
+        ServerResponseHandler serverResponseHandler=RestAPITestAPI.getMockServerResponseHandler();
+
+        doAnswer(new Answer<Void>(){
+            @Override
+            public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
+                Object[] args = invocationOnMock.getArguments();
+                User.login((String)args[1], (String)args[2]);
+                return null;
+            }
+        }).when(serverResponseHandler).handleLoginResponse(anyBoolean(),anyString(),anyString());
+
+        RestAPIRequester restAPIRequester=new RestAPIRequester(serverResponseHandler);
+        restAPIRequester.requestLogin(id,pw);
     }
 }
