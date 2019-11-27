@@ -1,6 +1,8 @@
 package org.edb.main;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 public class ServerResponseHandler {
     private UIManipulator uiManipulator;
@@ -27,20 +29,24 @@ public class ServerResponseHandler {
         else uiManipulator.onLoginUnsuccessful();
     }
 
-    public void handleAvailableExernalServiceResponse(ArrayList<ExternalService> data) {
+    public void handleAvailableExternalServiceResponse(ArrayList<ExternalService> data) {
         uiManipulator.onResponseAvailableExternalServices(data);
     }
 
     public void handleUserExternalServiceResponse(ArrayList<ExternalService> data) {
-//        User.getUser().loadExternalService(data);
-//        for i : data.size()
-//        serverRequester.requestExternalServiceDetails(externalIdx);
-        uiManipulator.onResponseUserExternalServices(data);
+        ExternalServiceManager.getExternalServiceManager().loadExternalServices(data);
+
+        Set<Integer> externalIdxSets = ExternalServiceManager.getExternalServiceManager().getExternalServices().keySet();
+        Iterator<Integer> externalIdxItr = externalIdxSets.iterator();
+
+        while(externalIdxItr.hasNext()){
+            serverRequester.requestExternalServiceDetails(externalIdxItr.next());
+        }
     }
 
     public void handleExternalServiceDetailsResponse(int externalIdx, ArrayList<ExternalServiceDetail> data) {
-//        user.loadExternalServiceDetails(externalIdx)
-        uiManipulator.onResponseExternalServiceDetails(externalIdx, data);
+
+        ExternalServiceManager.getExternalServiceManager().loadExternalServiceDetail(externalIdx,data);
     }
 
 //    public void handlePluginConfigsResponse(ArrayList<PluginConfig> data){

@@ -1,5 +1,8 @@
 package org.edb.main;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class UIEventHandler {
     private ServerRequester serverRequester;
     private UIManipulator uiManipulator;
@@ -20,16 +23,20 @@ public class UIEventHandler {
         serverRequester.requestAvailableExternalServices();
     }
 
-    public void onUserExternalServiceListLoaded(){
-        serverRequester.requestUserExternalServices();
-//        data = user.getUserExternalServices
-//        uiManipulator.뭐시기(data)
+    public void onUserExternalServicesRequested(){
+        Map<Integer,ExternalService> data= ExternalServiceManager.getExternalServiceManager().getExternalServices();
+        uiManipulator.onResponseUserExternalServices(new ArrayList<ExternalService>(data.values()));
+
     }
 
     public void onExternalServiceDetailRequested(int externalIdx) {
-        serverRequester.requestExternalServiceDetails(externalIdx);
-//        data = user.getUserExternalDetails
-//        uiManipulator.뭐시기(data)
+        Iterable<ExternalServiceDetail> externalServiceDetail = ExternalServiceManager.getExternalServiceManager().getExternalServiceDetail(externalIdx);
+
+        uiManipulator.onResponseExternalServiceDetail(externalIdx, externalServiceDetail);
+    }
+
+    public void onExternalServiceDetailRefreshRequested(int externalIdx){
+
     }
 
 }

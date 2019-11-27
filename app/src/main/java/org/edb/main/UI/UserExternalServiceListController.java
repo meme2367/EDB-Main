@@ -80,16 +80,16 @@ public class UserExternalServiceListController implements Initializable {
 
 
     public void loadUserExternalServiceList() {
-        uiEventHandler.onUserExternalServiceListLoaded();
+        uiEventHandler.onUserExternalServicesRequested();
     }
 
-    public void handleUserExternalServiceResponse(ArrayList<ExternalService> data) {
+    public void handleUserExternalServiceResponse(Iterable<ExternalService> data) {
 
         convertUserExternalServiceToRows(data);
         addUserExternalServiceRowsToTableView();
     }
 
-    public void convertUserExternalServiceToRows(ArrayList<ExternalService> data) {
+    public void convertUserExternalServiceToRows(Iterable<ExternalService> data) {
 
         for (ExternalService value : data) {
             userExternalData.add(new FXExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
@@ -114,7 +114,7 @@ public class UserExternalServiceListController implements Initializable {
     }
 
 
-    public void showExternalServiceDetailTableList(int externalIdx, ArrayList<ExternalServiceDetail> data) {
+    public void showExternalServiceDetailTableList(int externalIdx, Iterable<ExternalServiceDetail> data) {
 
         externalServiceDetailView.setVisible(true);
         externalServiceDetailTitle.setVisible(true);
@@ -139,6 +139,7 @@ public class UserExternalServiceListController implements Initializable {
                     //체크박스 클릭시 list 2차원 배열에 externalIdx 와 externalDetailIdx 를 저장함
                     // (이후에 postExternalDetailBtn 버튼 클릭 시에 저장된 list를 이용해 목표 달성 갱신)
                     CheckBox box = new CheckBox();
+                    box.setStyle("-fx-opacity: 1");
                     BooleanProperty checked = (BooleanProperty) column.getCellObservableValue(getIndex());
 
                     FXExternalServiceDetail cn = (FXExternalServiceDetail) column.getTableView().getItems().get(getIndex());
@@ -169,7 +170,7 @@ public class UserExternalServiceListController implements Initializable {
         addExternalServiceDetailToTable();
     }
 
-    private void convertExternalServiceDetailToRows(ArrayList<ExternalServiceDetail> data) {
+    private void convertExternalServiceDetailToRows(Iterable<ExternalServiceDetail> data) {
         for (ExternalServiceDetail value : data) {
             externalDetailData.add(new FXExternalServiceDetail(value.getExternal_service_detail_idx(), value.getName(), value.getIf_achieve()));
         }

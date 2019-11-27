@@ -36,7 +36,7 @@ public class FXManipulator implements UIManipulator {
     }
 
     @Override
-    public void onResponseUserExternalServices(ArrayList<ExternalService> data) {
+    public void onResponseUserExternalServices(Iterable<ExternalService> data) {
         Platform.runLater(()->{
             userExternalServicelListController.handleUserExternalServiceResponse(data);
         });
@@ -46,6 +46,13 @@ public class FXManipulator implements UIManipulator {
     public void onResponseExternalServiceDetails(int externalIdx, ArrayList<ExternalServiceDetail> data) {
         Platform.runLater(()->{
             userExternalServicelListController.showExternalServiceDetailTableList(externalIdx,data);
+        });
+    }
+
+    @Override
+    public void onResponseExternalServiceDetail(int externalIdx, Iterable<ExternalServiceDetail> externalServiceDetail) {
+        Platform.runLater(()->{
+            userExternalServicelListController.showExternalServiceDetailTableList(externalIdx,externalServiceDetail);
         });
     }
 

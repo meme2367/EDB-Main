@@ -47,7 +47,7 @@ public class RestAPIRequester  implements ServerRequester {
                         if (status == 200) {
                             System.out.print("\navilable service\n");
 
-                            serverResponseHandler.handleAvailableExernalServiceResponse(response.body().getData());
+                            serverResponseHandler.handleAvailableExternalServiceResponse(response.body().getData());
                         }
                     }
                 }
