@@ -1,9 +1,11 @@
 package org.edb.main.network;
 
 import com.google.gson.*;
+import org.edb.main.model.InactivateCondition;
 import org.edb.main.model.Time;
 import org.edb.main.model.Object;
 
+import java.awt.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,11 +22,15 @@ public class JsonConverter {
     JsonObject jsonObj;
 
     ArrayList<Object> objectList = new ArrayList<>();
-    ArrayList<Time> timeList = new ArrayList<Time>();
+    ArrayList<InactivateCondition> inactivateConditionList = new ArrayList<>();
     public Time time = new Time();
 
     String makeStringResult = "";
     public JsonObject configJsonObject;
+
+
+    JsonObject tmpJsonObject = new JsonObject();
+
 
     public JsonConverter() {
         jsonParser = new JsonParser();
@@ -64,6 +70,20 @@ public class JsonConverter {
                     //정규표현식 이용 {object1 : Chrome}, {object2:Game2} 구별
                     Pattern objectPattern = Pattern.compile("object*");
                     Matcher objectMatcher = objectPattern.matcher(current);
+
+
+                    Pattern inactivatePattern = Pattern.compile("condition*");
+                    Matcher inactivateMatcher = inactivatePattern.matcher(current);
+
+                    if(inactivateMatcher.find()){
+
+                        System.out.print("\nkeynametest3\n");
+                        System.out.print(current.toString());
+
+                        inactivateConditionList.add(new InactivateCondition(current.toString(), value.toString()));
+
+                    }
+
                     if (objectMatcher.find()) {
                         System.out.print("\nkeynametest4\n");
                         System.out.print(current.toString());
@@ -72,21 +92,7 @@ public class JsonConverter {
 
                     }
 
-                    if (keyName.equals("time")) {//현재 time은 configuration jsonobject에 들어잇지 않아 사용하지 않음.
 
-                        System.out.print("\nkeynametest5\n");
-                        System.out.print(value.toString());
-                        time.setTime(value.toString());
-
-                        //timeList에 중복시간 저장안되도록.
-                        if (!timeList.contains(time)) {
-                            timeList.add(i, time);
-                        } else {
-                            //중복
-                            break;
-                        }
-
-                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -127,26 +133,33 @@ public class JsonConverter {
         return objectList;
     }
 
-    public ArrayList<Time> getTimeList() {
-
-        return timeList;
-    }
 
 
-    public void makeStringObject(JsonObject object) {
+    public void makeString(String key,JsonObject object) {
 
-        JsonObject tmpJsonObject = new JsonObject();
-        tmpJsonObject.add("object",object);
 
-        configJsonObject.addProperty("configuration",tmpJsonObject.toString());
+        tmpJsonObject.add(key,object);
+
 //        configJsonObject.add("configuration",tmpJsonObject);
         //json으로만든결과를 string으로
-        makeStringResult = tmpJsonObject.toString();
 
-        System.out.print("\ntest makeString time 2\n");
-        System.out.print(tmpJsonObject.toString());
+        setConfigObject(tmpJsonObject);
+
     }
-    public String getString() {
+
+    private void setConfigObject(JsonObject tmpJsonObject) {
+        configJsonObject.addProperty("configuration",tmpJsonObject.toString());
+
+        getStringResult();
+    }
+
+    public String getStringResult() {
+
+        makeStringResult = configJsonObject.toString();
+
+        System.out.print("\ntest getStringResult time 2\n");
+        System.out.print(configJsonObject.toString());
+
         return makeStringResult;
     }
 
@@ -161,5 +174,9 @@ public class JsonConverter {
 
     public JsonObject getConfigJsonObject() {
         return configJsonObject;
+    }
+
+    public ArrayList<InactivateCondition> getInactivateConditionList() {
+        return inactivateConditionList;
     }
 }

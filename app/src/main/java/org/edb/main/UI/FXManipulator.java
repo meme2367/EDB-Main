@@ -79,7 +79,9 @@ public class FXManipulator implements UIManipulator {
     public void onPostUserPlugin(int pluginIdx, JsonConverter jsonConverter){
         Platform.runLater(()->{
             System.out.print("test post plugin configuration\n");
-            System.out.print(jsonConverter.getString());
+            System.out.print(jsonConverter.getInactivateConditionList());
+            System.out.print(jsonConverter.getObjectList());
+            System.out.print(jsonConverter.getTime());
         });
     }
     public void setMainUIController(MainUIController mainUIController) {
