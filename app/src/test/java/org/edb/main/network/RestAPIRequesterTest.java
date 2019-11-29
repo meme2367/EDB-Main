@@ -5,6 +5,7 @@ import com.sun.security.ntlm.Server;
 import javafx.application.Platform;
 import org.edb.main.*;
 import org.edb.main.UI.FXManipulator;
+import org.edb.main.model.InactivateCondition;
 import org.edb.main.model.tempPlugin;
 
 import org.edb.main.ServerResponseHandler;
@@ -108,29 +109,40 @@ public class RestAPIRequesterTest {
     public static void requestAvailablePlugins(){ restAPIRequester.requestAvailablePlugins(); }
 
     // 3. 잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
-    public static void requestUserDetailPlugin(){restAPIRequester.requestPluginDetails(3);}
+    public static void requestUserDetailPlugin(){restAPIRequester.requestPluginDetails(1);}
     // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠 금정책설정 저장
     public static void requestPostPluginDetail(){
 
-        Object object = new Object("object1","Chrome");
-        Object object2 = new Object("object2","game.exe");
 
         Time time = new Time("2019-11-19 12:00","2019-11-29 18:00");
 
         ArrayList<Object> objectArrayLists = new ArrayList<>();
-        objectArrayLists.add(object);
-        objectArrayLists.add(object2);
+        objectArrayLists.add(new Object("object1","Chrome"));
+        objectArrayLists.add(new Object("object2","game.exe"));
         JsonObject objecttmp = new JsonObject();
+
+        ArrayList<InactivateCondition> inactivateConditionArrayList = new ArrayList<>();
+        inactivateConditionArrayList.add(new InactivateCondition("condition1","인강5개보기"));
+        inactivateConditionArrayList.add(new InactivateCondition("condition2","6시간동안인터넷금지"));
+
+        JsonObject inactivatetmp = new JsonObject();
 
         for(int i = 0;i<objectArrayLists.size();i++){
             objecttmp.addProperty(objectArrayLists.get(i).getObject_name(),objectArrayLists.get(i).getObject_value());
         }
 
+        for(int i = 0;i<inactivateConditionArrayList.size();i++){
+            inactivatetmp.addProperty(inactivateConditionArrayList.get(i)
+                    .getInactivateCondition_name(),inactivateConditionArrayList.get(i).getInactivateCondition_value());
+        }
+
+
         JsonConverter jsonConverter = new JsonConverter();
-        jsonConverter.makeStringObject(objecttmp);
+        jsonConverter.makeString("object",objecttmp);
+        jsonConverter.makeString("inactivateCondition",inactivatetmp);
         jsonConverter.setTime(time);
 
-        restAPIRequester.requestPostUserPlugin(3,jsonConverter);
+        restAPIRequester.requestPostUserPlugin(1,jsonConverter);
 
     }
 

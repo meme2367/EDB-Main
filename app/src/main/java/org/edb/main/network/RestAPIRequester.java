@@ -267,6 +267,7 @@ public class RestAPIRequester  implements ServerRequester {
 
 
 
+
                         JsonConverter jsonConverter = new JsonConverter();
                         jsonConverter.setConfiguration(response.body().getData().get(0).getConfiguration());
 
@@ -286,6 +287,12 @@ public class RestAPIRequester  implements ServerRequester {
                         System.out.print(response.body().getData().get(0).getStart_time());
                         System.out.print(response.body().getData().get(0).getEnd_time());
 
+                        System.out.print("\ninactivatecondition jsonconverter\n");
+                        //InactivateCondition
+                        for(int j = 0;j<jsonConverter.getInactivateConditionList().size();j++){
+                            System.out.print(jsonConverter.getInactivateConditionList().get(j).getInactivateCondition_name());//object_idx1
+                            System.out.print(jsonConverter.getInactivateConditionList().get(j).getInactivateCondition_value());//"Game.exe"
+                        }
 
                         serverResponseHandler.handlePluginDetailsResponse(pluginIdx, response.body().getData());
                     }
