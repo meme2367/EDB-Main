@@ -1,5 +1,8 @@
 package org.edb.main;
 
+import org.edb.main.model.tempPlugin;
+import org.edb.main.network.JsonConverter;
+
 import java.util.ArrayList;
 
 public class ServerResponseHandler {
@@ -28,5 +31,21 @@ public class ServerResponseHandler {
 
     public void handleExternalServiceDetailsResponse(int externalIdx, ArrayList<tempExternalServiceDetail> data) {
         uiManipulator.onResponseExternalServiceDetails(externalIdx, data);
+    }
+
+    // load plugin user list
+    public void handleUserPluginResponse(ArrayList<tempPlugin> data){uiManipulator.onResponseUserPlugins(data);}
+    // load Available plugin  list
+    public void handleAvailablePluginResponse(ArrayList<tempPlugin> data) { uiManipulator.onResponseAvailablePlugins(data);}
+
+    public void handlePluginDetailsResponse(int pluginIdx, ArrayList<tempPlugin> data) {
+        uiManipulator.onResponsePluginDetails(pluginIdx, data);
+    }
+
+    //serverResponseHandler.handlePostUserPluginResponse(sucessful,jsonConverter);
+    //post configuration
+    public void handlePostUserPluginResponse(int pluginIdx, JsonConverter jsonConverter){
+
+        uiManipulator.onPostUserPlugin(pluginIdx,jsonConverter);
     }
 }

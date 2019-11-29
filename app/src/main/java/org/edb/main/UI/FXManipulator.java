@@ -2,6 +2,8 @@ package org.edb.main.UI;
 
 import javafx.application.Platform;
 import org.edb.main.UIManipulator;
+import org.edb.main.model.tempPlugin;
+import org.edb.main.network.JsonConverter;
 import org.edb.main.tempExternalService;
 import org.edb.main.tempExternalServiceDetail;
 
@@ -49,6 +51,37 @@ public class FXManipulator implements UIManipulator {
         });
     }
 
+    @Override
+    public void onResponseUserPlugins(ArrayList<tempPlugin> data){
+        Platform.runLater(()->{
+            System.out.print("test fxmaniipulator\n");
+            System.out.print(data);
+        });
+    }
+
+    @Override
+    public void  onResponseAvailablePlugins(ArrayList<tempPlugin> data){
+        Platform.runLater(()->{
+            System.out.print("test AVAILABLE PLUGIN LIST\n");
+            System.out.print(data);
+        });
+    }
+
+    @Override
+    public void onResponsePluginDetails(int pluginIdx, ArrayList<tempPlugin> data){
+        Platform.runLater(()->{
+            System.out.print("test AVAILABLE PLUGIN LIST\n");
+            System.out.print(data);
+        });
+    }
+
+    @Override
+    public void onPostUserPlugin(int pluginIdx, JsonConverter jsonConverter){
+        Platform.runLater(()->{
+            System.out.print("test post plugin configuration\n");
+            System.out.print(jsonConverter.getString());
+        });
+    }
     public void setMainUIController(MainUIController mainUIController) {
         this.mainUIController = mainUIController;
     }
