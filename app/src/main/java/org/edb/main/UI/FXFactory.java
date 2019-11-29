@@ -3,12 +3,15 @@ package org.edb.main.UI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import org.edb.main.EDBPluginManager;
 import org.edb.main.UIEventHandler;
 
 
 public class FXFactory {
     private UIEventHandler uiEventHandler;
     private FXManipulator fxManipulator;
+    private EDBPluginManager edbPluginManager;
+
     private static FXFactory fxFactory;
 
     public static synchronized FXFactory getInstance(){
@@ -62,10 +65,23 @@ public class FXFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent parent = loader.load();
 
-        loader.<UserExternalServiceListController>getController().setUiEventHandler(uiEventHandler);
+        UserExternalServiceListController controller = loader.<UserExternalServiceListController>getController();
+        controller.setUiEventHandler(uiEventHandler);
         fxManipulator.setUserExternalServicelListController(loader.getController());
+        controller.loadUserExternalServiceList();
 
         return parent;
 
+    }
+
+    public Parent loadPluginConfigUI(String path)throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+        Parent parent = loader.load();
+
+        PluginConfigUIController controller = loader.<PluginConfigUIController>getController();
+        controller.setUIEventHandler(uiEventHandler);
+        controller.setPluginManager(edbPluginManager);
+
+        return parent;
     }
 }

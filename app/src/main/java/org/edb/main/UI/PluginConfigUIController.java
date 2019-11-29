@@ -1,8 +1,31 @@
 package org.edb.main.UI;
 
+import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import org.edb.main.EDBPlugin;
+import org.edb.main.EDBPluginManager;
+import org.edb.main.UIEventHandler;
 
-public class PluginConfigUIController extends MainUIController {
-    /*
+public class PluginConfigUIController {
+
+    @FXML
+    private VBox configArea;
+    @FXML
+    private AnchorPane applyArea;
+
+    private EDBPlugin plugin;
+    private EDBPluginManager pluginManager;
+    private UIEventHandler uiEventHandler;
+
+    public void setPluginManager(EDBPluginManager pluginManager) {
+        this.pluginManager = pluginManager;
+    }
+
+    public void setUIEventHandler(UIEventHandler uiEventHandler) {
+        this.uiEventHandler=uiEventHandler;
+    }
+/*
         //1.  잠금정책목록 불러오기
         // 2. 잠금정책등록 선택시 추가가능한 잠금정책목록보여주기
         // 3. 잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
@@ -33,5 +56,5 @@ public class PluginConfigUIController extends MainUIController {
  */
 
 
-}
 
+}
