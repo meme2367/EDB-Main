@@ -12,8 +12,12 @@ public class ServerResponseHandler {
         this.uiManipulator = uiManipulator;
     }
 
-    public void handleLoginResponse(boolean successful, String id) {
-        if(successful) uiManipulator.onLoginSuccessful(id);
+    public void handleLoginResponse(boolean successful, String id, String token) {
+        if(successful) {
+            User.login(id,token);
+            uiManipulator.onLoginSuccessful(id);
+
+        }
         else uiManipulator.onLoginUnsuccessful();
     }
 
