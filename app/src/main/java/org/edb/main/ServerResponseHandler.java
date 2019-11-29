@@ -1,5 +1,8 @@
 package org.edb.main;
 
+import org.edb.main.model.PluginModel;
+import org.edb.main.network.JsonConverter;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -49,8 +52,21 @@ public class ServerResponseHandler {
         ExternalServiceManager.getExternalServiceManager().loadExternalServiceDetail(externalIdx,data);
     }
 
-//    public void handlePluginConfigsResponse(ArrayList<PluginConfig> data){
-//        User.getUser.loadPluginConfigs(data);
-//    }
+
+    // load plugin user list
+    public void handleUserPluginResponse(ArrayList<PluginModel> data){uiManipulator.onResponseUserPlugins(data);}
+    // load Available plugin  list
+    public void handleAvailablePluginResponse(ArrayList<PluginModel> data) { uiManipulator.onResponseAvailablePlugins(data);}
+
+    public void handlePluginDetailsResponse(int pluginIdx, ArrayList<PluginModel> data) {
+        uiManipulator.onResponsePluginDetails(pluginIdx, data);
+    }
+
+    //serverResponseHandler.handlePostUserPluginResponse(sucessful,jsonConverter);
+    //post configuration
+    public void handlePostUserPluginResponse(int pluginIdx, JsonConverter jsonConverter){
+
+        uiManipulator.onPostUserPlugin(pluginIdx,jsonConverter);
+    }
 
 }

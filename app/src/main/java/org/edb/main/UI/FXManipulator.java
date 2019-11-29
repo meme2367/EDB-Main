@@ -2,8 +2,12 @@ package org.edb.main.UI;
 
 import javafx.application.Platform;
 import org.edb.main.UIManipulator;
+
 import org.edb.main.ExternalService;
 import org.edb.main.ExternalServiceDetail;
+
+import org.edb.main.model.PluginModel;
+import org.edb.main.network.JsonConverter;
 
 import java.util.ArrayList;
 
@@ -56,6 +60,38 @@ public class FXManipulator implements UIManipulator {
         });
     }
 
+    public void onResponseUserPlugins(ArrayList<PluginModel> data){
+        Platform.runLater(()->{
+            System.out.print("test fxmaniipulator\n");
+            System.out.print(data);
+        });
+    }
+
+    @Override
+    public void  onResponseAvailablePlugins(ArrayList<PluginModel> data){
+        Platform.runLater(()->{
+            System.out.print("test AVAILABLE PLUGIN LIST\n");
+            System.out.print(data);
+        });
+    }
+
+    @Override
+    public void onResponsePluginDetails(int pluginIdx, ArrayList<PluginModel> data){
+        Platform.runLater(()->{
+            System.out.print("test AVAILABLE PLUGIN LIST\n");
+            System.out.print(data);
+        });
+    }
+
+    @Override
+    public void onPostUserPlugin(int pluginIdx, JsonConverter jsonConverter){
+        Platform.runLater(()->{
+            System.out.print("test post plugin configuration\n");
+            System.out.print(jsonConverter.getInactivateConditionList());
+            System.out.print(jsonConverter.getObjectList());
+            System.out.print(jsonConverter.getTime());
+        });
+    }
     public void setMainUIController(MainUIController mainUIController) {
         this.mainUIController = mainUIController;
     }

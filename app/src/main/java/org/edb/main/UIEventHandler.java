@@ -2,6 +2,7 @@ package org.edb.main;
 
 import java.util.ArrayList;
 import java.util.Map;
+import org.edb.main.network.JsonConverter;
 
 public class UIEventHandler {
     private ServerRequester serverRequester;
@@ -39,6 +40,13 @@ public class UIEventHandler {
         serverRequester.requestExternalServiceDetails(externalIdx);
 
         onExternalServiceDetailRequested(externalIdx);
+    }
+
+    public void onUserPluginListLoaded(){ serverRequester.requestUserPlugins();}
+
+    public void onPostUserPlugin(int pluginIdx,JsonConverter jsonConverter) {
+        //requestPostUserPlugin(int pluginIdx, JsonConverter jsonConverter);
+        serverRequester.requestPostUserPlugin(pluginIdx, jsonConverter);
     }
 
 }
