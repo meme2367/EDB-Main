@@ -19,16 +19,16 @@ public class JsonConverter {
 
     JsonObject jsonObj;
 
-    // RestAPIRequester에서 getter를 이용하여 사용가능.
-
     ArrayList<Object> objectList = new ArrayList<>();
     ArrayList<Time> timeList = new ArrayList<Time>();
     public Time time = new Time();
 
     String makeStringResult = "";
+    public JsonObject configJsonObject;
 
     public JsonConverter() {
         jsonParser = new JsonParser();
+        configJsonObject = new JsonObject();
     }
 
 
@@ -36,6 +36,7 @@ public class JsonConverter {
 
         System.out.print("\nconfiguration\n");
         System.out.print(configuration);
+
         //configuration에 key가 있기에 JsonParser 를 configuration으로 먼저 파싱한다.
         jsonObj = (JsonObject) jsonParser.parse(configuration);
         configArray = new JsonArray();
@@ -138,22 +139,18 @@ public class JsonConverter {
     }
 
 
-
-    public JsonObject ConfigjsonObject = new JsonObject();
-
     public void makeStringObject(JsonObject object) {
 
         JsonObject tmpJsonObject = new JsonObject();
-
         tmpJsonObject.add("object",object);
 
-        ConfigjsonObject.add("configuration",tmpJsonObject);
-
+        configJsonObject.addProperty("configuration",tmpJsonObject.toString());
+//        configJsonObject.add("configuration",tmpJsonObject);
         //json으로만든결과를 string으로
-        makeStringResult = ConfigjsonObject.toString();
+        makeStringResult = tmpJsonObject.toString();
 
         System.out.print("\ntest makeString time 2\n");
-        System.out.print(ConfigjsonObject.toString());
+        System.out.print(tmpJsonObject.toString());
     }
     public String getString() {
         return makeStringResult;
@@ -163,7 +160,12 @@ public class JsonConverter {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(Time time){
         this.time = time;
+
+    }
+
+    public JsonObject getConfigJsonObject() {
+        return configJsonObject;
     }
 }

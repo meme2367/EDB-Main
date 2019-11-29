@@ -83,10 +83,10 @@ public class RestAPIRequesterTest {
         Object object2 = new Object("object2","game.exe");
 
         Time time = new Time("2019-11-19 12:00","2019-11-29 18:00");
+
         ArrayList<Object> objectArrayLists = new ArrayList<>();
         objectArrayLists.add(object);
         objectArrayLists.add(object2);
-
         JsonObject objecttmp = new JsonObject();
 
         for(int i = 0;i<objectArrayLists.size();i++){
@@ -97,7 +97,7 @@ public class RestAPIRequesterTest {
         jsonConverter.makeStringObject(objecttmp);
         jsonConverter.setTime(time);
 
-        restAPIRequester.requestPostUserPlugin(4,jsonConverter);
+        restAPIRequester.requestPostUserPlugin(7,jsonConverter);
 
     }
 

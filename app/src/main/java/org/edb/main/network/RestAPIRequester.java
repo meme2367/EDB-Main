@@ -300,12 +300,14 @@ public class RestAPIRequester  implements ServerRequester {
 
         String token = getToken();
 
-        System.out.print("requestPostUserPlugin\n");
 
-        JsonObject jsonObject = new JsonObject();
+
+        JsonObject jsonObject = jsonConverter.getConfigJsonObject().getAsJsonObject();
         jsonObject.addProperty("start_time",jsonConverter.getTime().getStartTime());
         jsonObject.addProperty("end_time",jsonConverter.getTime().getEnd_time());
-        jsonObject.addProperty("configuration",jsonConverter.getString());
+
+        System.out.print("\nrequestPostUserPlugin\n");
+        System.out.print(jsonObject);
 
         Call<postPluginDetailResponse> postPluginDetailResponseCall =
                 RestApiConnector.getPluginService()
