@@ -1,5 +1,6 @@
 package org.edb.main.network;
 
+import com.google.gson.JsonObject;
 import com.sun.security.ntlm.Server;
 import javafx.application.Platform;
 import org.edb.main.*;
@@ -10,7 +11,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import retrofit2.Callback;
+import org.edb.main.model.Time;
+import org.edb.main.model.Object;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -18,7 +22,6 @@ import static org.awaitility.Awaitility.await;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.lang.Object;
 
 public class RestAPIRequesterTest {
 
@@ -34,7 +37,7 @@ public class RestAPIRequesterTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Object[] args = invocationOnMock.getArguments();
+                java.lang.Object[] args = invocationOnMock.getArguments();
                 System.out.print("\nargs test33\n");
                 System.out.print(args);
                 System.out.print("\ntoken mock test33\n");
@@ -74,7 +77,29 @@ public class RestAPIRequesterTest {
     // 3. 잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
     public static void requestUserDetailPlugin(){restAPIRequester.requestPluginDetails(3);}
     // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠 금정책설정 저장
-    public static void requestPostPluginDetail(){restAPIRequester.requestPostUserPlugin();}
+    public static void requestPostPluginDetail(){
+
+        Object object = new Object("object1","Chrome");
+        Object object2 = new Object("object2","game.exe");
+
+        Time time = new Time("2019-11-19 12:00","2019-11-29 18:00");
+        ArrayList<Object> objectArrayLists = new ArrayList<>();
+        objectArrayLists.add(object);
+        objectArrayLists.add(object2);
+
+        JsonObject objecttmp = new JsonObject();
+
+        for(int i = 0;i<objectArrayLists.size();i++){
+            objecttmp.addProperty(objectArrayLists.get(i).getObject_name(),objectArrayLists.get(i).getObject_value());
+        }
+
+        JsonConverter jsonConverter = new JsonConverter();
+        jsonConverter.makeStringObject(objecttmp);
+        jsonConverter.setTime(time);
+
+        restAPIRequester.requestPostUserPlugin(4,jsonConverter);
+
+    }
 
 
 }

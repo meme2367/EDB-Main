@@ -1,7 +1,10 @@
 package org.edb.main.network;
 
 import com.google.gson.*;
+import org.edb.main.model.Time;
+import org.edb.main.model.Object;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,8 +23,9 @@ public class JsonConverter {
 
     ArrayList<Object> objectList = new ArrayList<>();
     ArrayList<Time> timeList = new ArrayList<Time>();
-    Time time = new Time();
+    public Time time = new Time();
 
+    String makeStringResult = "";
 
     public JsonConverter() {
         jsonParser = new JsonParser();
@@ -30,6 +34,8 @@ public class JsonConverter {
 
     public void setConfiguration(String configuration) {
 
+        System.out.print("\nconfiguration\n");
+        System.out.print(configuration);
         //configuration에 key가 있기에 JsonParser 를 configuration으로 먼저 파싱한다.
         jsonObj = (JsonObject) jsonParser.parse(configuration);
         configArray = new JsonArray();
@@ -41,9 +47,6 @@ public class JsonConverter {
         }
 
     }
-
-
-
 
 
     private void convert(JsonObject jsonObject, String keyName) {
@@ -65,14 +68,19 @@ public class JsonConverter {
 
                 try {
 
+
                     //정규표현식 이용 {object1 : Chrome}, {object2:Game2} 구별
                     Pattern objectPattern = Pattern.compile("object*");
                     Matcher objectMatcher = objectPattern.matcher(current);
                     if (objectMatcher.find()) {
-                        objectList.add(new Object(current.toString(),value.toString()));
+                        System.out.print("\nkeynametest4\n");
+                        System.out.print(current.toString());
+                        objectList.add(new Object(current.toString(), value.toString()));
 
 
                     } else if (keyName.equals("time")) {
+                        System.out.print("\nkeynametest5\n");
+                        System.out.print(value.toString());
                         time.setTime(value.toString());
 
                         //timeList에 중복시간 저장안되도록.
@@ -110,7 +118,6 @@ public class JsonConverter {
 
             } else {
 //not  JsonArray
-                //추가해야함.
                 System.out.print("\nkeynametest errror\n");
                 System.out.print(current.toString());
             }
@@ -120,70 +127,43 @@ public class JsonConverter {
     }
 
 
-    public ArrayList<Object> getObject() {
+    public ArrayList<Object> getObjectList() {
 
         return objectList;
     }
 
-    public ArrayList<Time> getTime() {
+    public ArrayList<Time> getTimeList() {
 
         return timeList;
     }
 
-    class Time {
-        String start_time;
-        String end_time;
-        boolean isStart = false;
 
-        public void setStartTime(String start_time) {
-            this.start_time = start_time;
-        }
 
-        public void setTime(String start_or_end_time) {
-            if (!isStart) {//false
-                isStart = true;
-                setStartTime(start_or_end_time);
-                return;
-            } else {//true
-                setEndTime(start_or_end_time);
-                isStart = false;
+    public JsonObject ConfigjsonObject = new JsonObject();
 
-                return;
-            }
+    public void makeStringObject(JsonObject object) {
 
-        }
+        JsonObject tmpJsonObject = new JsonObject();
 
-        public void setEndTime(String end_time) {
+        tmpJsonObject.add("object",object);
 
-            this.end_time = end_time;
-        }
+        ConfigjsonObject.add("configuration",tmpJsonObject);
 
-        public String getStartTime() {
+        //json으로만든결과를 string으로
+        makeStringResult = ConfigjsonObject.toString();
 
-            return start_time;
-        }
-
-        public String getEnd_time() {
-            return end_time;
-        }
+        System.out.print("\ntest makeString time 2\n");
+        System.out.print(ConfigjsonObject.toString());
+    }
+    public String getString() {
+        return makeStringResult;
     }
 
-}
-
-class Object {
-    String object_name;
-    String object_value;
-
-    public Object(String object_name,String object_value) {
-        this.object_name = object_name;
-        this.object_value = object_value;
+    public Time getTime(){
+        return time;
     }
 
-    public String getObject_name() {
-        return object_name;
-    }
-
-    public String getObject_value() {
-        return object_value;
+    public void setTime(Time time) {
+        this.time = time;
     }
 }

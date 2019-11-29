@@ -13,9 +13,9 @@ public interface pluginNetworkService {
 //load user plugin list
     @GET("locks/")
     Call<getPluginListResponse> getPluginListAPI(@Header("token") String token);
-
-    @POST("locks/detail/{lockIdx}")
-    Call<postPluginDetailResponse> postPluginDetailAPI(@Path("lockIdx") int externalDetailIdx ,
+    //설정 저장
+    @POST("locks/detail/{pluginIdx}")
+    Call<postPluginDetailResponse> postPluginDetailAPI(@Path("pluginIdx") int pluginIdx ,
                                                        @Header("token") String token,
                                                        @Body() JsonObject body);
     //load AvailablePlugin list

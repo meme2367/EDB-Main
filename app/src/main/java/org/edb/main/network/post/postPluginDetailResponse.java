@@ -1,6 +1,7 @@
 package org.edb.main.network.post;
 
 public class postPluginDetailResponse {
+    //설정 저장
     private int status;
     private Boolean success;
     private String message;

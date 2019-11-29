@@ -8,6 +8,7 @@ import org.edb.main.*;
 import org.edb.main.UI.UserExternalServiceListController;
 import org.edb.main.network.get.*;
 import org.edb.main.network.post.postLoginResponse;
+import org.edb.main.network.post.postPluginDetailResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -265,17 +266,17 @@ public class RestAPIRequester  implements ServerRequester {
                         JsonConverter jsonConverter = new JsonConverter();
                         jsonConverter.setConfiguration(response.body().getData().get(0).getConfiguration());
 
-                        jsonConverter.getObject();//Arraylist<object>
+                        jsonConverter.getObjectList();//Arraylist<object>
 
                         //time configuration만 가져오기
                         System.out.print("\ntime jsonconverter");
-                        System.out.print(jsonConverter.getTime().get(0).getStartTime());//09:20
-                        System.out.print(jsonConverter.getTime().get(0).getEnd_time());//15:00
+                        System.out.print(jsonConverter.getTimeList().get(0).getStartTime());//09:20
+                        System.out.print(jsonConverter.getTimeList().get(0).getEnd_time());//15:00
 
                         //Object configuration만 가져오기
                         System.out.print("\nOBJECT jsonconverter");
-                        System.out.print(jsonConverter.getObject().get(0).getObject_name());//object_idx1
-                        System.out.print(jsonConverter.getObject().get(0).getObject_value());//"Game.exe"
+                        System.out.print(jsonConverter.getObjectList().get(0).getObject_name());//object_idx1
+                        System.out.print(jsonConverter.getObjectList().get(0).getObject_value());//"Game.exe"
 
 
                         serverResponseHandler.handlePluginDetailsResponse(pluginIdx, response.body().getData());
@@ -295,33 +296,41 @@ public class RestAPIRequester  implements ServerRequester {
         });
     }
 
-    //특정 잠금정책의 설정 저장
-    //
-    public void requestPostUserPlugin() {
+    public void requestPostUserPlugin(int pluginIdx,JsonConverter jsonConverter) {
+
+        String token = getToken();
+
+        System.out.print("requestPostUserPlugin\n");
 
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("start_time",jsonConverter.getTime().getStartTime());
+        jsonObject.addProperty("end_time",jsonConverter.getTime().getEnd_time());
+        jsonObject.addProperty("configuration",jsonConverter.getString());
 
+        Call<postPluginDetailResponse> postPluginDetailResponseCall =
+                RestApiConnector.getPluginService()
+                        .postPluginDetailAPI(pluginIdx,token,jsonObject);
 
-        JsonArray jsonArray = new JsonArray();
-        JsonObject object = new JsonObject();
-        object.addProperty("object1","Chrome");
-        object.addProperty("object2","Game.exe");
+        postPluginDetailResponseCall.enqueue(new Callback<postPluginDetailResponse>() {
 
-        jsonArray.add(object);
-        jsonObject.add("object",jsonArray);
+            @Override
+            public void onResponse(Call<postPluginDetailResponse> call, Response<postPluginDetailResponse> response) {
 
+                boolean sucessful = response.isSuccessful();
+                if (sucessful) {
+                    System.out.print("db connect token success\n");
+                    System.out.print(response.body().getMessage());
 
-        JsonArray jsonArray2 = new JsonArray();
-        JsonObject time = new JsonObject();
-        time.addProperty("start_time","19:00");
-        time.addProperty("update_time","17:00");
+                }
+                serverResponseHandler.handlePostUserPluginResponse(pluginIdx,jsonConverter);
+            }
 
-        jsonArray.add(time);
-        jsonObject.add("time",jsonArray);
-
-
-
-        //TIME OBJECT 등
+            @Override
+            public void onFailure(Call<postPluginDetailResponse> call, Throwable throwable) {
+                System.out.print("error\n");
+                System.out.println(throwable);
+            }
+        });
 
     }
 }
