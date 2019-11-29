@@ -263,20 +263,28 @@ public class RestAPIRequester  implements ServerRequester {
 
 
                         System.out.print("\nRestAPIRequester.java의 requestPluginDetails()\n\n");
+                        System.out.print(response.body().getData().get(0).getConfiguration());
+
+
+
                         JsonConverter jsonConverter = new JsonConverter();
                         jsonConverter.setConfiguration(response.body().getData().get(0).getConfiguration());
 
-                        jsonConverter.getObjectList();//Arraylist<object>
-
-                        //time configuration만 가져오기
-                        System.out.print("\ntime jsonconverter");
-                        System.out.print(jsonConverter.getTimeList().get(0).getStartTime());//09:20
-                        System.out.print(jsonConverter.getTimeList().get(0).getEnd_time());//15:00
+//                        jsonConverter.getObjectList();//Arraylist<object>
 
                         //Object configuration만 가져오기
-                        System.out.print("\nOBJECT jsonconverter");
-                        System.out.print(jsonConverter.getObjectList().get(0).getObject_name());//object_idx1
-                        System.out.print(jsonConverter.getObjectList().get(0).getObject_value());//"Game.exe"
+                        System.out.print("\nOBJECT jsonconverter\n");
+                        for(int j = 0;j<jsonConverter.getObjectList().size();j++){
+                            System.out.print(jsonConverter.getObjectList().get(j).getObject_name());//object_idx1
+                            System.out.print(jsonConverter.getObjectList().get(j).getObject_value());//"Game.exe"
+                        }
+
+
+
+                        //time
+                        System.out.print("\nTime jsonconverter\n");
+                        System.out.print(response.body().getData().get(0).getStart_time());
+                        System.out.print(response.body().getData().get(0).getEnd_time());
 
 
                         serverResponseHandler.handlePluginDetailsResponse(pluginIdx, response.body().getData());

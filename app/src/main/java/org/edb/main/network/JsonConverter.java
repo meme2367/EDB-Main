@@ -34,17 +34,10 @@ public class JsonConverter {
 
     public void setConfiguration(String configuration) {
 
-        System.out.print("\nconfiguration\n");
-        System.out.print(configuration);
-
-        //configuration에 key가 있기에 JsonParser 를 configuration으로 먼저 파싱한다.
         jsonObj = (JsonObject) jsonParser.parse(configuration);
-        configArray = new JsonArray();
-        configArray.add(jsonObj.getAsJsonObject("configuration"));
-        jsonObj = (JsonObject) configArray.get(0);
 
         for (String key : jsonObj.keySet()) {
-            convert(jsonObj, "config");
+            convert(jsonObj, key);
         }
 
     }
@@ -68,8 +61,6 @@ public class JsonConverter {
             if (value.isJsonPrimitive()) {
 
                 try {
-
-
                     //정규표현식 이용 {object1 : Chrome}, {object2:Game2} 구별
                     Pattern objectPattern = Pattern.compile("object*");
                     Matcher objectMatcher = objectPattern.matcher(current);
@@ -79,7 +70,10 @@ public class JsonConverter {
                         objectList.add(new Object(current.toString(), value.toString()));
 
 
-                    } else if (keyName.equals("time")) {
+                    }
+
+                    if (keyName.equals("time")) {//현재 time은 configuration jsonobject에 들어잇지 않아 사용하지 않음.
+
                         System.out.print("\nkeynametest5\n");
                         System.out.print(value.toString());
                         time.setTime(value.toString());

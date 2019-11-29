@@ -55,6 +55,9 @@ public class RestAPIRequesterTest {
                 // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠금정책설정 저장
                 requestPostPluginDetail();
 
+
+                requestUserDetailPlugin();
+
                 return null;
             }
 
@@ -97,7 +100,7 @@ public class RestAPIRequesterTest {
         jsonConverter.makeStringObject(objecttmp);
         jsonConverter.setTime(time);
 
-        restAPIRequester.requestPostUserPlugin(7,jsonConverter);
+        restAPIRequester.requestPostUserPlugin(3,jsonConverter);
 
     }
 
