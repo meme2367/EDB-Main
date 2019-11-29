@@ -1,6 +1,6 @@
 package org.edb.main.network.get;
 
-import org.edb.main.model.tempPlugin;
+import org.edb.main.model.PluginModel;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class getPluginDetailListResponse {
     private int status;
     private Boolean success;
     private String message;
-    private ArrayList<tempPlugin> data;
+    private ArrayList<PluginModel> data;
 
     public int getStatus() {
         return status;
@@ -36,11 +36,11 @@ public class getPluginDetailListResponse {
     }
 
 
-    public ArrayList<tempPlugin> getData() {
+    public ArrayList<PluginModel> getData() {
         return data;
     }
 
-    public void setData(ArrayList<tempPlugin> data) {
+    public void setData(ArrayList<PluginModel> data) {
         this.data = data;
     }
 

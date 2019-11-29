@@ -1,28 +1,19 @@
 package org.edb.main.network;
 
 import com.google.gson.JsonObject;
-import com.sun.security.ntlm.Server;
-import javafx.application.Platform;
 import org.edb.main.*;
-import org.edb.main.UI.FXManipulator;
 import org.edb.main.model.InactivateCondition;
-import org.edb.main.model.tempPlugin;
 
 import org.edb.main.ServerResponseHandler;
 
-import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-import retrofit2.Callback;
 import org.edb.main.model.Time;
 import org.edb.main.model.Object;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 
 import static org.mockito.Matchers.*;

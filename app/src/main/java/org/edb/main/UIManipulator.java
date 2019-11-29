@@ -1,9 +1,8 @@
 package org.edb.main;
 
-import org.edb.main.model.tempPlugin;
+import org.edb.main.model.PluginModel;
 import org.edb.main.network.JsonConverter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public interface UIManipulator {
@@ -11,17 +10,19 @@ public interface UIManipulator {
 
     void onLoginUnsuccessful();
 
-    void onResponseAvailableExternalServices(ArrayList<tempExternalService> data);
+    void onResponseAvailableExternalServices(ArrayList<ExternalService> data);
 
-    void onResponseUserExternalServices(ArrayList<tempExternalService> data);
+    void onResponseUserExternalServices(Iterable<ExternalService> data);
 
-    void onResponseExternalServiceDetails(int externalIdx, ArrayList<tempExternalServiceDetail> data);
+    void onResponseExternalServiceDetails(int externalIdx, ArrayList<ExternalServiceDetail> data);
 
-    void onResponseUserPlugins(ArrayList<tempPlugin> data);
+    void onResponseExternalServiceDetail(int externalIdx, Iterable<ExternalServiceDetail> externalServiceDetail);
 
-    void onResponseAvailablePlugins(ArrayList<tempPlugin> data);
+    void onResponseUserPlugins(ArrayList<PluginModel> data);
 
-    void onResponsePluginDetails(int pluginIdx, ArrayList<tempPlugin> data);
+    void onResponseAvailablePlugins(ArrayList<PluginModel> data);
+
+    void onResponsePluginDetails(int pluginIdx, ArrayList<PluginModel> data);
 
     void onPostUserPlugin(int pluginIdx,JsonConverter jsonConverter);
 }

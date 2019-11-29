@@ -2,10 +2,12 @@ package org.edb.main.UI;
 
 import javafx.application.Platform;
 import org.edb.main.UIManipulator;
-import org.edb.main.model.tempPlugin;
+
+import org.edb.main.ExternalService;
+import org.edb.main.ExternalServiceDetail;
+
+import org.edb.main.model.PluginModel;
 import org.edb.main.network.JsonConverter;
-import org.edb.main.tempExternalService;
-import org.edb.main.tempExternalServiceDetail;
 
 import java.util.ArrayList;
 
@@ -31,28 +33,34 @@ public class FXManipulator implements UIManipulator {
     }
 
     @Override
-    public void onResponseAvailableExternalServices(ArrayList<tempExternalService> data) {
+    public void onResponseAvailableExternalServices(ArrayList<ExternalService> data) {
         Platform.runLater(()->{
            availableExternalServicelListController.handleExternalServiceResponse(data);
         });
     }
 
     @Override
-    public void onResponseUserExternalServices(ArrayList<tempExternalService> data) {
+    public void onResponseUserExternalServices(Iterable<ExternalService> data) {
         Platform.runLater(()->{
             userExternalServicelListController.handleUserExternalServiceResponse(data);
         });
     }
 
     @Override
-    public void onResponseExternalServiceDetails(int externalIdx, ArrayList<tempExternalServiceDetail> data) {
+    public void onResponseExternalServiceDetails(int externalIdx, ArrayList<ExternalServiceDetail> data) {
         Platform.runLater(()->{
             userExternalServicelListController.showExternalServiceDetailTableList(externalIdx,data);
         });
     }
 
     @Override
-    public void onResponseUserPlugins(ArrayList<tempPlugin> data){
+    public void onResponseExternalServiceDetail(int externalIdx, Iterable<ExternalServiceDetail> externalServiceDetail) {
+        Platform.runLater(()->{
+            userExternalServicelListController.showExternalServiceDetailTableList(externalIdx,externalServiceDetail);
+        });
+    }
+
+    public void onResponseUserPlugins(ArrayList<PluginModel> data){
         Platform.runLater(()->{
             System.out.print("test fxmaniipulator\n");
             System.out.print(data);
@@ -60,7 +68,7 @@ public class FXManipulator implements UIManipulator {
     }
 
     @Override
-    public void  onResponseAvailablePlugins(ArrayList<tempPlugin> data){
+    public void  onResponseAvailablePlugins(ArrayList<PluginModel> data){
         Platform.runLater(()->{
             System.out.print("test AVAILABLE PLUGIN LIST\n");
             System.out.print(data);
@@ -68,7 +76,7 @@ public class FXManipulator implements UIManipulator {
     }
 
     @Override
-    public void onResponsePluginDetails(int pluginIdx, ArrayList<tempPlugin> data){
+    public void onResponsePluginDetails(int pluginIdx, ArrayList<PluginModel> data){
         Platform.runLater(()->{
             System.out.print("test AVAILABLE PLUGIN LIST\n");
             System.out.print(data);

@@ -8,10 +8,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import org.edb.main.ExternalService;
+import org.edb.main.FXExternalService;
 import org.edb.main.UIEventHandler;
 
-import org.edb.main.tempExternalService;
+import org.edb.main.ExternalService;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,13 +19,13 @@ import java.util.ResourceBundle;
 
 public class AvailableExternalServiceListController implements Initializable {
     @FXML
-    private TableView<ExternalService> availableExternalServiceListView;
+    private TableView<FXExternalService> availableExternalServiceListView;
     @FXML
-    private TableColumn<ExternalService, String> availableExternalServiceTitle;
+    private TableColumn<FXExternalService, String> availableExternalServiceTitle;
     @FXML
-    private TableColumn<ExternalService, String> availableExternalServiceUrl;
+    private TableColumn<FXExternalService, String> availableExternalServiceUrl;
 
-    private ObservableList<ExternalService> availableExternalData = FXCollections.observableArrayList();
+    private ObservableList<FXExternalService> availableExternalData = FXCollections.observableArrayList();
 
     private UIEventHandler uiEventHandler;
 
@@ -33,7 +33,7 @@ public class AvailableExternalServiceListController implements Initializable {
         this.uiEventHandler = uiEventHandler;
     }
 
-    public ObservableList<ExternalService> getAvailableExternalData() {
+    public ObservableList<FXExternalService> getAvailableExternalData() {
         return availableExternalData;
 
     }
@@ -44,7 +44,7 @@ public class AvailableExternalServiceListController implements Initializable {
         availableExternalServiceTitle.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         availableExternalServiceUrl.setCellValueFactory(cellData -> cellData.getValue().urlProperty());
 
-        loadAvailableExternalServiceList();
+//        loadAvailableExternalServiceList();
     }
 
 
@@ -52,15 +52,15 @@ public class AvailableExternalServiceListController implements Initializable {
         uiEventHandler.onAvailableExternalServiceListLoaded();
     }
 
-    public void handleExternalServiceResponse(ArrayList<tempExternalService> data){
+    public void handleExternalServiceResponse(ArrayList<ExternalService> data){
         convertToRows(data);
         addRowsToTableView();
     }
 
-    public void convertToRows(ArrayList<tempExternalService> data) {
+    public void convertToRows(ArrayList<ExternalService> data) {
 
-        for (tempExternalService value : data) {
-            availableExternalData.add(new ExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
+        for (ExternalService value : data) {
+            availableExternalData.add(new FXExternalService(value.getName(), value.getUrl(),value.getExternal_service_idx()));
         }
     }
 

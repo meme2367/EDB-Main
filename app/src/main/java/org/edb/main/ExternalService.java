@@ -1,53 +1,30 @@
 package org.edb.main;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class ExternalService {
-    private final StringProperty url;
-    private final StringProperty name;
-    private final IntegerProperty idx;
+    int user_idx;
+    int external_service_idx;
+    String name;
+    String url;
 
-    public ExternalService(String  name, String url,int idx) {
-        this.url = new SimpleStringProperty(url);
-        this.name = new SimpleStringProperty(name);
-        this.idx = new SimpleIntegerProperty(idx);
+    public ExternalService(int user_idx, int external_service_idx, String name, String url) {
+        this.user_idx = user_idx;
+        this.external_service_idx = external_service_idx;
+        this.name = name;
+        this.url = url;
     }
 
-    public String getUrl(){ return url.get(); }
+    public String  getName() {
 
-    public String getName() {
-        return name.get();
-    }
-
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public void setUrl(String url) {
-        this.url.set(url);
-    }
-
-    public StringProperty nameProperty(){
         return name;
     }
 
-    public StringProperty urlProperty(){
+    public String  getUrl() {
+
         return url;
     }
 
-
-    public int getIdx() {return idx.get(); }
-
-    @Override
-    public String toString() {
-        return "ExternalService{" +
-                "url=" + url +
-                ", name=" + name +
-                ", idx=" + idx +
-                '}';
+    public int getExternal_service_idx(){
+        return external_service_idx;
     }
 }

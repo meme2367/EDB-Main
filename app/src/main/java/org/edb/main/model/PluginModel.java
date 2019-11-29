@@ -23,7 +23,7 @@ package org.edb.main.model;
     ]
 }
 * */
-public class tempPlugin {
+public class PluginModel {
     int idx;
     String configuration;
     String end_time;

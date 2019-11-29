@@ -1,44 +1,27 @@
 package org.edb.main;
 
-import javafx.beans.property.*;
-
 public class ExternalServiceDetail {
-    private StringProperty if_achieve;
-    private StringProperty name;
-    private IntegerProperty idx;
-    private BooleanProperty check;
-
-    /*
-    *  int if_achieve;
+    int if_achieve;
     int external_service_detail_idx;
-    String name;*/
+    String name;
 
-    public ExternalServiceDetail(int idx, String  name, int if_achieve) {
-        this.idx = new SimpleIntegerProperty(idx);
-        this.name = new SimpleStringProperty(name);
-        if(if_achieve == 1){
-            this.if_achieve = new SimpleStringProperty("달성완료");
-        }else{
-            this.if_achieve = new SimpleStringProperty("달성해주세요");
-        }
-        this.check = new SimpleBooleanProperty(false);
-
+    public ExternalServiceDetail(int if_achieve, int external_service_detail_idx, String name) {
+        this.if_achieve = if_achieve;
+        this.external_service_detail_idx = external_service_detail_idx;
+        this.name = name;
     }
 
-    public StringProperty nameProperty(){
+    public String  getName() {
+
         return name;
     }
 
-    public StringProperty ifachieveProperty(){
+    public int getIf_achieve() {
+
         return if_achieve;
     }
 
-    public IntegerProperty idxProperty(){return idx;}
-
-    public BooleanProperty checkProperty() { return check; }
-    public BooleanProperty getCheck() {return check; }
-
-    public void setCheck(Boolean check) {
-        this.check = new SimpleBooleanProperty(check);
+    public int getExternal_service_detail_idx(){
+        return external_service_detail_idx;
     }
 }

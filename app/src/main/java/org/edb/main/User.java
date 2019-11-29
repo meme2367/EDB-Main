@@ -1,10 +1,6 @@
 package org.edb.main;
 
 
-import org.edb.main.network.RestApiConnector;
-
-import java.util.ArrayList;
-
 /**
  * User
  * can access common single TempUser instance
@@ -12,8 +8,6 @@ import java.util.ArrayList;
 public class User {
     private static User loggedInUser;
 
-    private ArrayList<ExternalService> externalServices;
-    private ArrayList<PluginConfig> pluginConfigs;
     private String id;
     private String token;
 
@@ -47,18 +41,13 @@ public class User {
     public String getToken() {
         return token;
     }
+
     public static synchronized void login(String id, String token){
         if(loggedInUser!=null){
             if(id!=loggedInUser.getId())loggedInUser.logOut();
         }
 
         loggedInUser = new User(id,token);
-        /*
-            token=로그인 처리
-            loadPluginConfig()
-            loadExternalService()
-            loggedinUser=new User(id, token);
-         */
     }
 
     public void logOut(){
@@ -66,26 +55,5 @@ public class User {
         /*
             edbTimer.stop()?
          */
-    }
-
-    /*
-        갱신부분 좀 난해한듯..
-        플러그인, 외부서비스 불러오는 부분 일단 제외하고 나머지 작성.
-     */
-    public void loadPluginConfig(){
-        /*
-            잠금정책들 불러오기
-            edbTimer에 전달하기
-            만약 이러면 내부 메서드에 보관할 필요 있는가?
-         */
-    }
-
-    public void loadExternalService(){
-        /*
-            외부서비스들 불러오기
-            edbTimer에 전달하기
-            너두
-         */
-
     }
 }

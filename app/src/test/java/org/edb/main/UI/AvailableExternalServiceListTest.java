@@ -7,8 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.edb.main.FXExternalService;
 import org.edb.main.ExternalService;
-import org.edb.main.tempExternalService;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -28,9 +28,6 @@ public class AvailableExternalServiceListTest extends Application
         convertToRowsTest(createServiceList());
         controller.addRowsToTableView();
     }
-
-    //이 메소드는 특히 재사용될 가능성이 높기 때문에 다른 테스트 클래스에서도 공통적으로 사용될 수 있는 방법을 고민할 필요가 있음.
-    //테스트중에 서버 연결코드를 적용하지 않는 방법. 구체적 컨트롤러 사이 중간계층 만드는 것밖에 없음.
 
     public void loadAvailableExternalServiceListFXML()
     {
@@ -52,18 +49,18 @@ public class AvailableExternalServiceListTest extends Application
     }
 
 
-    private ArrayList<tempExternalService> createServiceList(){
-        ArrayList<tempExternalService> data=new ArrayList<>();
-        data.add(new tempExternalService(1, 2,"inflearn","www.inflearn.com"));
+    private ArrayList<ExternalService> createServiceList(){
+        ArrayList<ExternalService> data=new ArrayList<>();
+        data.add(new ExternalService(1, 2,"inflearn","www.inflearn.com"));
         return data;
     }
 
-    private void convertToRowsTest(ArrayList<tempExternalService> data){
+    private void convertToRowsTest(ArrayList<ExternalService> data){
         controller.convertToRows(data);
-        ObservableList<ExternalService> availableExternalData=controller.getAvailableExternalData();
+        ObservableList<FXExternalService> availableExternalData=controller.getAvailableExternalData();
         int size=availableExternalData.size();
 
-        for (ExternalService single:availableExternalData) {
+        for (FXExternalService single:availableExternalData) {
             System.out.println(single.toString());
         }
     }
