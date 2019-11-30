@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import org.edb.main.FXExternalService;
 import org.edb.main.UIEventHandler;
 
 import org.edb.main.ExternalService;

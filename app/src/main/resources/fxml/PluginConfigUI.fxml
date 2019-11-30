@@ -17,25 +17,25 @@
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TableView prefHeight="155.0" prefWidth="463.0">
+                        <TableView fx:id="targetProgramTableView" prefHeight="155.0" prefWidth="463.0">
                           <columns>
-                            <TableColumn prefWidth="150" text="프로그램 이름" />
-                            <TableColumn prefWidth="250" text="경로" />
+                            <TableColumn fx:id="targetProgramNameColumn" prefWidth="150" text="프로그램 이름" />
+                            <TableColumn fx:id="targetProgramPathColumn" prefWidth="250" text="경로" />
                           </columns>
                         </TableView>
-                        <Button layoutX="315.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="추가" />
-                        <Button layoutX="398.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="삭제" />
+                        <Button onAction="#addTargetProgram" layoutX="315.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="추가" />
+                        <Button onAction="#deleteTargetProgram" layoutX="398.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="삭제" />
                      </children>
                   </AnchorPane>
                   <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TableView prefHeight="155.0" prefWidth="463.0">
+                        <TableView fx:id="targetWebsiteTableView" prefHeight="155.0" prefWidth="463.0">
                            <columns>
-                              <TableColumn prefWidth="400" text="웹사이트URL" />
+                              <TableColumn fx:id="targetWebsiteURLColumn" prefWidth="400" text="웹사이트URL" />
                            </columns>
                         </TableView>
-                        <Button layoutX="315.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="추가" />
-                        <Button layoutX="398.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="삭제" />
+                        <Button onAction="#addTargetWebsite" layoutX="315.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="추가" />
+                        <Button onAction="#deleteTargetWebsite" layoutX="398.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" text="삭제" />
                         <TextField layoutX="11.0" layoutY="158.0" prefHeight="29.0" prefWidth="292.0" />
                      </children>
                   </AnchorPane>
@@ -44,8 +44,8 @@
       </ScrollPane>
       <AnchorPane fx:id="applyArea" prefHeight="40.0" prefWidth="477.0">
          <children>
-            <Button fx:id="applyToServerBtn" layoutX="412.0" layoutY="4.0" mnemonicParsing="false" text="서버반영" />
-            <Button fx:id="scheduleBtn" layoutX="320.0" layoutY="4.0" mnemonicParsing="false" text="시간설정" />
+            <Button fx:id="applyToServerBtn" onAction="#applyToServer" layoutX="412.0" layoutY="4.0" mnemonicParsing="false" text="서버반영" />
+            <Button fx:id="scheduleBtn" onAction="#schedulePlugin" layoutX="320.0" layoutY="4.0" mnemonicParsing="false" text="시간설정" />
             <TextField fx:id="startHourField" layoutX="6.0" layoutY="4.0" prefHeight="20.0" prefWidth="35.0" />
             <TextField fx:id="startMinField" layoutX="80.0" layoutY="4.0" prefHeight="20.0" prefWidth="35.0" />
             <TextField fx:id="endHourField" layoutX="161.0" layoutY="4.0" prefHeight="20.0" prefWidth="35.0" />

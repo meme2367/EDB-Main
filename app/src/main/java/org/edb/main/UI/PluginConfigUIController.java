@@ -1,22 +1,55 @@
 package org.edb.main.UI;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import org.edb.main.EDBPlugin;
-import org.edb.main.EDBPluginManager;
-import org.edb.main.UIEventHandler;
+import javafx.stage.FileChooser;
+import org.edb.main.*;
 
-public class PluginConfigUIController {
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static org.edb.main.UI.BootApp.primaryStage;
+
+public class PluginConfigUIController implements Initializable {
 
     @FXML
     private VBox configArea;
     @FXML
     private AnchorPane applyArea;
+    @FXML
+    private TextField startHourField;
+    @FXML
+    private TextField startMinField;
+    @FXML
+    private TextField endHourField;
+    @FXML
+    private TextField endMinField;
+    @FXML
+    private TableView<FXTargetProgram> targetProgramTableView;
+    @FXML
+    private TableView<FXTargetWebsite> targetWebsiteTableView;
+    @FXML
+    private TableColumn<FXTargetProgram, String> targetProgramNameColumn;
+    @FXML
+    private TableColumn<FXTargetProgram, String> targetProgramPathColumn;
+    @FXML
+    private TableColumn<FXTargetWebsite, String> targetWebsiteURLColumn;
 
     private EDBPlugin plugin;
     private EDBPluginManager pluginManager;
     private UIEventHandler uiEventHandler;
+    private FXTargetProgram curSelectedProgram;
+    private FXTargetWebsite curSelectedWebsite;
+    private ObservableList<FXTargetProgram> fxTargetProgramObservableList = FXCollections.observableArrayList();
+    private ObservableList<FXTargetWebsite> fxTargetWebsiteObservableList = FXCollections.observableArrayList();
 
     public void setPluginManager(EDBPluginManager pluginManager) {
         this.pluginManager = pluginManager;
@@ -25,6 +58,68 @@ public class PluginConfigUIController {
     public void setUIEventHandler(UIEventHandler uiEventHandler) {
         this.uiEventHandler=uiEventHandler;
     }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        targetProgramNameColumn.setCellValueFactory(cellData->cellData.getValue().targetNameProperty());
+        targetProgramPathColumn.setCellValueFactory(cellData->cellData.getValue().targetPathProperty());
+        targetWebsiteURLColumn.setCellValueFactory(cellData->cellData.getValue().targetURLProperty());
+
+        targetProgramTableView.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> onProgramSelected(newValue));
+        targetWebsiteTableView.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> onWebsiteSelected(newValue));
+
+        targetProgramTableView.setItems(fxTargetProgramObservableList);
+        targetWebsiteTableView.setItems(fxTargetWebsiteObservableList);
+    }
+
+    public void addTargetProgram(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files","*.*"));
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
+        FXTargetProgram addedTargetProgram = new FXTargetProgram(selectedFile.getName(),selectedFile.getAbsolutePath());
+
+        fxTargetProgramObservableList.add(addedTargetProgram);
+
+        plugin.addTargetProgram(addedTargetProgram.convertToTargetProgram());
+    }
+
+    public void deleteTargetProgram(){
+
+//        curSelectedProgram 참고해서 삭제하기
+
+//        테이블 뷰에서 삭제
+//        EDBPluginConfig에서도 삭제
+    }
+
+    public void addTargetWebsite(){
+//        textField에 입력된값 기반
+    }
+
+    public void deleteTargetWebsite(){
+//        curSelectedWebsite 참고해서 삭제하기
+    }
+
+    public void applyToServer(){
+//        edbPlugin변환해서 서버리퀘스트로 보낸다
+    }
+
+    public void schedulePlugin(){
+//        textField참고해서 설정값에 넣는다.
+
+    }
+
+    public void onProgramSelected(FXTargetProgram selectedProgram){
+        curSelectedProgram = selectedProgram;
+    }
+
+    public void onWebsiteSelected(FXTargetWebsite selectedWebsite){
+        curSelectedWebsite = selectedWebsite;
+    }
+
 /*
         //1.  잠금정책목록 불러오기
         // 2. 잠금정책등록 선택시 추가가능한 잠금정책목록보여주기

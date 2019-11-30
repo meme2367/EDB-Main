@@ -1,9 +1,12 @@
 package org.edb.main;
 
+import org.edb.main.model.TargetProgram;
+
 import java.util.Date;
+import java.util.Map;
 
 public abstract class EDBPlugin {
-    private Iterable<PluginConfig> pluginConfigs;
+    private Map<String,PluginConfig> pluginConfigs;
     private Date startDate;
     private Date endDate;
     private int pulginIdx;
@@ -20,4 +23,9 @@ public abstract class EDBPlugin {
     public abstract void checkLifeCycle();
     public abstract void renewTrackingTarget();
     public abstract void checkForLogics();
+
+    public void addTargetProgram(TargetProgram targetProgram) {
+        pluginConfigs.get("TargetProgram").addSingleConfig(targetProgram.toString());
+    }
+
 }

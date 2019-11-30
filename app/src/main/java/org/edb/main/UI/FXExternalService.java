@@ -1,4 +1,4 @@
-package org.edb.main;
+package org.edb.main.UI;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
