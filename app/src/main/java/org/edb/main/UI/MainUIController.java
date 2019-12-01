@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.edb.main.BootApp;
 import org.edb.main.UIEventHandler;
 
 import java.io.IOException;
@@ -58,7 +59,7 @@ public class MainUIController {
         try {
             clearCenterUI();
             Parent list = FXMLLoader.load(getClass().getResource(filePath));
-            Scene tempScene=BootApp.getPrimaryStage().getScene();
+            Scene tempScene= BootApp.getPrimaryStage().getScene();
             HBox hbox=(HBox)tempScene.lookup("#centerUI");
             hbox.getChildren().add(list);
 

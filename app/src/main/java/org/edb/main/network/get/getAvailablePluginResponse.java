@@ -1,7 +1,6 @@
 package org.edb.main.network.get;
 
 import org.edb.main.model.PluginModel;
-import org.edb.main.tempExternalService;
 
 import java.util.ArrayList;
 

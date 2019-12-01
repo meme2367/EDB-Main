@@ -1,14 +1,19 @@
-package org.edb.main.UI;
+package org.edb.main;
 
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.edb.main.EDBPluginManager;
 import org.edb.main.ServerResponseHandler;
+import org.edb.main.UI.FXFactory;
+import org.edb.main.UI.FXManipulator;
 import org.edb.main.UIEventHandler;
 import org.edb.main.UIManipulator;
+import org.edb.main.network.JsonConverter;
 import org.edb.main.network.RestAPIRequester;
+import org.edb.main.network.TempJsonConverter;
 
 import java.io.IOException;
 
@@ -35,13 +40,22 @@ public class BootApp extends Application {
     }
 
     public void initComponentRoots(){
+        EDBPluginManager edbPluginManager = new EDBPluginManager();
         FXManipulator fxManipulator= new FXManipulator();
         ServerResponseHandler serverResponseHandler=new ServerResponseHandler(fxManipulator);
-        RestAPIRequester restAPIRequester = new RestAPIRequester(serverResponseHandler);
+
+        RestAPIRequester restAPIRequester = new RestAPIRequester();
+        restAPIRequester.setServerResponseHandler(serverResponseHandler);
+        restAPIRequester.setPluginManager(edbPluginManager);
+
         serverResponseHandler.setServerRequester(restAPIRequester);
+        serverResponseHandler.setPluginManager(edbPluginManager);
+
         UIEventHandler uiEventHandler=new UIEventHandler(restAPIRequester);
         uiEventHandler.setUiManipulator(fxManipulator);
+
         FXFactory.getInstance().init(uiEventHandler,fxManipulator);
+        FXFactory.getInstance().setPluginManager(edbPluginManager);
     }
 
     public void initRootLayout() {
