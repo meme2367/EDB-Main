@@ -52,7 +52,9 @@ public class RestAPITestAPI {
             }
         }).when(serverResponseHandler).handleLoginResponse(anyBoolean(),anyString(),anyString());
 
-        RestAPIRequester restAPIRequester=new RestAPIRequester(serverResponseHandler);
+        RestAPIRequester restAPIRequester=new RestAPIRequester();
+        restAPIRequester.setServerResponseHandler(serverResponseHandler);
         restAPIRequester.requestLogin(id,pw);
     }
+
 }

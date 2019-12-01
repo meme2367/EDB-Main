@@ -3,6 +3,7 @@ package org.edb.main.UI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import org.edb.main.BootApp;
 import org.edb.main.EDBPluginManager;
 import org.edb.main.UIEventHandler;
 
@@ -10,9 +11,15 @@ import org.edb.main.UIEventHandler;
 public class FXFactory {
     private UIEventHandler uiEventHandler;
     private FXManipulator fxManipulator;
-    private EDBPluginManager edbPluginManager;
+    private EDBPluginManager pluginManager;
 
     private static FXFactory fxFactory;
+
+
+    public void setPluginManager(EDBPluginManager pluginManager) {
+        this.pluginManager = pluginManager;
+    }
+
 
     public static synchronized FXFactory getInstance(){
         if(fxFactory==null){
@@ -80,7 +87,7 @@ public class FXFactory {
 
         PluginConfigUIController controller = loader.<PluginConfigUIController>getController();
         controller.setUIEventHandler(uiEventHandler);
-        controller.setPluginManager(edbPluginManager);
+        controller.setPluginManager(pluginManager);
 
         return parent;
     }

@@ -7,7 +7,6 @@ import org.edb.main.ExternalService;
 import org.edb.main.ExternalServiceDetail;
 
 import org.edb.main.model.PluginModel;
-import org.edb.main.network.JsonConverter;
 
 import java.util.ArrayList;
 
@@ -76,22 +75,14 @@ public class FXManipulator implements UIManipulator {
     }
 
     @Override
-    public void onResponsePluginDetails(int pluginIdx, ArrayList<PluginModel> data){
+    public void onResponsePluginDetails(int pluginIdx, PluginModel data){
         Platform.runLater(()->{
             System.out.print("test AVAILABLE PLUGIN LIST\n");
             System.out.print(data);
         });
     }
 
-    @Override
-    public void onPostUserPlugin(int pluginIdx, JsonConverter jsonConverter){
-        Platform.runLater(()->{
-            System.out.print("test post plugin configuration\n");
-            System.out.print(jsonConverter.getInactivateConditionList());
-            System.out.print(jsonConverter.getObjectList());
-            System.out.print(jsonConverter.getTime());
-        });
-    }
+
     public void setMainUIController(MainUIController mainUIController) {
         this.mainUIController = mainUIController;
     }

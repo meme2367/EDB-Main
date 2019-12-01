@@ -1,7 +1,6 @@
 package org.edb.main;
 
 import org.edb.main.model.PluginModel;
-import org.edb.main.network.JsonConverter;
 
 import java.util.ArrayList;
 
@@ -22,7 +21,6 @@ public interface UIManipulator {
 
     void onResponseAvailablePlugins(ArrayList<PluginModel> data);
 
-    void onResponsePluginDetails(int pluginIdx, ArrayList<PluginModel> data);
+    void onResponsePluginDetails(int pluginIdx, PluginModel data);
 
-    void onPostUserPlugin(int pluginIdx,JsonConverter jsonConverter);
 }

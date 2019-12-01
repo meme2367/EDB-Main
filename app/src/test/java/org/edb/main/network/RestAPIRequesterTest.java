@@ -2,17 +2,18 @@ package org.edb.main.network;
 
 import com.google.gson.JsonObject;
 import org.edb.main.*;
-import org.edb.main.model.InactivateCondition;
+import org.edb.main.model.*;
 
 import org.edb.main.ServerResponseHandler;
 
+import org.edb.main.model.Object;
+import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.edb.main.model.Time;
-import org.edb.main.model.Object;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static org.awaitility.Awaitility.await;
 
@@ -25,39 +26,41 @@ public class RestAPIRequesterTest {
     private static RestAPIRequester restAPIRequester;
 
     public static void main(String[] args) {
-
+        tempPostPluginDetail();
 
         //Mockito를 이용한 callback test
-        ServerResponseHandler serverResponseHandler = mock(ServerResponseHandler.class);
-
-
-        //callback boolean successful, String id
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                java.lang.Object[] args = invocationOnMock.getArguments();
-                System.out.print("\nargs test33\n");
-                System.out.print(args);
-                System.out.print("\ntoken mock test33\n");
-                System.out.print(User.getUser().getToken());//token
-
-                //잠금정책목록
-//                requestUserPlugins();
-
-                // 2. 잠금정책등록 선택시 추가가능한 잠금정책목록보여주기
-                //requestAvailablePlugins();
-
-                //3.잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
-//                requestUserDetailPlugin();
-//'{"configuration":{"object":{"object_idx1":"Game.exe","object_idx2":"Chrome"}\n,"time":{"start_time":"09:20","end_time":"15:00"}}}'
-                // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠금정책설정 저장
-                requestPostPluginDetail();
-
-
-                requestUserDetailPlugin();
-
-                return null;
-            }
+//        ServerResponseHandler serverResponseHandler = mock(ServerResponseHandler.class);
+////
+////
+////        //callback boolean successful, String id
+////        doAnswer(new Answer() {
+////            @Override
+////            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+////                java.lang.Object[] args = invocationOnMock.getArguments();
+////                System.out.print("\nargs test33\n");
+////                System.out.print(args);
+////                System.out.print("\ntoken mock test33\n");
+////                System.out.print(User.getUser().getToken());//token
+////
+////                //잠금정책목록
+//////                requestUserPlugins();
+////
+////                // 2. 잠금정책등록 선택시 추가가능한 잠금정책목록보여주기
+////                //requestAvailablePlugins();
+////
+////                //3.잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
+//////                requestUserDetailPlugin();
+//////'{"configuration":{"object":{"object_idx1":"Game.exe","object_idx2":"Chrome"}\n,"time":{"start_time":"09:20","end_time":"15:00"}}}'
+////                // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠금정책설정 저장
+////                requestPostPluginDetail();
+////
+////
+////                requestUserDetailPlugin();
+////
+////                return null;
+////            }
+////        }).when(serverResponseHandler).handleLoginResponse(anyBoolean(), anyString(),anyString());
+    }
 
     public static void requestLoginTest(){
         /*
@@ -84,9 +87,10 @@ public class RestAPIRequesterTest {
         RestAPITestAPI.getStubber(responseNames).when(serverResponseHandler).handleLoginResponse(anyBoolean(),anyString(),anyString());
 
 
-        }).when(serverResponseHandler).handleLoginResponse(anyBoolean(), anyString());
 
-        restAPIRequester = new RestAPIRequester(serverResponseHandler);
+
+        restAPIRequester = new RestAPIRequester();
+        restAPIRequester.setServerResponseHandler(serverResponseHandler);
         restAPIRequester.requestLogin("meme2367", "123");
 
     }
@@ -137,5 +141,44 @@ public class RestAPIRequesterTest {
 
     }
 
+    @Test
+    public static void tempRequestPluginDetail(){
 
+        RestAPITestAPI.loginFotTest("jooha208","123");
+
+
+
+    }
+
+    @Test
+    public static void tempPostPluginDetail(){
+        RestAPITestAPI.loginFotTest("jooha208","123");
+        TestEDBPlugin testEDBPlugin = new TestEDBPlugin();
+//        TODO TargetProgramConfig 정의 필요
+//        TODO TargetWebsiteConfig 정의 필요
+//        testEDBPlugin.addTargetProgram(new TargetProgram("chrome","chrome.exe"));
+//        testEDBPlugin.addTargetWebsite(new TargetWebsite("www.naver.com"));
+        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigInt : 3");
+        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigStr : tempStr");
+        testEDBPlugin.applySchedule(new Date(), new Date());
+
+        TempJsonConverter tempJsonConverter= new TempJsonConverter();
+        testEDBPlugin.extractConfigs(tempJsonConverter);
+        RestAPIRequester restAPIRequester1 = new RestAPIRequester();
+
+        ServerResponseHandler serverResponseHandler = RestAPITestAPI.getMockServerResponseHandler();
+        restAPIRequester1.setServerResponseHandler(serverResponseHandler);
+
+        ArrayList<String> responseName = new ArrayList<String>();
+        responseName.add("pluginIdx");
+        RestAPITestAPI.getStubber(responseName).when(serverResponseHandler).handlePostUserPluginResponse(anyInt());
+
+        JsonObject jsonObejct = tempJsonConverter.getJsonObjectForPost();
+
+        System.out.println(jsonObejct.toString());
+//        TODO slash가 나중에 decode할때 걸림돌이 될 수도 있음
+//        {"start_time":"2019-12-01 11:45:51","end_time":"2019-12-01 11:45:51","configuration":"{\"TestPluginConfig\":\"tempConfigInt : 3, tempConfigStr : tempStr\"}"}
+
+//        restAPIRequester1.postUserPluginWithJsonObject(1, tempJsonConverter.getJsonObjectForPost());
+    }
 }

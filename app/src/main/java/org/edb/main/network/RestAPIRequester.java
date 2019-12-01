@@ -1,6 +1,5 @@
 package org.edb.main.network;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.edb.main.*;
@@ -12,19 +11,20 @@ import org.edb.main.network.get.*;
 
 import org.edb.main.network.post.postLoginResponse;
 import org.edb.main.network.post.postPluginDetailResponse;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.text.ParseException;
-
 public class RestAPIRequester  implements ServerRequester {
 
-    ServerResponseHandler serverResponseHandler;
+    private ServerResponseHandler serverResponseHandler;
+    private EDBPluginManager pluginManager;
 
-    public RestAPIRequester(ServerResponseHandler serverResponseHandler) {
+    public void setPluginManager(EDBPluginManager pluginManager) {
+        this.pluginManager = pluginManager;
+    }
+
+    public void setServerResponseHandler(ServerResponseHandler serverResponseHandler) {
         this.serverResponseHandler = serverResponseHandler;
     }
 
@@ -264,40 +264,10 @@ public class RestAPIRequester  implements ServerRequester {
                 try {
                     if (response.isSuccessful()) {
 
-
                         System.out.print("\nRestAPIRequester.java의 requestPluginDetails()\n\n");
                         System.out.print(response.body().getData().get(0).getConfiguration());
 
-
-
-
-                        JsonConverter jsonConverter = new JsonConverter();
-                        jsonConverter.setConfiguration(response.body().getData().get(0).getConfiguration());
-
-//                        jsonConverter.getObjectList();//Arraylist<object>
-
-                        //Object configuration만 가져오기
-                        System.out.print("\nOBJECT jsonconverter\n");
-                        for(int j = 0;j<jsonConverter.getObjectList().size();j++){
-                            System.out.print(jsonConverter.getObjectList().get(j).getObject_name());//object_idx1
-                            System.out.print(jsonConverter.getObjectList().get(j).getObject_value());//"Game.exe"
-                        }
-
-
-
-                        //time
-                        System.out.print("\nTime jsonconverter\n");
-                        System.out.print(response.body().getData().get(0).getStart_time());
-                        System.out.print(response.body().getData().get(0).getEnd_time());
-
-                        System.out.print("\ninactivatecondition jsonconverter\n");
-                        //InactivateCondition
-                        for(int j = 0;j<jsonConverter.getInactivateConditionList().size();j++){
-                            System.out.print(jsonConverter.getInactivateConditionList().get(j).getInactivateCondition_name());//object_idx1
-                            System.out.print(jsonConverter.getInactivateConditionList().get(j).getInactivateCondition_value());//"Game.exe"
-                        }
-
-                        serverResponseHandler.handlePluginDetailsResponse(pluginIdx, response.body().getData());
+                        serverResponseHandler.handlePluginDetailsResponse(pluginIdx, response.body().getData().get(0),new TempJsonConverter());
                     }
 
                 } catch (Exception e) {
@@ -314,18 +284,16 @@ public class RestAPIRequester  implements ServerRequester {
         });
     }
 
-    public void requestPostUserPlugin(int pluginIdx,JsonConverter jsonConverter) {
+    public void requestPostUserPlugin(int pluginIdx){
+//        실질적으로 post시 이 메서드를 활용함
+        JsonObject jsonObject = getJsonObjectFromPluginManager(pluginIdx);
 
-        String token = getToken();
+        postUserPluginWithJsonObject(pluginIdx, jsonObject);
+    }
 
-
-
-        JsonObject jsonObject = jsonConverter.getConfigJsonObject().getAsJsonObject();
-        jsonObject.addProperty("start_time",jsonConverter.getTime().getStartTime());
-        jsonObject.addProperty("end_time",jsonConverter.getTime().getEnd_time());
-
-        System.out.print("\nrequestPostUserPlugin\n");
-        System.out.print(jsonObject);
+    protected void postUserPluginWithJsonObject(int pluginIdx, JsonObject jsonObject) {
+//        테스트 목적 메소드 분리 정의
+        String token= getToken();
 
         Call<postPluginDetailResponse> postPluginDetailResponseCall =
                 RestApiConnector.getPluginService()
@@ -342,7 +310,7 @@ public class RestAPIRequester  implements ServerRequester {
                     System.out.print(response.body().getMessage());
 
                 }
-                serverResponseHandler.handlePostUserPluginResponse(pluginIdx,jsonConverter);
+                serverResponseHandler.handlePostUserPluginResponse(pluginIdx);
             }
 
             @Override
@@ -351,6 +319,19 @@ public class RestAPIRequester  implements ServerRequester {
                 System.out.println(throwable);
             }
         });
+    }
+
+    private JsonObject getJsonObjectFromPluginManager(int pluginIdx) {
+        TempJsonConverter jsonConverter = new TempJsonConverter();
+        pluginManager.collectConfigs(pluginIdx, jsonConverter);
+        JsonObject jsonObject = jsonConverter.getJsonObjectForPost();
+
+        System.out.println(jsonObject.toString());
+        return jsonObject;
+    }
+
+    public void requestPostUserPlugin(int pluginIdx,JsonConverter jsonConverter) {
+
 
     }
 }

@@ -2,6 +2,7 @@ package org.edb.main;
 
 import org.edb.main.model.PluginModel;
 import org.edb.main.network.JsonConverter;
+import org.edb.main.network.TempJsonConverter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,8 +10,12 @@ import java.util.Set;
 
 public class ServerResponseHandler {
     private UIManipulator uiManipulator;
-
+    private EDBPluginManager pluginManager;
     private ServerRequester serverRequester;
+
+    public void setPluginManager(EDBPluginManager pluginManager) {
+        this.pluginManager = pluginManager;
+    }
 
     public ServerResponseHandler(UIManipulator uiManipulator) {
         this.uiManipulator = uiManipulator;
@@ -58,15 +63,16 @@ public class ServerResponseHandler {
     // load Available plugin  list
     public void handleAvailablePluginResponse(ArrayList<PluginModel> data) { uiManipulator.onResponseAvailablePlugins(data);}
 
-    public void handlePluginDetailsResponse(int pluginIdx, ArrayList<PluginModel> data) {
-        uiManipulator.onResponsePluginDetails(pluginIdx, data);
+    public void handlePluginDetailsResponse(int pluginIdx, PluginModel data, PluginConfigConverter pluginConfigConverter) {
+        pluginManager.applyConfigsFromServer(pluginIdx, data, pluginConfigConverter);
+//        uiManipulator.onResponsePluginDetails(pluginIdx, data);
+//        ui적용은 ui에서의 요청이 있을때 pluginManager로부터 요청한다.
     }
 
     //serverResponseHandler.handlePostUserPluginResponse(sucessful,jsonConverter);
     //post configuration
-    public void handlePostUserPluginResponse(int pluginIdx, JsonConverter jsonConverter){
+    public void handlePostUserPluginResponse(int pluginIdx){
 
-        uiManipulator.onPostUserPlugin(pluginIdx,jsonConverter);
     }
 
 }
