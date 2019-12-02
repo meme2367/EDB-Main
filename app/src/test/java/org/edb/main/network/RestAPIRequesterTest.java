@@ -25,44 +25,45 @@ public class RestAPIRequesterTest {
 
     private static RestAPIRequester restAPIRequester;
 
-    public static void main(String[] args) {
-        tempPostPluginDetail();
-
-        //Mockito를 이용한 callback test
-//        ServerResponseHandler serverResponseHandler = mock(ServerResponseHandler.class);
-////
-////
-////        //callback boolean successful, String id
-////        doAnswer(new Answer() {
-////            @Override
-////            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-////                java.lang.Object[] args = invocationOnMock.getArguments();
-////                System.out.print("\nargs test33\n");
-////                System.out.print(args);
-////                System.out.print("\ntoken mock test33\n");
-////                System.out.print(User.getUser().getToken());//token
-////
-////                //잠금정책목록
-//////                requestUserPlugins();
-////
-////                // 2. 잠금정책등록 선택시 추가가능한 잠금정책목록보여주기
-////                //requestAvailablePlugins();
-////
-////                //3.잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
+//    public static void main(String[] args) {
+//        tempPostPluginDetail();
+//
+//        //Mockito를 이용한 callback test
+////        ServerResponseHandler serverResponseHandler = mock(ServerResponseHandler.class);
+//////
+//////
+//////        //callback boolean successful, String id
+//////        doAnswer(new Answer() {
+//////            @Override
+//////            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+//////                java.lang.Object[] args = invocationOnMock.getArguments();
+//////                System.out.print("\nargs test33\n");
+//////                System.out.print(args);
+//////                System.out.print("\ntoken mock test33\n");
+//////                System.out.print(User.getUser().getToken());//token
+//////
+//////                //잠금정책목록
+////////                requestUserPlugins();
+//////
+//////                // 2. 잠금정책등록 선택시 추가가능한 잠금정책목록보여주기
+//////                //requestAvailablePlugins();
+//////
+//////                //3.잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
+////////                requestUserDetailPlugin();
+////////'{"configuration":{"object":{"object_idx1":"Game.exe","object_idx2":"Chrome"}\n,"time":{"start_time":"09:20","end_time":"15:00"}}}'
+//////                // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠금정책설정 저장
+//////                requestPostPluginDetail();
+//////
+//////
 //////                requestUserDetailPlugin();
-//////'{"configuration":{"object":{"object_idx1":"Game.exe","object_idx2":"Chrome"}\n,"time":{"start_time":"09:20","end_time":"15:00"}}}'
-////                // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠금정책설정 저장
-////                requestPostPluginDetail();
-////
-////
-////                requestUserDetailPlugin();
-////
-////                return null;
-////            }
-////        }).when(serverResponseHandler).handleLoginResponse(anyBoolean(), anyString(),anyString());
-    }
+//////
+//////                return null;
+//////            }
+//////        }).when(serverResponseHandler).handleLoginResponse(anyBoolean(), anyString(),anyString());
+//    }
 
-    public static void requestLoginTest(){
+    @Test
+    public void requestLoginTest(){
         /*
             response의 결과들의 이름을 ArrayList에 담는다.
             아무렇게나 지정해도 무관하지만, response 개수와는 일치시켜야함
@@ -96,17 +97,17 @@ public class RestAPIRequesterTest {
     }
 
     // 1. 잠금정책목록
-    public static void requestUserPlugins() {
+    public void requestUserPlugins() {
         restAPIRequester.requestUserPlugins();
     }
 
     // 2. 잠금정책등록 선택시 추가가능한 잠금정책목록보여주기
-    public static void requestAvailablePlugins(){ restAPIRequester.requestAvailablePlugins(); }
+    public void requestAvailablePlugins(){ restAPIRequester.requestAvailablePlugins(); }
 
     // 3. 잠금정책목록에서 특정 잠금 정책 클릭 시 잠금정책설정 불러오기
-    public static void requestUserDetailPlugin(){restAPIRequester.requestPluginDetails(1);}
+    public void requestUserDetailPlugin(){restAPIRequester.requestPluginDetails(1);}
     // 4. 잠금정책목록에서 특정 잠금 정책 화면에서 잠 금정책설정 저장
-    public static void requestPostPluginDetail(){
+    public void requestPostPluginDetail(){
 
 
         Time time = new Time("2019-11-19 12:00","2019-11-29 18:00");
@@ -142,7 +143,7 @@ public class RestAPIRequesterTest {
     }
 
     @Test
-    public static void tempRequestPluginDetail(){
+    public void tempRequestPluginDetail(){
 
         RestAPITestAPI.loginFotTest("jooha208","123");
 
@@ -151,15 +152,15 @@ public class RestAPIRequesterTest {
     }
 
     @Test
-    public static void tempPostPluginDetail(){
+    public void tempPostPluginDetail(){
         RestAPITestAPI.loginFotTest("jooha208","123");
         TestEDBPlugin testEDBPlugin = new TestEDBPlugin();
-//        TODO TargetProgramConfig 정의 필요
-//        TODO TargetWebsiteConfig 정의 필요
-//        testEDBPlugin.addTargetProgram(new TargetProgram("chrome","chrome.exe"));
-//        testEDBPlugin.addTargetWebsite(new TargetWebsite("www.naver.com"));
-        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigInt : 3");
-        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigStr : tempStr");
+
+        testEDBPlugin.addTargetProgram(new TargetProgram("chrome","C:\\chrome"));
+        testEDBPlugin.addTargetWebsite(new TargetWebsite("www.naver.com"));
+
+        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigInt","3");
+        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigStr", "tempStr");
         testEDBPlugin.applySchedule(new Date(), new Date());
 
         TempJsonConverter tempJsonConverter= new TempJsonConverter();
@@ -176,8 +177,6 @@ public class RestAPIRequesterTest {
         JsonObject jsonObejct = tempJsonConverter.getJsonObjectForPost();
 
         System.out.println(jsonObejct.toString());
-//        TODO slash가 나중에 decode할때 걸림돌이 될 수도 있음
-//        {"start_time":"2019-12-01 11:45:51","end_time":"2019-12-01 11:45:51","configuration":"{\"TestPluginConfig\":\"tempConfigInt : 3, tempConfigStr : tempStr\"}"}
 
 //        restAPIRequester1.postUserPluginWithJsonObject(1, tempJsonConverter.getJsonObjectForPost());
     }

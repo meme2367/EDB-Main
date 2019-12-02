@@ -11,9 +11,13 @@ import java.util.Map;
 
 public abstract class EDBPlugin {
     protected Map<String,PluginConfig> pluginConfigs;
+    protected Map<String, TargetProgram> targetPrograms;
+    protected Map<String, TargetWebsite> targetWebsites;
+
     protected Date startDate;
     protected Date endDate;
-    protected int pulginIdx;
+
+
     protected boolean isRunning;
     protected String fxPath;
     protected String androidPath;
@@ -24,12 +28,17 @@ public abstract class EDBPlugin {
     public abstract void renewTrackingTarget();
     public abstract void checkForLogics();
 
+    public abstract int getPluginIdx();
+
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
         pluginConfigConverter.setSchedule(startDate, endDate);
+        pluginConfigConverter.setTargetPrograms(targetPrograms);
+        pluginConfigConverter.setTargetWebsites(targetWebsites);
         for (Map.Entry<String, PluginConfig> entry : pluginConfigs.entrySet()){
             entry.getValue().extractConfig(pluginConfigConverter);
         }
     }
+
 
     public void decodeConfigs(PluginModel data, PluginConfigConverter pluginConfigConverter){
         Date from = new Date();
@@ -46,11 +55,13 @@ public abstract class EDBPlugin {
         this.startDate = from;
         this.endDate = to;
 
-        pluginConfigConverter.convertStrConfigToMap(data.getConfiguration());
-        Map<String,String> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
+        pluginConfigConverter.convertStrConfigs(data.getConfiguration());
+        targetPrograms = pluginConfigConverter.getTargetPrograms();
+        targetWebsites = pluginConfigConverter.getTargetWebsites();
+        Map<String,Map<String,String>> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
 
-        for (Map.Entry<String, String> entry : strConfigsMap.entrySet()) {
-            pluginConfigs.get(entry.getKey()).decode(entry.getValue());
+        for (Map.Entry<String, Map<String,String>> entry : strConfigsMap.entrySet()) {
+            pluginConfigs.get(entry.getKey()).decodeFromMap(entry.getValue());
         }
     }
 
@@ -60,22 +71,22 @@ public abstract class EDBPlugin {
     }
 
     public void addTargetProgram(TargetProgram targetProgram) {
-        pluginConfigs.get("TargetProgram").addSingleConfig(targetProgram.toString());
+        targetPrograms.put(targetProgram.getTargetName(),targetProgram);
     }
 
     public void removeTargetProgram(TargetProgram targetProgram) {
-        pluginConfigs.get("TargetProgram").removeSingleConfig(targetProgram.toString());
-    }
-
-    public void removeTargetWebsite(TargetWebsite targetWebsite) {
-        pluginConfigs.get("TargetWebsite").removeSingleConfig(targetWebsite.toString());
+        targetPrograms.remove(targetProgram.getTargetName());
     }
 
     public void addTargetWebsite(TargetWebsite targetWebsite) {
-        pluginConfigs.get("TargetWebsite").addSingleConfig(targetWebsite.toString());
+        targetWebsites.put(targetWebsite.getTargetURL(),targetWebsite);
     }
 
-    public void applySingleConfig(String configName, String config){
-        pluginConfigs.get(configName).addSingleConfig(config);
+    public void removeTargetWebsite(TargetWebsite targetWebsite) {
+        targetWebsites.remove(targetWebsite.getTargetURL());
+    }
+
+    public void applySingleConfig(String configName, String attributeName, String config){
+        pluginConfigs.get(configName).addSingleConfig(attributeName,config);
     }
 }

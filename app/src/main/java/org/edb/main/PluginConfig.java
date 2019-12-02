@@ -1,9 +1,11 @@
 package org.edb.main;
 
-public abstract class PluginConfig {
-    public abstract void addSingleConfig(String singleConfig);
+import java.util.Map;
 
-    public abstract void decode(String decodeConfig);
+public abstract class PluginConfig {
+    public abstract void addSingleConfig(String attributeName, String attributeValue);
+
+    public abstract void decodeFromMap(Map<String, String> decodeConfig);
 
     public abstract void removeSingleConfig(String singleConfig);
 

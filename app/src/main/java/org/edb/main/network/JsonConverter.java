@@ -37,18 +37,24 @@ public class JsonConverter {
         configJsonObject = new JsonObject();
     }
 
+//{"object":{"object1":"Chrome","object2":"game.exe"},"inactivateCondition":{"condition1":"인강5개보기","condition2":"6시간동안인터넷금지"}}
 
+    //{"TargetProgram":{"targetName1" : "targetPath1", "targetName2" : "targetPath2"}, "TargetWebsites":["targetURL1", "targetURL2"],
+    //    "Config1" : {"configAttribute1" : "1", "configAttribute2" : "[arrayElement1, arrayElement2]"}}
     public void setConfiguration(String configuration) {
 
         jsonObj = (JsonObject) jsonParser.parse(configuration);
 
+//        Key : TargetProgram, TargetWebsite, Config1
+//        반복이 필요했나? 재귀만으로 충분히 해결 가능할듯?
         for (String key : jsonObj.keySet()) {
             convert(jsonObj, key);
         }
 
     }
 
-
+//      전체 object를 통채로 전달, key = Config1
+//    element 단위로 구분한다.
     private void convert(JsonObject jsonObject, String keyName) {
         Iterator<Map.Entry<String, JsonElement>> iterator
                 = jsonObject.entrySet().iterator();

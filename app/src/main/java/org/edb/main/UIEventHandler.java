@@ -44,9 +44,8 @@ public class UIEventHandler {
 
     public void onUserPluginListLoaded(){ serverRequester.requestUserPlugins();}
 
-    public void onPostUserPlugin(int pluginIdx,JsonConverter jsonConverter) {
-        //requestPostUserPlugin(int pluginIdx, JsonConverter jsonConverter);
-        serverRequester.requestPostUserPlugin(pluginIdx, jsonConverter);
+    public void onPostUserPlugin(int pluginIdx){
+        serverRequester.requestPostUserPlugin(pluginIdx);
     }
 
 }

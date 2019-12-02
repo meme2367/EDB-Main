@@ -79,7 +79,7 @@ public class PluginConfigUIController implements Initializable {
         targetWebsiteTableView.setItems(fxTargetWebsiteObservableList);
     }
 
-    //TODO pluginConfigUI 화면불러오기
+    //TODO pluginConfigUI 화면불러오기, 구체적인 pluginConfigUI가 정의되지 않았기에 아직 불가능.
     public void loadPluginConfigRequested(){
 //        시간, 잠금대상, 잠금웹사이트 config를 받아와서, 이 ui에 뿌리고
 //        EDBPlugin에서 PluginConfigUI불러와서 configArea에 달아주고
@@ -120,9 +120,8 @@ public class PluginConfigUIController implements Initializable {
         plugin.removeTargetWebsite(selectedItem.convertToTargetWebsite());
     }
 
-    //TODO 서버에 반영하기
     public void applyToServer(){
-//        edbPlugin변환해서 서버리퀘스트로 보낸다
+        uiEventHandler.onPostUserPlugin(plugin.getPluginIdx());
     }
 
     public void schedulePlugin(){
@@ -142,7 +141,6 @@ public class PluginConfigUIController implements Initializable {
         modifyScheduleBtn.setVisible(true);
         scheduledTimeLbl.setVisible(true);
 
-        //TODO 시간 출력 포맷 확인
         String scheduledTime = startDate.toString()+ "부터 " + endDate.toString()+"까지";
         scheduledTimeLbl.setText(scheduledTime);
     }

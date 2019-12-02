@@ -16,4 +16,12 @@ public class TargetProgram {
                 ", targetPath='" + targetPath + '\'' +
                 '}';
     }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public String getTargetPath() {
+        return targetPath;
+    }
 }

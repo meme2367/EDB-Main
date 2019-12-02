@@ -329,9 +329,4 @@ public class RestAPIRequester  implements ServerRequester {
         System.out.println(jsonObject.toString());
         return jsonObject;
     }
-
-    public void requestPostUserPlugin(int pluginIdx,JsonConverter jsonConverter) {
-
-
-    }
 }
