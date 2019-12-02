@@ -11,6 +11,9 @@ import java.util.Map;
 
 public abstract class EDBPlugin {
     protected Map<String,PluginConfig> pluginConfigs;
+    protected Map<String, TargetProgram> targetPrograms;
+    protected Map<String, TargetWebsite> targetWebsites;
+
     protected Date startDate;
     protected Date endDate;
     protected int pulginIdx;
@@ -26,6 +29,8 @@ public abstract class EDBPlugin {
 
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
         pluginConfigConverter.setSchedule(startDate, endDate);
+        pluginConfigConverter.setTargetPrograms(targetPrograms);
+        pluginConfigConverter.setTargetWebsites(targetWebsites);
         for (Map.Entry<String, PluginConfig> entry : pluginConfigs.entrySet()){
             entry.getValue().extractConfig(pluginConfigConverter);
         }
@@ -46,7 +51,9 @@ public abstract class EDBPlugin {
         this.startDate = from;
         this.endDate = to;
 
-        pluginConfigConverter.convertStrConfigToMap(data.getConfiguration());
+        pluginConfigConverter.convertStrConfigs(data.getConfiguration());
+        targetPrograms = pluginConfigConverter.getTargetPrograms();
+        targetWebsites = pluginConfigConverter.getTargetWebsites();
         Map<String,String> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
 
         for (Map.Entry<String, String> entry : strConfigsMap.entrySet()) {
@@ -60,19 +67,19 @@ public abstract class EDBPlugin {
     }
 
     public void addTargetProgram(TargetProgram targetProgram) {
-        pluginConfigs.get("TargetProgram").addSingleConfig(targetProgram.toString());
+        targetPrograms.put(targetProgram.getTargetName(),targetProgram);
     }
 
     public void removeTargetProgram(TargetProgram targetProgram) {
-        pluginConfigs.get("TargetProgram").removeSingleConfig(targetProgram.toString());
-    }
-
-    public void removeTargetWebsite(TargetWebsite targetWebsite) {
-        pluginConfigs.get("TargetWebsite").removeSingleConfig(targetWebsite.toString());
+        targetPrograms.remove(targetProgram.getTargetName());
     }
 
     public void addTargetWebsite(TargetWebsite targetWebsite) {
-        pluginConfigs.get("TargetWebsite").addSingleConfig(targetWebsite.toString());
+        targetWebsites.put(targetWebsite.getTargetURL(),targetWebsite);
+    }
+
+    public void removeTargetWebsite(TargetWebsite targetWebsite) {
+        targetWebsites.remove(targetWebsite.getTargetURL());
     }
 
     public void applySingleConfig(String configName, String config){
