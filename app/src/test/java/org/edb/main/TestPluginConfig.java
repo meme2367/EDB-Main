@@ -1,6 +1,7 @@
 package org.edb.main;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class TestPluginConfig extends PluginConfig {
     private int tempConfigInt;
@@ -24,7 +25,7 @@ public class TestPluginConfig extends PluginConfig {
 
 //  TODO 테스트용 말고 제대로된 decode 작성 필요
     @Override
-    public void decode(String decodeConfig) {
+    public void decode(Map<String, String> decodeConfig) {
         System.out.println("decode with some Logics");
         System.out.println(decodeConfig);
     }
@@ -38,6 +39,6 @@ public class TestPluginConfig extends PluginConfig {
     public void extractConfig(PluginConfigConverter pluginConfigConverter) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("tempConfigInt : 3, tempConfigStr : tempStr");
-        pluginConfigConverter.addSingleConfig("TestPluginConfig",stringBuffer.toString());
+//        pluginConfigConverter.addSingleConfig();
     }
 }

@@ -10,6 +10,7 @@ import org.edb.main.model.TargetWebsite;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public class TempJsonConverter extends PluginConfigConverter {
     private JsonObject jsonObjectForPost;
 
     public JsonObject getJsonObjectForPost(){
-        convertForPost();
+        makeFormatForPost();
         return jsonObjectForPost;
     }
 
     @Override
-    protected void convertForPost() {
+    protected void makeFormatForPost() {
         jsonObjectForPost = new JsonObject();
 
         SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -38,7 +39,7 @@ public class TempJsonConverter extends PluginConfigConverter {
 
         jsonObjectForPost.addProperty("start_time",fm.format(startDate));
         jsonObjectForPost.addProperty("end_time",fm.format(endDate));
-        jsonObjectForPost.addProperty("configuration",convertConfigs());
+        jsonObjectForPost.add("configuration", convertConfigsForPost());
     }
 
     @Override
@@ -59,7 +60,7 @@ public class TempJsonConverter extends PluginConfigConverter {
                     extractTargetWebsitesFromJson((JsonObject)entry.getValue());
                     break;
                 default:
-                    extractSpecificConfigsFromJson();
+                    extractSpecificConfigsFromJson(entry.getKey(),(JsonObject)entry.getValue());
             }
         }
     }
@@ -71,7 +72,7 @@ public class TempJsonConverter extends PluginConfigConverter {
 
         while(iterator.hasNext()){
             entry = iterator.next();
-            String targetPath = removeDobuleQuotesFromString(entry.getValue().toString());
+            String targetPath = removeDoubleQuotesFromString(entry.getValue().toString());
 
             TargetProgram tempTargetProgram = new TargetProgram(entry.getKey(),targetPath);
             targetPrograms.put(entry.getKey(),tempTargetProgram);
@@ -82,53 +83,73 @@ public class TempJsonConverter extends PluginConfigConverter {
         JsonArray targetWebsiteArray = targetWebsiteJsons.getAsJsonArray();
 
         for (int i = 0; i < targetWebsiteArray.size(); i++) {
-            String targetURL = removeDobuleQuotesFromString(targetWebsiteArray.get(i).toString());
+            String targetURL = removeDoubleQuotesFromString(targetWebsiteArray.get(i).toString());
             TargetWebsite tempTargetWebsite = new TargetWebsite(targetURL);
             targetWebsites.put(targetURL,tempTargetWebsite);
         }
 
     }
 
-    private String removeDobuleQuotesFromString(String str){
-        return str.substring(1,str.length()-1);
+    private String removeDoubleQuotesFromString(String str){
+        if(str.startsWith("\"")){
+            return str.substring(1,str.length()-1);
+        }
+        else return str;
     }
 
-    private void extractSpecificConfigsFromJson() {
+    private void extractSpecificConfigsFromJson(String key, JsonObject singleConfigJsons) {
 
+        Map<String,String> attributes = new HashMap<String,String>();
+
+        Iterator<Map.Entry<String, JsonElement>> iterator
+                = singleConfigJsons.entrySet().iterator();
+        Map.Entry<String, JsonElement> entry;
+
+        while(iterator.hasNext()){
+            entry = iterator.next();
+            String singleAttribute = removeDoubleQuotesFromString(entry.getValue().toString());
+
+            attributes.put(entry.getKey(),singleAttribute);
+        }
+        pluginConfigs.put(key,attributes);
     }
 
 
-//    TODO setTargetPrograms
     @Override
     public void setTargetPrograms(Map<String, TargetProgram> targetPrograms) {
-
+        this.targetPrograms=targetPrograms;
     }
 
-//    TODO setTargetWebsites
     @Override
     public void setTargetWebsites(Map<String, TargetWebsite> targetWebsites) {
-
+        this.targetWebsites=targetWebsites;
     }
 
-//    TODO getTargetPrograms
     @Override
     public Map<String, TargetProgram> getTargetPrograms() {
-        return null;
+        return targetPrograms;
     }
 
-//    TODO getTargetWebsites
     @Override
     public Map<String, TargetWebsite> getTargetWebsites() {
-        return null;
+        return targetWebsites;
     }
 
-    private String convertConfigs(){
+    private JsonObject convertConfigsForPost(){
         JsonObject configJsonObject = new JsonObject();
 
-        for(Map.Entry<String,String> entry : pluginConfigs.entrySet()){
-            configJsonObject.addProperty(entry.getKey(),entry.getValue());
+        for(Map.Entry<String,Map<String,String>> singleConfigMap : pluginConfigs.entrySet()){
+            JsonObject attributesJsonObject = new JsonObject();
+            for (Map.Entry<String,String> singleAttribute : singleConfigMap.getValue().entrySet()) {
+
+                attributesJsonObject.addProperty(singleAttribute.getKey(),singleAttribute.getValue());
+            }
+
+            System.out.println(attributesJsonObject.toString());
+            configJsonObject.add(singleConfigMap.getKey(),attributesJsonObject);
         }
 
-        return configJsonObject.toString();
+        System.out.println(configJsonObject.toString());
+        return configJsonObject;
     }
 }

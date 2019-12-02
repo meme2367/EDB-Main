@@ -5,44 +5,46 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.edb.main.network.TempJsonConverter;
+import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class JsonConvertTest {
-    public static void main(String[] args) {
-        String configuration = "{\"TargetProgram\":{\"targetName1\" : \"targetPath1\", \"targetName2\" : \"targetPath2\"}, \"TargetWebsites\":[\"targetURL1\", \"targetURL2\"],\"Config1\" : {\"configAttribute1\" : \"1\", \"configAttribute2\" : [\"arrayElement1\", \"arrayElement2\"]}}";
+//    public static void main(String[] args) {
+//
+//        convertConfigsForPostTest();
+//
+//    }
 
-//        String configuration = "{\"TargetProgram\":{}, \"TargetWebsites\":[\"targetURL1\", \"targetURL2\"],\"Config1\" : {\"configAttribute1\" : \"1\", \"configAttribute2\" : [\"arrayElement1\", \"arrayElement2\"]}}";
+    @Test
+    public void convertConfigsForPostTest(){
+        Map<String,Map<String,String>> pluginConfigs= new HashMap<String,Map<String,String>>();
 
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = (JsonObject)jsonParser.parse(configuration);
-        for (String key :
-                jsonObject.keySet()) {
-            System.out.println(key);
-        }
+        Map<String,String> config1 = new HashMap<String,String>();
+        config1.put("attribute1","1");
+        config1.put("attribute2","5");
 
-        Iterator<Map.Entry<String, JsonElement>> iterator
-                = jsonObject.entrySet().iterator();
-        Map.Entry<String, JsonElement> entry;
+        Map<String,String> config2 = new HashMap<String,String>();
+        config2.put("attribute3","[element1,element2]");
 
+        pluginConfigs.put("config1",config1);
+        pluginConfigs.put("config2",config2);
 
-        while(iterator.hasNext()){
-            entry=iterator.next();
-            switch(entry.getKey()) {
-                case "TargetProgram" :
-//                    만약 비어있으면 어떻게 처리되나?
-                    System.out.println(((JsonObject)entry.getValue()).toString());
-                    break;
-                case "TargetWebiste" :
-//                    extractTargetWebsitesFromJson();
-                    break;
-                default:
-//                    extractSpecificConfigsFromJson();
+        JsonObject configJsonObject = new JsonObject();
+
+        for(Map.Entry<String,Map<String,String>> singleConfigMap : pluginConfigs.entrySet()){
+            JsonObject attributesJsonObject = new JsonObject();
+            for (Map.Entry<String,String> singleAttribute : singleConfigMap.getValue().entrySet()) {
+
+                attributesJsonObject.addProperty(singleAttribute.getKey(),singleAttribute.getValue());
             }
+
+            System.out.println(attributesJsonObject.toString());
+            configJsonObject.add(singleConfigMap.getKey(),attributesJsonObject);
         }
 
-        TempJsonConverter jsonConverter = new TempJsonConverter();
-        jsonConverter.convertStrConfigs(configuration);
+        System.out.println(configJsonObject.toString());
     }
 }

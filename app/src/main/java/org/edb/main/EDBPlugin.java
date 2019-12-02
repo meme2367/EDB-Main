@@ -54,9 +54,10 @@ public abstract class EDBPlugin {
         pluginConfigConverter.convertStrConfigs(data.getConfiguration());
         targetPrograms = pluginConfigConverter.getTargetPrograms();
         targetWebsites = pluginConfigConverter.getTargetWebsites();
-        Map<String,String> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
+        Map<String,Map<String,String>> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
 
-        for (Map.Entry<String, String> entry : strConfigsMap.entrySet()) {
+//        TODO EDBPlugin 에러수정
+        for (Map.Entry<String, Map<String,String>> entry : strConfigsMap.entrySet()) {
             pluginConfigs.get(entry.getKey()).decode(entry.getValue());
         }
     }

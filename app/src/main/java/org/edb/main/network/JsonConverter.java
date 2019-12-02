@@ -40,7 +40,7 @@ public class JsonConverter {
 //{"object":{"object1":"Chrome","object2":"game.exe"},"inactivateCondition":{"condition1":"인강5개보기","condition2":"6시간동안인터넷금지"}}
 
     //{"TargetProgram":{"targetName1" : "targetPath1", "targetName2" : "targetPath2"}, "TargetWebsites":["targetURL1", "targetURL2"],
-    //    "Config1" : {"configAttribute1" : "1", "configAttribute2" : ["arrayElement1", "arrayElement2"]}}
+    //    "Config1" : {"configAttribute1" : "1", "configAttribute2" : "[arrayElement1, arrayElement2]"}}
     public void setConfiguration(String configuration) {
 
         jsonObj = (JsonObject) jsonParser.parse(configuration);
