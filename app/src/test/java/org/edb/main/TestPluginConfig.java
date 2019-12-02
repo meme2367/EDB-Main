@@ -1,6 +1,8 @@
 package org.edb.main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TestPluginConfig extends PluginConfig {
@@ -12,22 +14,39 @@ public class TestPluginConfig extends PluginConfig {
         tempConfigList = new ArrayList<String>();
     }
 
-//    TODO 하드코딩 컨피그에서 변경필요
+
     @Override
-    public void addSingleConfig(String singleConfig) {
-        if(singleConfig.startsWith("tempConfigInt : ")){
-            tempConfigInt=3;
+    public void addSingleConfig(String attributeName, String attributeValue) {
+        switch(attributeName){
+            case "tempConfigInt":
+                tempConfigInt = Integer.parseInt(attributeValue);
+                break;
+            case "tempConfigStr":
+                tempConfigStr = attributeValue;
+                break;
+            case"tempConfigList":
+                addToTempConfigList(attributeValue);
+                break;
+            default:
+                System.out.println("error");
         }
-        if(singleConfig.startsWith("tempConfigStr: ")){
-            tempConfigStr = "tempStr";
-        }
+
     }
 
-//  TODO 테스트용 말고 제대로된 decode 작성 필요
+//    TODO arrayList가 원시자료형을 담지 않을 가능성 고려 필요.(개별 플러그인 개발자가 해야할 역할)
+
+    private void addToTempConfigList(String attributeValue) {
+        ArrayList<String> tempList = new ArrayList<String>(Arrays.asList(attributeValue.split(",")));
+        tempConfigList.addAll(tempList);
+    }
+
     @Override
-    public void decode(Map<String, String> decodeConfig) {
-        System.out.println("decode with some Logics");
-        System.out.println(decodeConfig);
+    public void decodeFromMap(Map<String, String> decodeConfig) {
+
+        tempConfigInt = Integer.parseInt(decodeConfig.get("tempConfigInt"));
+        tempConfigStr = decodeConfig.get("tempConfigStr");
+
+        tempConfigList = new ArrayList<String>(Arrays.asList(decodeConfig.get("tempConfigList").split(",")));
     }
 
     @Override
@@ -37,8 +56,22 @@ public class TestPluginConfig extends PluginConfig {
 
     @Override
     public void extractConfig(PluginConfigConverter pluginConfigConverter) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("tempConfigInt : 3, tempConfigStr : tempStr");
-//        pluginConfigConverter.addSingleConfig();
+        Map<String,String> attributesMap = new HashMap<String,String>();
+
+        attributesMap.put("tempConfigInt",Integer.toString(tempConfigInt));
+        attributesMap.put("tempConfigStr",tempConfigStr);
+
+
+        pluginConfigConverter.addSingleConfig("TestPluginConfig", attributesMap);
+    }
+
+    private String convertListToSingleStr(){
+        StringBuffer sbr = new StringBuffer();
+
+        for (String str : tempConfigList) {
+            sbr.append(str);
+        }
+
+        return sbr.toString();
     }
 }

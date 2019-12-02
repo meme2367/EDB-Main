@@ -13,7 +13,7 @@ public interface ServerRequester {
     public void requestUserPlugins();//load user plugin list
     public void requestAvailablePlugins();//load available plugin list
     public void requestPluginDetails(int pluginIdx);
-    public void requestPostUserPlugin(int pluginIdx, JsonConverter jsonConverter);
+    public void requestPostUserPlugin(int pluginIdx);
 
     public void setServerResponseHandler(ServerResponseHandler serverResponseHandler);
 

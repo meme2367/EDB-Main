@@ -16,7 +16,8 @@ public abstract class EDBPlugin {
 
     protected Date startDate;
     protected Date endDate;
-    protected int pulginIdx;
+
+
     protected boolean isRunning;
     protected String fxPath;
     protected String androidPath;
@@ -27,6 +28,8 @@ public abstract class EDBPlugin {
     public abstract void renewTrackingTarget();
     public abstract void checkForLogics();
 
+    public abstract int getPluginIdx();
+
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
         pluginConfigConverter.setSchedule(startDate, endDate);
         pluginConfigConverter.setTargetPrograms(targetPrograms);
@@ -35,6 +38,7 @@ public abstract class EDBPlugin {
             entry.getValue().extractConfig(pluginConfigConverter);
         }
     }
+
 
     public void decodeConfigs(PluginModel data, PluginConfigConverter pluginConfigConverter){
         Date from = new Date();
@@ -56,9 +60,8 @@ public abstract class EDBPlugin {
         targetWebsites = pluginConfigConverter.getTargetWebsites();
         Map<String,Map<String,String>> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
 
-//        TODO EDBPlugin 에러수정
         for (Map.Entry<String, Map<String,String>> entry : strConfigsMap.entrySet()) {
-            pluginConfigs.get(entry.getKey()).decode(entry.getValue());
+            pluginConfigs.get(entry.getKey()).decodeFromMap(entry.getValue());
         }
     }
 
@@ -83,7 +86,7 @@ public abstract class EDBPlugin {
         targetWebsites.remove(targetWebsite.getTargetURL());
     }
 
-    public void applySingleConfig(String configName, String config){
-        pluginConfigs.get(configName).addSingleConfig(config);
+    public void applySingleConfig(String configName, String attributeName, String config){
+        pluginConfigs.get(configName).addSingleConfig(attributeName,config);
     }
 }
