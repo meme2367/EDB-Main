@@ -138,7 +138,7 @@ public class RestAPIRequesterTest {
         jsonConverter.makeString("inactivateCondition",inactivatetmp);
         jsonConverter.setTime(time);
 
-        restAPIRequester.requestPostUserPlugin(1,jsonConverter);
+        restAPIRequester.requestPostUserPlugin(1);
 
     }
 
@@ -159,8 +159,8 @@ public class RestAPIRequesterTest {
         testEDBPlugin.addTargetProgram(new TargetProgram("chrome","C:\\chrome"));
         testEDBPlugin.addTargetWebsite(new TargetWebsite("www.naver.com"));
 
-        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigInt","3");
-        testEDBPlugin.applySingleConfig("TestPluginConfig","tempConfigStr", "tempStr");
+        testEDBPlugin.applySingleConfig("TestPluginLogic","tempConfigInt","3");
+        testEDBPlugin.applySingleConfig("TestPluginLogic","tempConfigStr", "tempStr");
         testEDBPlugin.applySchedule(new Date(), new Date());
 
         TempJsonConverter tempJsonConverter= new TempJsonConverter();

@@ -7,16 +7,16 @@ import org.edb.main.model.TargetWebsite;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public abstract class EDBPlugin {
-    protected Map<String,PluginConfig> pluginConfigs;
+    protected Map<String, PluginLogic> pluginLogics;
     protected Map<String, TargetProgram> targetPrograms;
     protected Map<String, TargetWebsite> targetWebsites;
 
     protected Date startDate;
     protected Date endDate;
-
 
     protected boolean isRunning;
     protected String fxPath;
@@ -26,15 +26,16 @@ public abstract class EDBPlugin {
 
     public abstract void checkLifeCycle();
     public abstract void renewTrackingTarget();
-    public abstract void checkForLogics();
+    public abstract void checkForLogics(List<String> curPrograms, List<String> curWebsites, Date curTime);
 
     public abstract int getPluginIdx();
+
 
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
         pluginConfigConverter.setSchedule(startDate, endDate);
         pluginConfigConverter.setTargetPrograms(targetPrograms);
         pluginConfigConverter.setTargetWebsites(targetWebsites);
-        for (Map.Entry<String, PluginConfig> entry : pluginConfigs.entrySet()){
+        for (Map.Entry<String, PluginLogic> entry : pluginLogics.entrySet()){
             entry.getValue().extractConfig(pluginConfigConverter);
         }
     }
@@ -61,7 +62,7 @@ public abstract class EDBPlugin {
         Map<String,Map<String,String>> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
 
         for (Map.Entry<String, Map<String,String>> entry : strConfigsMap.entrySet()) {
-            pluginConfigs.get(entry.getKey()).decodeFromMap(entry.getValue());
+            pluginLogics.get(entry.getKey()).decodeFromMap(entry.getValue());
         }
     }
 
@@ -87,6 +88,14 @@ public abstract class EDBPlugin {
     }
 
     public void applySingleConfig(String configName, String attributeName, String config){
-        pluginConfigs.get(configName).addSingleConfig(attributeName,config);
+        pluginLogics.get(configName).addSingleConfig(attributeName,config);
+    }
+
+    public Map<String, TargetProgram> getTargetPrograms() {
+        return targetPrograms;
+    }
+
+    public Map<String, TargetWebsite> getTargetWebsites() {
+        return targetWebsites;
     }
 }

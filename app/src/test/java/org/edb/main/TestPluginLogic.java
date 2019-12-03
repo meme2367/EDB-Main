@@ -1,16 +1,13 @@
 package org.edb.main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class TestPluginConfig extends PluginConfig {
+public class TestPluginLogic extends PluginLogic {
     private int tempConfigInt;
     private String tempConfigStr;
     private ArrayList<String> tempConfigList;
 
-    public TestPluginConfig(){
+    public TestPluginLogic(){
         tempConfigList = new ArrayList<String>();
     }
 
@@ -62,7 +59,12 @@ public class TestPluginConfig extends PluginConfig {
         attributesMap.put("tempConfigStr",tempConfigStr);
 
 
-        pluginConfigConverter.addSingleConfig("TestPluginConfig", attributesMap);
+        pluginConfigConverter.addSingleConfig("TestPluginLogic", attributesMap);
+    }
+
+    @Override
+    public void checkForLogic(EDBPlugin plugin, List<String> curPrograms, List<String> curWebsites, Date curTime) {
+
     }
 
     private String convertListToSingleStr(){

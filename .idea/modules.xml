@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/edb-main.iml" filepath="$PROJECT_DIR$/edb-main.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/edb-main-app.iml" filepath="$PROJECT_DIR$/app/edb-main-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/sampleplugins/edb-sampleplugins.iml" filepath="$PROJECT_DIR$/sampleplugins/edb-sampleplugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sampleplugins/edb-cycle-plugin/edbcycleplugin.iml" filepath="$PROJECT_DIR$/sampleplugins/edb-cycle-plugin/edbcycleplugin.iml" />
     </modules>
   </component>
 </project>
