@@ -9,9 +9,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.edb.main.*;
+import org.edb.main.util.DateFormatter;
 
 import java.io.File;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -159,7 +161,13 @@ public class PluginConfigUIController implements Initializable {
 
         //Date타입으로 변환하기
         //반환하기
-        return cal.getTime();
+        Date formattedTime = cal.getTime();
+        try {
+            formattedTime = DateFormatter.getSimpleFormattedDateFromDate(cal.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedTime;
     }
 
     public void modifySchedule(){

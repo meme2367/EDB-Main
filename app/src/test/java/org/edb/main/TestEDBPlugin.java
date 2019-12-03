@@ -27,11 +27,6 @@ public class TestEDBPlugin extends EDBPlugin {
     }
 
     @Override
-    public void checkLifeCycle() {
-
-    }
-
-    @Override
     public void renewTrackingTarget() {
 
     }
@@ -44,5 +39,15 @@ public class TestEDBPlugin extends EDBPlugin {
     @Override
     public int getPluginIdx() {
         return pluginIdx;
+    }
+
+    @Override
+    protected void endPluginTime() {
+
+    }
+
+    @Override
+    protected void startPluginTime() {
+
     }
 }

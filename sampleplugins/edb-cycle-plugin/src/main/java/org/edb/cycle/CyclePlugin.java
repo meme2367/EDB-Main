@@ -14,11 +14,8 @@ public class CyclePlugin extends EDBPlugin {
         return null;
     }
 
-    public void checkLifeCycle() {
-
-    }
-
     public void renewTrackingTarget() {
+//        TODO renewTrackingTarget의 용도?
 
     }
 
@@ -32,5 +29,15 @@ public class CyclePlugin extends EDBPlugin {
 
     public int getPluginIdx() {
         return pluginIdx;
+    }
+
+    protected void endPluginTime() {
+
+    }
+
+    protected void startPluginTime() {
+        CycleLogic cycleLogic = (CycleLogic)pluginLogics.get("CycleLogic");
+        cycleLogic.setCurMode(CycleMode.FOCUS);
+        cycleLogic.renewDate(cycleLogic.getFocusCycle());
     }
 }

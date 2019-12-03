@@ -3,9 +3,9 @@ package org.edb.main;
 import org.edb.main.model.PluginModel;
 import org.edb.main.model.TargetProgram;
 import org.edb.main.model.TargetWebsite;
+import org.edb.main.util.DateFormatter;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +24,13 @@ public abstract class EDBPlugin {
 
     public abstract String getPluginConfigUIPath();
 
-    public abstract void checkLifeCycle();
+
     public abstract void renewTrackingTarget();
     public abstract void checkForLogics(List<String> curPrograms, List<String> curWebsites, Date curTime);
 
     public abstract int getPluginIdx();
+    protected abstract void endPluginTime();
+    protected abstract void startPluginTime();
 
 
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
@@ -40,15 +42,27 @@ public abstract class EDBPlugin {
         }
     }
 
+    public void checkLifeCycle(Date curTime){
+        if(isRunning) {
+            if (curTime.compareTo(endDate) == -1) {
+                isRunning = false;
+                endPluginTime();
+            }
+        }
+        else {
+            if(curTime.compareTo(startDate)==1){
+                isRunning = true;
+                startPluginTime();
+            }
+        }
+    }
 
     public void decodeConfigs(PluginModel data, PluginConfigConverter pluginConfigConverter){
         Date from = new Date();
         Date to = new Date();
-        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         try {
-            from = fm.parse(data.getStart_time());
-            to = fm.parse(data.getEnd_time());
+            from = DateFormatter.getSimpleFormattedDateFromString(data.getStart_time());
+            to = DateFormatter.getSimpleFormattedDateFromString(data.getEnd_time());
         } catch (ParseException e) {
             e.printStackTrace();
         }

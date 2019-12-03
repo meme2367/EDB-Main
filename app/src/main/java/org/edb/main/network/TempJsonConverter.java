@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import org.edb.main.PluginConfigConverter;
 import org.edb.main.model.TargetProgram;
 import org.edb.main.model.TargetWebsite;
+import org.edb.main.util.DateFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,8 +28,6 @@ public class TempJsonConverter extends PluginConfigConverter {
     protected void makeFormatForPost() {
         jsonObjectForPost = new JsonObject();
 
-        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         if(startDate==null){
             startDate = new Date();
         }
@@ -37,8 +36,8 @@ public class TempJsonConverter extends PluginConfigConverter {
             endDate = new Date();
         }
 
-        jsonObjectForPost.addProperty("start_time",fm.format(startDate));
-        jsonObjectForPost.addProperty("end_time",fm.format(endDate));
+        jsonObjectForPost.addProperty("start_time", DateFormatter.getSimpleFormattedStringFromDate(startDate));
+        jsonObjectForPost.addProperty("end_time",DateFormatter.getSimpleFormattedStringFromDate(endDate));
         jsonObjectForPost.add("configuration", convertConfigsForPost());
     }
 

@@ -5,9 +5,9 @@ import org.edb.main.PluginLogic;
 import org.edb.main.PluginConfigConverter;
 import org.edb.main.model.TargetProgram;
 import org.edb.main.model.TargetWebsite;
+import org.edb.main.util.DateFormatter;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CycleLogic extends PluginLogic {
@@ -26,6 +26,7 @@ public class CycleLogic extends PluginLogic {
     public void addSingleConfig(String attributeName, String attributeValue) {
 //        TODO addSingleConfig 삭제 고려,
 //        어차피 특정 pluginConfigController는 각 플러그인에 강한 결합되므로 getter, setter로 대체가능할듯.
+
     }
 
     public void decodeFromMap(Map<String, String> decodeConfig) {
@@ -34,9 +35,8 @@ public class CycleLogic extends PluginLogic {
         restCycle = Integer.parseInt(decodeConfig.get("restCycle"));
         wildCardLimit = Integer.parseInt(decodeConfig.get("wildCardLimit"));
 
-        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            finishingTime = fm.parse(decodeConfig.get("finishingTime"));
+            finishingTime = DateFormatter.getSimpleFormattedDateFromString(decodeConfig.get("finishingTime"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -66,9 +66,7 @@ public class CycleLogic extends PluginLogic {
         attributesMap.put("restCycle",Integer.toString(restCycle));
         attributesMap.put("wildCardLimit",Integer.toString(wildCardLimit));
 
-        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        attributesMap.put("finishingTime",fm.format(finishingTime));
+        attributesMap.put("finishingTime",DateFormatter.getSimpleFormattedStringFromDate(finishingTime));
         attributesMap.put("curMode",curMode.toString());
         attributesMap.put("targetExternalServices",removeBracket(targetExternalServices.toString()));
 
@@ -90,14 +88,6 @@ public class CycleLogic extends PluginLogic {
     }
 
     private void checkMode(Date curTime) {
-        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        String formattedStrCurTime = fm.format(curTime);
-        try {
-            Date formattedCurTime = fm.parse(formattedStrCurTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         int nextCycle;
 //        curTime이 Date보다 뒤라면 즉, curTime이 Date보다 크다면
@@ -115,7 +105,7 @@ public class CycleLogic extends PluginLogic {
         }
     }
 
-    private void renewDate(int nextCycle) {
+    public void renewDate(int nextCycle) {
         Date curTime = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(curTime);
