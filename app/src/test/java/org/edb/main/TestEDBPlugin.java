@@ -42,12 +42,14 @@ public class TestEDBPlugin extends EDBPlugin {
     }
 
     @Override
-    protected void endPluginTime() {
+    protected void onLifeCycleEnd() {
 
     }
+
 
     @Override
-    protected void startPluginTime() {
+    protected void onLifeCycleStart() {
 
     }
+
 }

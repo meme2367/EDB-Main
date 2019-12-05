@@ -31,6 +31,7 @@ public class MainUIController {
     private Label userIdLbl;
     @FXML
     private ComboBox pluginComboBox;
+//    TODO combobox event 등록
     @FXML
     private HBox centerUI;
     @FXML

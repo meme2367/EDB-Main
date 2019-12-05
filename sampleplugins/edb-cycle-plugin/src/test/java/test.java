@@ -1,4 +1,6 @@
+import org.edb.cycle.CycleLogic;
 import org.edb.cycle.CycleMode;
+import org.edb.main.PluginLogic;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -19,5 +21,8 @@ public class test {
 
         arrayList1.retainAll(arrayList2);
         System.out.println(arrayList1.toString());
+
+        PluginLogic pluginLogic = new CycleLogic();
+        System.out.println(pluginLogic.getClass());
     }
 }

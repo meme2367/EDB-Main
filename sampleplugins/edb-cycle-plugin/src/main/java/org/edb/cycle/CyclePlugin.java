@@ -31,13 +31,12 @@ public class CyclePlugin extends EDBPlugin {
         return pluginIdx;
     }
 
-    protected void endPluginTime() {
+    protected void onLifeCycleEnd() {
 
     }
 
-    protected void startPluginTime() {
+    protected void onLifeCycleStart() {
         CycleLogic cycleLogic = (CycleLogic)pluginLogics.get("CycleLogic");
-        cycleLogic.setCurMode(CycleMode.FOCUS);
-        cycleLogic.renewDate(cycleLogic.getFocusCycle());
-    }
+        cycleLogic.initializeLogicBeforeStart();
+}
 }

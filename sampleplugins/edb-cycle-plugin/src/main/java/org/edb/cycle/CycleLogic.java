@@ -1,8 +1,10 @@
 package org.edb.cycle;
 
+import org.edb.cycle.ui.CyclePluginConfigUIController;
 import org.edb.main.EDBPlugin;
 import org.edb.main.PluginLogic;
 import org.edb.main.PluginConfigConverter;
+import org.edb.main.UI.SpecificConfigUIController;
 import org.edb.main.model.TargetProgram;
 import org.edb.main.model.TargetWebsite;
 import org.edb.main.util.DateFormatter;
@@ -11,16 +13,20 @@ import java.text.ParseException;
 import java.util.*;
 
 public class CycleLogic extends PluginLogic {
+
     private int focusCycle;
 //    min단위
     private int restCycle;
     private int wildCardLimit;
+    private boolean wildCardUsed=false;
     private Date finishingTime;
     private CycleMode curMode;
     private List<Integer> targetExternalServices;
+    private CyclePluginConfigUIController controller;
 
     public CycleLogic() {
         this.targetExternalServices = new ArrayList<Integer>();
+        fxPath = "cycleLogicUI.fxml";
     }
 
     public void addSingleConfig(String attributeName, String attributeValue) {
@@ -82,12 +88,15 @@ public class CycleLogic extends PluginLogic {
 
     @Override
     public void checkForLogic(EDBPlugin plugin, List<String> curPrograms, List<String> curWebsites, Date curTime) {
-        checkMode(curTime);
-        checkForPrograms(plugin.getTargetPrograms(), curPrograms);
-        checkForWebsites(plugin.getTargetWebsites(), curWebsites);
+        checkAndChangeMode(curTime);
+        if(curMode == CycleMode.FOCUS){
+            checkForPrograms(plugin.getTargetPrograms(), curPrograms);
+            checkForWebsites(plugin.getTargetWebsites(), curWebsites);
+        }
     }
 
-    private void checkMode(Date curTime) {
+    private void checkAndChangeMode(Date curTime) {
+//        이름자체로부터, 메소드가 2개의 역할을 한다는 암시.. 리팩토링 사항
 
         int nextCycle;
 //        curTime이 Date보다 뒤라면 즉, curTime이 Date보다 크다면
@@ -102,16 +111,10 @@ public class CycleLogic extends PluginLogic {
                 nextCycle = focusCycle;
                 renewDate(nextCycle);
             }
+            controller.renewUI();
         }
     }
 
-    public void renewDate(int nextCycle) {
-        Date curTime = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(curTime);
-        cal.add(Calendar.MINUTE,nextCycle);
-        finishingTime = cal.getTime();
-    }
 
     private void checkForPrograms(Map<String, TargetProgram> targetPrograms, List<String> curPrograms) {
         List<String> commonPrograms = new ArrayList(curPrograms);
@@ -127,6 +130,32 @@ public class CycleLogic extends PluginLogic {
 //        TODO OSNativeExecutor 개발 후 일치 웹사이트 종료요청
 //        OSNativeExecutor에게 일치하는 웹사이트 종료 요청한다.(static?)
 //        전달 매개변수는 targetWebsite의 리스트 (나중에 정의 변경될 가능성 예방하여 String으로는 보내지 않는다)
+    }
+
+    public void initializeLogicBeforeStart() {
+        setCurMode(CycleMode.FOCUS);
+        renewDate(focusCycle);
+        controller.onPluginStart();
+    }
+
+    public void addController(SpecificConfigUIController controller) {
+        this.controller = (CyclePluginConfigUIController)controller;
+    }
+
+    public void renewDate(int nextCycle) {
+        Date curTime = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(curTime);
+        cal.add(Calendar.MINUTE,nextCycle);
+        finishingTime = cal.getTime();
+    }
+
+    public void useWildCard(){
+        wildCardUsed = true;
+        curMode = CycleMode.WILDCARD;
+        renewDate(wildCardLimit);
+        wildCardLimit=0;
+        controller.renewUI();
     }
 
 //
@@ -183,5 +212,8 @@ public class CycleLogic extends PluginLogic {
         return targetExternalServices;
     }
 
+    public boolean isWildCardUsed() {
+        return wildCardUsed;
+    }
 
 }

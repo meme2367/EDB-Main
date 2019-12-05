@@ -1,5 +1,7 @@
 package org.edb.main;
 
+import org.edb.main.UI.SpecificConfigUIController;
+
 import java.util.*;
 
 public class TestPluginLogic extends PluginLogic {
@@ -64,6 +66,16 @@ public class TestPluginLogic extends PluginLogic {
 
     @Override
     public void checkForLogic(EDBPlugin plugin, List<String> curPrograms, List<String> curWebsites, Date curTime) {
+
+    }
+
+    @Override
+    public void initializeLogicBeforeStart() {
+
+    }
+
+    @Override
+    public void addController(SpecificConfigUIController controller) {
 
     }
 

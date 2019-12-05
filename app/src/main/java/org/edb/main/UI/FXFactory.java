@@ -3,9 +3,7 @@ package org.edb.main.UI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
-import org.edb.main.BootApp;
-import org.edb.main.EDBPluginManager;
-import org.edb.main.UIEventHandler;
+import org.edb.main.*;
 
 
 public class FXFactory {
@@ -74,20 +72,36 @@ public class FXFactory {
 
         UserExternalServiceListController controller = loader.<UserExternalServiceListController>getController();
         controller.setUiEventHandler(uiEventHandler);
-        fxManipulator.setUserExternalServicelListController(loader.getController());
+        fxManipulator.setUserExternalServicelListController(controller);
         controller.loadUserExternalServiceList();
 
         return parent;
 
     }
 
-    public Parent loadPluginConfigUI(String path)throws Exception{
+    public Parent loadPluginConfigUI(String path, int pluginIdx)throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent parent = loader.load();
 
         PluginConfigUIController controller = loader.<PluginConfigUIController>getController();
         controller.setUIEventHandler(uiEventHandler);
         controller.setPluginManager(pluginManager);
+        controller.setPlugin(pluginManager.findEDBPlugin(pluginIdx));
+        fxManipulator.setPluginConfigUIController(controller);
+
+        return parent;
+    }
+
+    public Parent loadSpecificPluginUIFromPluginLogic(PluginLogic logic)throws Exception{
+//        logic과 같은 패키지 안에 있는 경로로부터 resource를 가져와야 한다.
+
+        String path = logic.getFxPath();
+        FXMLLoader loader = new FXMLLoader(logic.getClass().getResource(path));
+        Parent parent = loader.load();
+
+        SpecificConfigUIController controller = loader.<SpecificConfigUIController>getController();
+        controller.setPluginLogic(logic);
+        logic.addController(controller);
 
         return parent;
     }

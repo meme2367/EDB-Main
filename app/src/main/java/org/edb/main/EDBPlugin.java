@@ -1,11 +1,13 @@
 package org.edb.main;
 
+import org.edb.main.UI.SpecificConfigUIController;
 import org.edb.main.model.PluginModel;
 import org.edb.main.model.TargetProgram;
 import org.edb.main.model.TargetWebsite;
 import org.edb.main.util.DateFormatter;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,19 +20,30 @@ public abstract class EDBPlugin {
     protected Date startDate;
     protected Date endDate;
 
-    protected boolean isRunning;
-    protected String fxPath;
-    protected String androidPath;
+    protected boolean isRunning=false;
+
 
     public abstract String getPluginConfigUIPath();
-
 
     public abstract void renewTrackingTarget();
     public abstract void checkForLogics(List<String> curPrograms, List<String> curWebsites, Date curTime);
 
     public abstract int getPluginIdx();
-    protected abstract void endPluginTime();
-    protected abstract void startPluginTime();
+    protected abstract void onLifeCycleEnd();
+    protected abstract void onLifeCycleStart();
+
+    public void startPluginTime(){
+        onLifeCycleStart();
+        isRunning=true;
+    }
+
+    public void endPluginTime(){
+        onLifeCycleEnd();
+        isRunning=false;
+    }
+
+
+//    TODO 시간 다되었을 때 해제시키기. pluginConfigUIController 갱신 필요
 
 
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
@@ -42,19 +55,22 @@ public abstract class EDBPlugin {
         }
     }
 
-    public void checkLifeCycle(Date curTime){
+
+    public boolean checkLifeCycle(Date curTime){
+        boolean lifeCycleChanged=false;
         if(isRunning) {
             if (curTime.compareTo(endDate) == -1) {
-                isRunning = false;
                 endPluginTime();
+                lifeCycleChanged=true;
             }
         }
         else {
             if(curTime.compareTo(startDate)==1){
-                isRunning = true;
                 startPluginTime();
+                lifeCycleChanged=true;
             }
         }
+        return lifeCycleChanged;
     }
 
     public void decodeConfigs(PluginModel data, PluginConfigConverter pluginConfigConverter){
@@ -112,4 +128,13 @@ public abstract class EDBPlugin {
     public Map<String, TargetWebsite> getTargetWebsites() {
         return targetWebsites;
     }
+
+    public PluginLogic getSinglePluginLogicFromClassName(String logicName){
+        return pluginLogics.get(logicName);
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
 }
+

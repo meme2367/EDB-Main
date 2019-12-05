@@ -40,8 +40,9 @@ public class BootApp extends Application {
     }
 
     public void initComponentRoots(){
-        EDBPluginManager edbPluginManager = new EDBPluginManager();
         FXManipulator fxManipulator= new FXManipulator();
+        EDBPluginManager edbPluginManager = new EDBPluginManager();
+        edbPluginManager.setManipulator(fxManipulator);
         ServerResponseHandler serverResponseHandler=new ServerResponseHandler(fxManipulator);
 
         RestAPIRequester restAPIRequester = new RestAPIRequester();

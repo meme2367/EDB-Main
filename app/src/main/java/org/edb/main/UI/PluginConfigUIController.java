@@ -55,7 +55,6 @@ public class PluginConfigUIController implements Initializable {
     @FXML
     private Label scheduledTimeLbl;
 
-    //TODO pluginConfigUIController 주입 필요(FXFactory나 MainUIController에서 주입)
     private EDBPlugin plugin;
     private EDBPluginManager pluginManager;
     private UIEventHandler uiEventHandler;
@@ -82,10 +81,11 @@ public class PluginConfigUIController implements Initializable {
     }
 
     //TODO pluginConfigUI 화면불러오기, 구체적인 pluginConfigUI가 정의되지 않았기에 아직 불가능.
-    public void loadPluginConfigRequested(){
+    public void fillPluginConfigUIContents(){
 //        시간, 잠금대상, 잠금웹사이트 config를 받아와서, 이 ui에 뿌리고
-//        EDBPlugin에서 PluginConfigUI불러와서 configArea에 달아주고
-//        plugin에서 나머지 Config들을 받아와서 pluginConfigUI에 뿌린다.
+//        plugin이 가진 모든 logic들에 대해서.
+//        EDBLogic에서 logicConfigUI불러와서 configArea에 달아주고
+//        logic에서 일치하는 Config들을 받아와서 logicConfigUI에 뿌린다.
     }
 
     public void addTargetProgram(){
@@ -176,6 +176,20 @@ public class PluginConfigUIController implements Initializable {
         modifyScheduleBtn.setVisible(false);
         scheduledTimeLbl.setVisible(false);
 
+    }
+
+    public void onLifeCycleChanged(){
+        if(plugin.isRunning()==false){
+            modifySchedule();
+        }
+    }
+
+    public void setPlugin(EDBPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public int getPluginIdx(){
+        return plugin.getPluginIdx();
     }
 
 }

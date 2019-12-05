@@ -15,6 +15,11 @@ import java.util.Map;
 public class EDBPluginManager {
 
     private Map<Integer,EDBPlugin> plugins;
+    private UIManipulator manipulator;
+
+    public void setManipulator(UIManipulator manipulator) {
+        this.manipulator = manipulator;
+    }
 
     public EDBPluginManager(){
         plugins = new HashMap<Integer, EDBPlugin>();
@@ -48,8 +53,15 @@ public class EDBPluginManager {
         List<String> curWebsites = osNativeExecutor.getCurWebsites();
         for (EDBPlugin singlePlugin :
                 plugins.values()) {
-            singlePlugin.checkLifeCycle(curTime);
+            boolean cycleChanged = singlePlugin.checkLifeCycle(curTime);
+            if(cycleChanged){
+                manipulator.onPluginLifeCycleChanged(singlePlugin.getPluginIdx());
+            }
             singlePlugin.checkForLogics(curPrograms,curWebsites,curTime);
         }
+    }
+
+    public EDBPlugin findEDBPlugin(int pluginIdx){
+        return plugins.get(pluginIdx);
     }
 }
