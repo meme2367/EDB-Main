@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class CyclePlugin extends EDBPlugin {
     private static final int pluginIdx=2;
+    private static final String pluginName="CyclePlugin";
 
     public String getPluginConfigUIPath() {
         return null;
@@ -29,6 +30,10 @@ public class CyclePlugin extends EDBPlugin {
 
     public int getPluginIdx() {
         return pluginIdx;
+    }
+
+    public String getPluginName() {
+        return pluginName;
     }
 
     protected void onLifeCycleEnd() {

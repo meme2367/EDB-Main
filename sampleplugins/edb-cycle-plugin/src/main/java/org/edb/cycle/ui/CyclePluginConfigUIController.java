@@ -34,6 +34,12 @@ public class CyclePluginConfigUIController implements Initializable, SpecificCon
     private Label nextCycleTimeLbl;
     @FXML
     private Button wildCardBtn;
+    @FXML
+    private Label focusCycleLbl;
+    @FXML
+    private Label restCycleLbl;
+    @FXML
+    private Label wildCardLimitLbl;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -43,6 +49,7 @@ public class CyclePluginConfigUIController implements Initializable, SpecificCon
         applyFocusCycleConfig();
         applyRestCycleConfig();
         applyWildCardConfig();
+        loadFromLogic();
     }
 
     private void applyFocusCycleConfig() {
@@ -77,6 +84,7 @@ public class CyclePluginConfigUIController implements Initializable, SpecificCon
         renewCurStateUI();
     }
 
+
     private void renewCurStateUI(){
         if(cycleLogic.isWildCardUsed()){
             remainingWildCardLbl.setText("사용불가");
@@ -102,4 +110,13 @@ public class CyclePluginConfigUIController implements Initializable, SpecificCon
         }
     }
 
+    public void onSpecificConfigUILoaded() {
+        loadFromLogic();
+    }
+
+    private void loadFromLogic() {
+        focusCycleLbl.setText(Integer.toString(cycleLogic.getFocusCycle()));
+        restCycleLbl.setText(Integer.toString(cycleLogic.getRestCycle()));
+        wildCardLimitLbl.setText(Integer.toString(cycleLogic.getWildCardLimit()));
+    }
 }

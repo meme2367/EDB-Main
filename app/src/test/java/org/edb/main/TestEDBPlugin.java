@@ -9,6 +9,8 @@ import java.util.List;
 
 public class TestEDBPlugin extends EDBPlugin {
 
+    private static final String pluginName ="TestEDBPlugin";
+
     private static final int pluginIdx=1;
 
     public TestEDBPlugin(){
@@ -39,6 +41,11 @@ public class TestEDBPlugin extends EDBPlugin {
     @Override
     public int getPluginIdx() {
         return pluginIdx;
+    }
+
+    @Override
+    public String getPluginName() {
+        return pluginName;
     }
 
     @Override

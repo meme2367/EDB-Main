@@ -38,8 +38,10 @@ public class FXFactory {
         loader.setLocation(BootApp.class.getResource(path));
         Parent parent =loader.load();
 
-        loader.<MainUIController>getController().setUiEventHandler(uiEventHandler);
-        fxManipulator.setMainUIController(loader.getController());
+        MainUIController controller = loader.<MainUIController>getController();
+        controller.setUiEventHandler(uiEventHandler);
+        controller.setPluginManager(pluginManager);
+        fxManipulator.setMainUIController(controller);
 
         return parent;
     }

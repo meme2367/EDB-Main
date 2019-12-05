@@ -79,6 +79,11 @@ public class TestPluginLogic extends PluginLogic {
 
     }
 
+    @Override
+    public void sendRequestFillUI() {
+
+    }
+
     private String convertListToSingleStr(){
         StringBuffer sbr = new StringBuffer();
 

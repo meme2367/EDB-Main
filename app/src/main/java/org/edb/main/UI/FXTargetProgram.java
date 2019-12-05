@@ -18,6 +18,11 @@ public class FXTargetProgram {
 
     }
 
+    public FXTargetProgram(TargetProgram targetProgram){
+        this.targetName = new SimpleStringProperty(targetProgram.getTargetName());
+        this.targetPath = new SimpleStringProperty(targetProgram.getTargetPath());
+    }
+
     public StringProperty targetNameProperty(){
         return targetName;
     }

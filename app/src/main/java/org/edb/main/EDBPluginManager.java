@@ -17,6 +17,7 @@ public class EDBPluginManager {
     private Map<Integer,EDBPlugin> plugins;
     private UIManipulator manipulator;
 
+
     public void setManipulator(UIManipulator manipulator) {
         this.manipulator = manipulator;
     }
@@ -63,5 +64,9 @@ public class EDBPluginManager {
 
     public EDBPlugin findEDBPlugin(int pluginIdx){
         return plugins.get(pluginIdx);
+    }
+
+    public Map<Integer, EDBPlugin> getPlugins() {
+        return plugins;
     }
 }

@@ -9,4 +9,5 @@ public interface SpecificConfigUIController {
     public abstract void onPluginStart();
     public abstract void onPluginFinished();
     public abstract void renewUI();
+    public abstract void onSpecificConfigUILoaded();
 }

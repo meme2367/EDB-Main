@@ -27,4 +27,7 @@ public abstract class PluginLogic {
     }
 
     public abstract void addController(SpecificConfigUIController controller);
+
+//    TODO 강한 UI의존성.
+    public abstract void sendRequestFillUI();
 }

@@ -4,23 +4,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.edb.main.*;
+import org.edb.main.model.TargetProgram;
+import org.edb.main.model.TargetWebsite;
 import org.edb.main.util.DateFormatter;
 
 import java.io.File;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static org.edb.main.BootApp.primaryStage;
 
 public class PluginConfigUIController implements Initializable {
+
+    private static double prefWidth = 463.0;
 
     @FXML
     private VBox configArea;
@@ -80,12 +83,64 @@ public class PluginConfigUIController implements Initializable {
         targetWebsiteTableView.setItems(fxTargetWebsiteObservableList);
     }
 
-    //TODO pluginConfigUI 화면불러오기, 구체적인 pluginConfigUI가 정의되지 않았기에 아직 불가능.
     public void fillPluginConfigUIContents(){
-//        시간, 잠금대상, 잠금웹사이트 config를 받아와서, 이 ui에 뿌리고
-//        plugin이 가진 모든 logic들에 대해서.
-//        EDBLogic에서 logicConfigUI불러와서 configArea에 달아주고
-//        logic에서 일치하는 Config들을 받아와서 logicConfigUI에 뿌린다.
+        loadTime();
+        loadTargetPrograms();
+        loadTargetWebsites();
+        loadLogics();
+    }
+
+    private void loadTime() {
+        if(plugin.isRunning()){
+            Date startDate = plugin.getStartDate();
+            Date endDate = plugin.getEndDate();
+            loadDateOnUI(startDate,endDate);
+        }
+    }
+
+    private void loadTargetPrograms() {
+        for (TargetProgram singleProgram :
+                plugin.getTargetPrograms().values()) {
+          fxTargetProgramObservableList.add(new FXTargetProgram(singleProgram));
+        }
+    }
+
+    private void loadTargetWebsites() {
+        for (TargetWebsite singleWebsite :
+                plugin.getTargetWebsites().values()) {
+            fxTargetWebsiteObservableList.add(new FXTargetWebsite(singleWebsite));
+        }
+    }
+
+    private void loadLogics() {
+        FXFactory factory = FXFactory.getInstance();
+        for (Map.Entry<String,PluginLogic> singleLogicEntry :
+                plugin.getPluginLogics().entrySet()) {
+
+            PluginLogic singleLogic = singleLogicEntry.getValue();
+
+            Parent singleConfigUI = null;
+
+            try {
+                singleConfigUI = factory.loadSpecificPluginUIFromPluginLogic(singleLogic);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            attachSpecificLogicUIToCommonConfigUI(singleConfigUI);
+            singleLogic.sendRequestFillUI();
+        }
+    }
+
+    private void attachSpecificLogicUIToCommonConfigUI(Parent singleConfigUI) {
+        double singleConfigUIHeight = singleConfigUI.prefHeight(prefWidth);
+        widerConfigArea(singleConfigUIHeight);
+//        붙이기.
+        configArea.getChildren().add(singleConfigUI);
+    }
+
+    private void widerConfigArea(double singleConfigUIHeight) {
+//        TODO widerConfigArea
     }
 
     public void addTargetProgram(){
@@ -138,6 +193,10 @@ public class PluginConfigUIController implements Initializable {
 
 //        텍스트필드를 라벨로 바꾼다
 //        취소버튼 보이게 하기
+        loadDateOnUI(startDate, endDate);
+    }
+
+    private void loadDateOnUI(Date startDate, Date endDate) {
         scheduleArea.setVisible(false);
         scheduleBtn.setVisible(false);
         modifyScheduleBtn.setVisible(true);

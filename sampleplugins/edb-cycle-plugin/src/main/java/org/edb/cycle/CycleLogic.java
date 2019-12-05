@@ -14,14 +14,15 @@ import java.util.*;
 
 public class CycleLogic extends PluginLogic {
 
-    private int focusCycle;
+    private int focusCycle=30;
 //    min단위
-    private int restCycle;
-    private int wildCardLimit;
+    private int restCycle=5;
+    private int wildCardLimit=15;
     private boolean wildCardUsed=false;
     private Date finishingTime;
     private CycleMode curMode;
     private List<Integer> targetExternalServices;
+//    TODO UI의존성.
     private CyclePluginConfigUIController controller;
 
     public CycleLogic() {
@@ -140,6 +141,10 @@ public class CycleLogic extends PluginLogic {
 
     public void addController(SpecificConfigUIController controller) {
         this.controller = (CyclePluginConfigUIController)controller;
+    }
+
+    public void sendRequestFillUI() {
+        controller.onSpecificConfigUILoaded();
     }
 
     public void renewDate(int nextCycle) {

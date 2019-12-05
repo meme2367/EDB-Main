@@ -18,6 +18,7 @@ public abstract class EDBPlugin {
     protected Map<String, TargetWebsite> targetWebsites;
 
     protected Date startDate;
+
     protected Date endDate;
 
     protected boolean isRunning=false;
@@ -29,6 +30,7 @@ public abstract class EDBPlugin {
     public abstract void checkForLogics(List<String> curPrograms, List<String> curWebsites, Date curTime);
 
     public abstract int getPluginIdx();
+    public abstract String getPluginName();
     protected abstract void onLifeCycleEnd();
     protected abstract void onLifeCycleStart();
 
@@ -41,10 +43,6 @@ public abstract class EDBPlugin {
         onLifeCycleEnd();
         isRunning=false;
     }
-
-
-//    TODO 시간 다되었을 때 해제시키기. pluginConfigUIController 갱신 필요
-
 
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
         pluginConfigConverter.setSchedule(startDate, endDate);
@@ -136,5 +134,18 @@ public abstract class EDBPlugin {
     public boolean isRunning() {
         return isRunning;
     }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public Map<String, PluginLogic> getPluginLogics() {
+        return pluginLogics;
+    }
+
 }
 
