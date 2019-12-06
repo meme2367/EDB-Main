@@ -15,7 +15,7 @@
          <content>
             <VBox fx:id="configArea" prefHeight="369.0" prefWidth="464.0">
                <children>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                  <AnchorPane prefHeight="200.0" prefWidth="463.0">
                      <children>
                         <TableView fx:id="targetProgramTableView" prefHeight="155.0" prefWidth="463.0">
                           <columns>
@@ -27,7 +27,7 @@
                         <Button layoutX="398.0" layoutY="157.0" mnemonicParsing="false" onAction="#deleteTargetProgram" prefHeight="29.0" prefWidth="58.0" text="삭제" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+                  <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="463.0">
                      <children>
                         <TableView fx:id="targetWebsiteTableView" prefHeight="155.0" prefWidth="463.0">
                            <columns>

@@ -1,16 +1,15 @@
 package org.edb.main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import org.edb.main.UI.SpecificConfigUIController;
 
-public class TestPluginConfig extends PluginConfig {
+import java.util.*;
+
+public class TestPluginLogic extends PluginLogic {
     private int tempConfigInt;
     private String tempConfigStr;
     private ArrayList<String> tempConfigList;
 
-    public TestPluginConfig(){
+    public TestPluginLogic(){
         tempConfigList = new ArrayList<String>();
     }
 
@@ -62,7 +61,27 @@ public class TestPluginConfig extends PluginConfig {
         attributesMap.put("tempConfigStr",tempConfigStr);
 
 
-        pluginConfigConverter.addSingleConfig("TestPluginConfig", attributesMap);
+        pluginConfigConverter.addSingleConfig("TestPluginLogic", attributesMap);
+    }
+
+    @Override
+    public void checkForLogic(EDBPlugin plugin, List<String> curPrograms, List<String> curWebsites, Date curTime) {
+
+    }
+
+    @Override
+    public void initializeLogicBeforeStart() {
+
+    }
+
+    @Override
+    public void addController(SpecificConfigUIController controller) {
+
+    }
+
+    @Override
+    public void sendRequestFillUI() {
+
     }
 
     private String convertListToSingleStr(){

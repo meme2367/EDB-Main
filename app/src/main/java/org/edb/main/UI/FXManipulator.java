@@ -15,6 +15,8 @@ public class FXManipulator implements UIManipulator {
     private LoginDialogController loginDialogController;
     private AvailableExternalServiceListController availableExternalServicelListController;
     private UserExternalServiceListController userExternalServicelListController;
+    private PluginConfigUIController pluginConfigUIController;
+
 
     @Override
     public void onLoginSuccessful(String id) {
@@ -82,6 +84,15 @@ public class FXManipulator implements UIManipulator {
         });
     }
 
+    @Override
+    public void onPluginLifeCycleChanged(int pluginIdx) {
+
+        if(pluginIdx == pluginConfigUIController.getPluginIdx()){
+            pluginConfigUIController.onLifeCycleChanged();
+        }
+
+    }
+
 
     public void setMainUIController(MainUIController mainUIController) {
         this.mainUIController = mainUIController;
@@ -99,4 +110,8 @@ public class FXManipulator implements UIManipulator {
         this.userExternalServicelListController = userExternalServicelListController;
     }
 
+
+    public <T> void setPluginConfigUIController(PluginConfigUIController pluginConfigUIController) {
+        this.pluginConfigUIController = pluginConfigUIController;
+    }
 }

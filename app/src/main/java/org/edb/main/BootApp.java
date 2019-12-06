@@ -40,8 +40,10 @@ public class BootApp extends Application {
     }
 
     public void initComponentRoots(){
-        EDBPluginManager edbPluginManager = new EDBPluginManager();
+//        TODO pluginManager작업이 fxml 생성작업보다 우선해야 한다.
         FXManipulator fxManipulator= new FXManipulator();
+        EDBPluginManager edbPluginManager = new EDBPluginManager();
+        edbPluginManager.setManipulator(fxManipulator);
         ServerResponseHandler serverResponseHandler=new ServerResponseHandler(fxManipulator);
 
         RestAPIRequester restAPIRequester = new RestAPIRequester();

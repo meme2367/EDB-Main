@@ -4,21 +4,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.edb.main.*;
+import org.edb.main.model.TargetProgram;
+import org.edb.main.model.TargetWebsite;
+import org.edb.main.util.DateFormatter;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.text.ParseException;
+import java.util.*;
 
 import static org.edb.main.BootApp.primaryStage;
 
 public class PluginConfigUIController implements Initializable {
+
+    private static double prefWidth = 463.0;
 
     @FXML
     private VBox configArea;
@@ -53,7 +58,6 @@ public class PluginConfigUIController implements Initializable {
     @FXML
     private Label scheduledTimeLbl;
 
-    //TODO pluginConfigUIController 주입 필요(FXFactory나 MainUIController에서 주입)
     private EDBPlugin plugin;
     private EDBPluginManager pluginManager;
     private UIEventHandler uiEventHandler;
@@ -79,11 +83,64 @@ public class PluginConfigUIController implements Initializable {
         targetWebsiteTableView.setItems(fxTargetWebsiteObservableList);
     }
 
-    //TODO pluginConfigUI 화면불러오기, 구체적인 pluginConfigUI가 정의되지 않았기에 아직 불가능.
-    public void loadPluginConfigRequested(){
-//        시간, 잠금대상, 잠금웹사이트 config를 받아와서, 이 ui에 뿌리고
-//        EDBPlugin에서 PluginConfigUI불러와서 configArea에 달아주고
-//        plugin에서 나머지 Config들을 받아와서 pluginConfigUI에 뿌린다.
+    public void fillPluginConfigUIContents(){
+        loadTime();
+        loadTargetPrograms();
+        loadTargetWebsites();
+        loadLogics();
+    }
+
+    private void loadTime() {
+        if(plugin.isRunning()){
+            Date startDate = plugin.getStartDate();
+            Date endDate = plugin.getEndDate();
+            loadDateOnUI(startDate,endDate);
+        }
+    }
+
+    private void loadTargetPrograms() {
+        for (TargetProgram singleProgram :
+                plugin.getTargetPrograms().values()) {
+          fxTargetProgramObservableList.add(new FXTargetProgram(singleProgram));
+        }
+    }
+
+    private void loadTargetWebsites() {
+        for (TargetWebsite singleWebsite :
+                plugin.getTargetWebsites().values()) {
+            fxTargetWebsiteObservableList.add(new FXTargetWebsite(singleWebsite));
+        }
+    }
+
+    private void loadLogics() {
+        FXFactory factory = FXFactory.getInstance();
+        for (Map.Entry<String,PluginLogic> singleLogicEntry :
+                plugin.getPluginLogics().entrySet()) {
+
+            PluginLogic singleLogic = singleLogicEntry.getValue();
+
+            Parent singleConfigUI = null;
+
+            try {
+                singleConfigUI = factory.loadSpecificPluginUIFromPluginLogic(singleLogic);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            attachSpecificLogicUIToCommonConfigUI(singleConfigUI);
+            singleLogic.sendRequestFillUI();
+        }
+    }
+
+    private void attachSpecificLogicUIToCommonConfigUI(Parent singleConfigUI) {
+        double singleConfigUIHeight = singleConfigUI.prefHeight(prefWidth);
+        widerConfigArea(singleConfigUIHeight);
+//        붙이기.
+        configArea.getChildren().add(singleConfigUI);
+    }
+
+    private void widerConfigArea(double singleConfigUIHeight) {
+//        TODO widerConfigArea
     }
 
     public void addTargetProgram(){
@@ -136,6 +193,10 @@ public class PluginConfigUIController implements Initializable {
 
 //        텍스트필드를 라벨로 바꾼다
 //        취소버튼 보이게 하기
+        loadDateOnUI(startDate, endDate);
+    }
+
+    private void loadDateOnUI(Date startDate, Date endDate) {
         scheduleArea.setVisible(false);
         scheduleBtn.setVisible(false);
         modifyScheduleBtn.setVisible(true);
@@ -159,7 +220,13 @@ public class PluginConfigUIController implements Initializable {
 
         //Date타입으로 변환하기
         //반환하기
-        return cal.getTime();
+        Date formattedTime = cal.getTime();
+        try {
+            formattedTime = DateFormatter.getSimpleFormattedDateFromDate(cal.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedTime;
     }
 
     public void modifySchedule(){
@@ -168,6 +235,20 @@ public class PluginConfigUIController implements Initializable {
         modifyScheduleBtn.setVisible(false);
         scheduledTimeLbl.setVisible(false);
 
+    }
+
+    public void onLifeCycleChanged(){
+        if(plugin.isRunning()==false){
+            modifySchedule();
+        }
+    }
+
+    public void setPlugin(EDBPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public int getPluginIdx(){
+        return plugin.getPluginIdx();
     }
 
 }

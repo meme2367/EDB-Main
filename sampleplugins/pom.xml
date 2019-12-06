@@ -85,6 +85,7 @@
 
     <modules>
 
+        <module>edb-cycle-plugin</module>
     </modules>
 
 </project>

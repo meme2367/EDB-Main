@@ -14,6 +14,10 @@ public class FXTargetWebsite {
 
     }
 
+    public FXTargetWebsite(TargetWebsite targetWebsite){
+        this.targetURL = new SimpleStringProperty(targetWebsite.getTargetURL());
+    }
+
 
     public StringProperty targetURLProperty(){
         return targetURL;

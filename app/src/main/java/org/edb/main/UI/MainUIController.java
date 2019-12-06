@@ -1,8 +1,11 @@
 package org.edb.main.UI;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,11 +17,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.edb.main.BootApp;
+import org.edb.main.EDBPlugin;
+import org.edb.main.EDBPluginManager;
 import org.edb.main.UIEventHandler;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
-public class MainUIController {
+public class MainUIController implements Initializable{
     //    @FXML
     private HBox rootContainer;
     @FXML
@@ -30,7 +39,8 @@ public class MainUIController {
     @FXML
     private Label userIdLbl;
     @FXML
-    private ComboBox pluginComboBox;
+    private ComboBox<String> pluginComboBox;
+
     @FXML
     private HBox centerUI;
     @FXML
@@ -38,13 +48,37 @@ public class MainUIController {
 
     private Stage loginDialog;
     private UIEventHandler uiEventHandler;
-
+    private ObservableList<String> pluginNames = FXCollections.observableArrayList();
+    private Map<String,Integer> pluginNameIdxMap;
+    private EDBPluginManager pluginManager;
 
     @FXML
     public Label postExternalServiceListButton;
 
     public Stage primaryStage;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        pluginComboBox.setItems(pluginNames);
+        pluginNameIdxMap= new HashMap<String,Integer>();
+        fillPluginNameIdxMap();
+        fillObservableList();
+    }
+
+    private void fillPluginNameIdxMap() {
+        Map<Integer, EDBPlugin> pluginMap = pluginManager.getPlugins();
+        for (Map.Entry<Integer, EDBPlugin> entry :
+                pluginMap.entrySet()) {
+            pluginNameIdxMap.put(entry.getValue().getPluginName(),entry.getKey());
+        }
+    }
+
+    private void fillObservableList() {
+        for (String pluginName :
+                pluginNameIdxMap.keySet()) {
+            pluginNames.add(pluginName);
+        }
+    }
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -52,20 +86,6 @@ public class MainUIController {
 
     public void setUiEventHandler(UIEventHandler uiEventHandler) {
         this.uiEventHandler = uiEventHandler;
-    }
-
-
-    public void changeCenterUI(String filePath){
-        try {
-            clearCenterUI();
-            Parent list = FXMLLoader.load(getClass().getResource(filePath));
-            Scene tempScene= BootApp.getPrimaryStage().getScene();
-            HBox hbox=(HBox)tempScene.lookup("#centerUI");
-            hbox.getChildren().add(list);
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 
     public void changeCenterUI(Parent parent){
@@ -80,8 +100,6 @@ public class MainUIController {
         centerUI.getChildren().clear();
         System.out.println("clearCenterUI\n");
     }
-
-
 
     public void showLoginDialog(ActionEvent event) throws Exception {
         loginDialog = new Stage(StageStyle.DECORATED);
@@ -102,7 +120,6 @@ public class MainUIController {
 
     }
 
-
     public void showAvailableExternalServiceList() {
 
         try {
@@ -112,7 +129,6 @@ public class MainUIController {
             e.printStackTrace();
         }
     }
-
 
     public void showUserExternalServiceList(){
         try {
@@ -134,5 +150,21 @@ public class MainUIController {
         userIdLbl.setVisible(true);
         userIdLbl.setText(id);
     }
-}
 
+    public void setPluginManager(EDBPluginManager pluginManager) {
+        this.pluginManager = pluginManager;
+    }
+
+    public void onComboBoxSelected(){
+        String selectedPluginName = pluginComboBox.getValue();
+        Integer selectedPluginIdx = pluginNameIdxMap.get(selectedPluginName);
+        Parent pluginConfigUI=null;
+        try {
+            pluginConfigUI = FXFactory.getInstance().loadPluginConfigUI("/fxml/PluginConfigUI.fxml",selectedPluginIdx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        changeCenterUI(pluginConfigUI);
+    }
+
+}

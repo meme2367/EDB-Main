@@ -3,18 +3,22 @@ package org.edb.main;
 import org.edb.main.model.TargetProgram;
 import org.edb.main.model.TargetWebsite;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public class TestEDBPlugin extends EDBPlugin {
+
+    private static final String pluginName ="TestEDBPlugin";
 
     private static final int pluginIdx=1;
 
     public TestEDBPlugin(){
-        pluginConfigs = new HashMap<String,PluginConfig>();
+        pluginLogics = new HashMap<String, PluginLogic>();
         targetPrograms = new HashMap<String, TargetProgram>();
         targetWebsites = new HashMap<String, TargetWebsite>();
-        TestPluginConfig testPluginConfig = new TestPluginConfig();
-        pluginConfigs.put("TestPluginConfig", testPluginConfig);
+        TestPluginLogic testPluginConfig = new TestPluginLogic();
+        pluginLogics.put("TestPluginLogic", testPluginConfig);
 
     }
 
@@ -25,17 +29,12 @@ public class TestEDBPlugin extends EDBPlugin {
     }
 
     @Override
-    public void checkLifeCycle() {
-
-    }
-
-    @Override
     public void renewTrackingTarget() {
 
     }
 
     @Override
-    public void checkForLogics() {
+    public void checkForLogics(List<String> curPrograms, List<String> curWebsites, Date curTime) {
 
     }
 
@@ -43,4 +42,21 @@ public class TestEDBPlugin extends EDBPlugin {
     public int getPluginIdx() {
         return pluginIdx;
     }
+
+    @Override
+    public String getPluginName() {
+        return pluginName;
+    }
+
+    @Override
+    protected void onLifeCycleEnd() {
+
+    }
+
+
+    @Override
+    protected void onLifeCycleStart() {
+
+    }
+
 }

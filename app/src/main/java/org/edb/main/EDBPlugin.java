@@ -1,53 +1,82 @@
 package org.edb.main;
 
+import org.edb.main.UI.SpecificConfigUIController;
 import org.edb.main.model.PluginModel;
 import org.edb.main.model.TargetProgram;
 import org.edb.main.model.TargetWebsite;
+import org.edb.main.util.DateFormatter;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public abstract class EDBPlugin {
-    protected Map<String,PluginConfig> pluginConfigs;
+    protected Map<String, PluginLogic> pluginLogics;
     protected Map<String, TargetProgram> targetPrograms;
     protected Map<String, TargetWebsite> targetWebsites;
 
     protected Date startDate;
+
     protected Date endDate;
 
+    protected boolean isRunning=false;
 
-    protected boolean isRunning;
-    protected String fxPath;
-    protected String androidPath;
 
     public abstract String getPluginConfigUIPath();
 
-    public abstract void checkLifeCycle();
     public abstract void renewTrackingTarget();
-    public abstract void checkForLogics();
+    public abstract void checkForLogics(List<String> curPrograms, List<String> curWebsites, Date curTime);
 
     public abstract int getPluginIdx();
+    public abstract String getPluginName();
+    protected abstract void onLifeCycleEnd();
+    protected abstract void onLifeCycleStart();
+
+    public void startPluginTime(){
+        onLifeCycleStart();
+        isRunning=true;
+    }
+
+    public void endPluginTime(){
+        onLifeCycleEnd();
+        isRunning=false;
+    }
 
     public  void extractConfigs(PluginConfigConverter pluginConfigConverter){
         pluginConfigConverter.setSchedule(startDate, endDate);
         pluginConfigConverter.setTargetPrograms(targetPrograms);
         pluginConfigConverter.setTargetWebsites(targetWebsites);
-        for (Map.Entry<String, PluginConfig> entry : pluginConfigs.entrySet()){
+        for (Map.Entry<String, PluginLogic> entry : pluginLogics.entrySet()){
             entry.getValue().extractConfig(pluginConfigConverter);
         }
     }
 
 
+    public boolean checkLifeCycle(Date curTime){
+        boolean lifeCycleChanged=false;
+        if(isRunning) {
+            if (curTime.compareTo(endDate) == -1) {
+                endPluginTime();
+                lifeCycleChanged=true;
+            }
+        }
+        else {
+            if(curTime.compareTo(startDate)==1){
+                startPluginTime();
+                lifeCycleChanged=true;
+            }
+        }
+        return lifeCycleChanged;
+    }
+
     public void decodeConfigs(PluginModel data, PluginConfigConverter pluginConfigConverter){
         Date from = new Date();
         Date to = new Date();
-        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         try {
-            from = fm.parse(data.getStart_time());
-            to = fm.parse(data.getEnd_time());
+            from = DateFormatter.getSimpleFormattedDateFromString(data.getStart_time());
+            to = DateFormatter.getSimpleFormattedDateFromString(data.getEnd_time());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -61,7 +90,7 @@ public abstract class EDBPlugin {
         Map<String,Map<String,String>> strConfigsMap = pluginConfigConverter.getPluginConfigMap();
 
         for (Map.Entry<String, Map<String,String>> entry : strConfigsMap.entrySet()) {
-            pluginConfigs.get(entry.getKey()).decodeFromMap(entry.getValue());
+            pluginLogics.get(entry.getKey()).decodeFromMap(entry.getValue());
         }
     }
 
@@ -87,6 +116,36 @@ public abstract class EDBPlugin {
     }
 
     public void applySingleConfig(String configName, String attributeName, String config){
-        pluginConfigs.get(configName).addSingleConfig(attributeName,config);
+        pluginLogics.get(configName).addSingleConfig(attributeName,config);
     }
+
+    public Map<String, TargetProgram> getTargetPrograms() {
+        return targetPrograms;
+    }
+
+    public Map<String, TargetWebsite> getTargetWebsites() {
+        return targetWebsites;
+    }
+
+    public PluginLogic getSinglePluginLogicFromClassName(String logicName){
+        return pluginLogics.get(logicName);
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public Map<String, PluginLogic> getPluginLogics() {
+        return pluginLogics;
+    }
+
 }
+
