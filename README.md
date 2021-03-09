@@ -53,6 +53,9 @@
 ### 🔧 ERD
 ![ERD6](https://user-images.githubusercontent.com/29730565/110437049-4a327e80-80f8-11eb-81f6-5d4b2abb53f5.png)
 
+## REST API  문서
+* [GIT WIKI Document](https://github.com/Extensible-Distraction-Blocker/EDB-Server/wiki)
+
 ## 설계 예시
 
 ### 클래스 다이어그램 설계
