@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="edbcycleplugin" />
         <module name="edb-main-app" />
       </profile>
     </annotationProcessing>
@@ -15,6 +16,7 @@
       <module name="edb-main-plugins" target="8" />
       <module name="edb-sampleplugins" target="1.5" />
       <module name="edb-test" target="1.5" />
+      <module name="edbcycleplugin" target="1.5" />
       <module name="hello-plugin" target="8" />
       <module name="welcome-plugin" target="8" />
     </bytecodeTargetLevel>
